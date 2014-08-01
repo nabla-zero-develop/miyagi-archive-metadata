@@ -4,24 +4,28 @@ include_once(dirname(__FILE__) . "/Classes/PHPExcel/IOFactory.php");
 
 ignore_user_abort(1);
 set_time_limit(86400);
-$test_flag = !isset($_FILES["upfile"]["name"]); 
 
-//定数 (追ってdefineに変更すべき)
-$input_sheet_name = "整理表";
-$first_data_row = 9;
-$last_column =34;
-$division_name_row = 2;
-$division_name_col = 5;
-$excel2007 = 'Excel2007';
-$excel5 ='Excel5';
-$required_excel_version= $excel2007;
-define("EXCEL_FILE_NOT_PREPARED", "-1");
-define("EXCEL_FILE_NOT_UPLOADED", "-2");
-define("SHEET_TITLE_ERR", "-3");
-define("LEFT_END_ERR", "-4");
-define("RIGHT_END_ERR", "-5");
-define("HEADER_BOTTOM_ERR", "-6");
-define("SHEET_DEF_ERR", "-7");
+//定数 
+define("INPUT_SHEET_NAME", "整理表");
+define("TITLE_ROW", "1");
+define("TITLE_COLUMN", "4");
+define("FIRST_DATA_ROW", "9");
+define("LAST_COLUMN", "33");
+define("DIVISION_NAME_ROW", "2");
+define("DIVISION_NAME_COLUMN", "5");
+define("EXCEL2007", "Excel2007");
+define("EXCEL5", "Excel5");
+define("EXCEL_FILE_NOT_PREPARED", "-10");
+define("EXCEL_FILE_NOT_UPLOADED", "-20");
+define("SHEET_TITLE_ERR", "-30");
+define("KEN_LEFT_END_ERR", "-41");
+define("SHI_LEFT_END_ERR", "-42");
+define("RIGHT_END_ERR", "-50");
+define("HEADER_BOTTOM_ERR", "-60");
+define("SHEET_DEF_ERR", "-70");
+
+$test_flag = !isset($_FILES["upfile"]["name"]); 
+$required_excel_version= EXCEL2007;
 
 // シェル上のテストかどうか	
 if($test_flag){
@@ -41,11 +45,10 @@ if($test_flag){
 
 // エクセルのファイルか？
 function is_excel_file($file_path, $required_excel_version){
-	 global $excel5, $excel2007;
 	$ext = pathinfo($file_path, PATHINFO_EXTENSION);
-	if($required_excel_version == $excel2007){
+	if($required_excel_version == EXCEL2007){
 		return ($ext == "xlsx");
-	} else if ($required_excel_version == $excel5){
+	} else if ($required_excel_version == EXCEL5){
 		return ($ext == "xls");
 	}
 	return FALSE;
@@ -150,36 +153,32 @@ function load_sheet($file_path, $sheet_name, $required_excel_version){
 }
 
 // 有効な基本情報整理表かどうかを確認する
-function is_valid_seirihyo($data){
-	global $first_data_row, $last_column;
+function is_valid_seirihyo($data, $ken_or_shi){
 	// [row][column]
-	if ((trim($data[1][5]) <> "基本情報整理表")) return SHEET_TITLE_ERR;
+	if ((trim($data[TITLE_ROW][TITLE_COLUMN]) <> "基本情報整理表")) return SHEET_TITLE_ERR;
 	// 左端
-	if ((trim($data[$first_data_row-4][1]) <> "＊課･室・地方機関コード")) return LEFT_END_ERR; 
+	if($ken_or_shi == 0){
+		if ((trim($data[FIRST_DATA_ROW-4][0]) <> "＊課･室・地方機関コード")) return KEN_LEFT_END_ERR; 
+	} else {
+		if ((trim($data[FIRST_DATA_ROW-4][0]) <> "＊市町村ｺｰﾄﾞ")) return SHI_LEFT_END_ERR; 
+	}
 	//右端
-	if((trim($data[$first_data_row-4][$last_column]) <> "＊作業管理No.")) return RIGHT_END_ERR;
+	if((trim($data[FIRST_DATA_ROW-4][LAST_COLUMN]) <> "＊作業管理No.")) return RIGHT_END_ERR;
 	//見出し最下部 
-	if((trim($data[$first_data_row-1][7]) <> "複数可")) return HEADER_BOTTOM_ERR;
+	if((trim($data[FIRST_DATA_ROW-1][6]) <> "複数可")) return HEADER_BOTTOM_ERR;
 	//大域宣言との整合性確認
-	if($first_data_row != 9) return SHEET_DEF_ERR;
-
-	//$r = (trim($data[1][5]) == "基本情報整理表"); // [row][column]
-	//$r = $r && (trim($data[$first_data_row-4][1]) == "＊課･室・地方機関コード"); // 左端
-	//$r = $r && (trim($data[$first_data_row-4][$last_column]) == "＊作業管理No."); //右端
-	//$r = $r && (trim($data[$first_data_row-1][7]) == "複数可");	//見出し最下部 
-	//$r = $r && ($first_data_row == 9); //大域宣言との整合性確認
+	if(FIRST_DATA_ROW != 9) return SHEET_DEF_ERR;
 	return TRUE;
 }
 
 // テーブルの出力
 function write_table($data, $ken_or_shi, $lot){
-	global $first_data_row, $last_column, $division_name_row, $division_name_col;
-	$division_name = $data[$division_name_row][$division_name_col];
+	$division_name = $data[DIVISION_NAME_ROW][DIVISION_NAME_COLUMN];
 	$num_rows = count($data);
 	
 	//echo "lines:" . $num_rows."\n";
 	$s = "<table border=1>\n";
-	for ($r=$first_data_row ; $r<=$num_rows; $r++){
+	for ($r=FIRST_DATA_ROW ; $r<=$num_rows; $r++){
 		if (isset($data[$r][1]) && $data[$r][1] != ""){
 			$s .= "<tr><td>".$division_name."</td>";
 			$s .= "<form method='post' action ='metadata4.php?lot=". $lot ."&"."row_no=".$r."'>\n";
@@ -238,7 +237,7 @@ if($uploaded == EXCEL_FILE_NOT_PREPARED){
 	echo "Excelのファイルのバージョンが異なります。";
 } else {
 	echo output_file_info($original_file_path, $uploaded_file_path);
-	$data = load_sheet($uploaded, $input_sheet_name, $required_excel_version);
+	$data = load_sheet($uploaded, INPUT_SHEET_NAME, $required_excel_version);
 	if(!$data){
 		echo "Excelのファイルから読み取りをおこなうことができませんでした。";
 	} else {
@@ -249,8 +248,11 @@ if($uploaded == EXCEL_FILE_NOT_PREPARED){
 				case SHEET_TITLE_ERR:
 					echo "表のタイトルが「基本情報整理表」になっていないか、タイトルの位置が変更されています。";
 					break;
-				case LEFT_END_ERR:
-					echo "表の左端が「課･室・地方機関コード」になっていません。";
+				case KEN_LEFT_END_ERR:
+					echo "県の資料のはずなのに、表の左端が「課･室・地方機関コード」になっていません。";
+					break;
+				case SHI_LEFT_END_ERR:
+					echo "市町村の資料のはずなのに、表の左端が「市町村コード」になっていません。";
 					break;
 				case RIGHT_END_ERR:
 					echo "表の右端が「作業管理No」になっていません。";
@@ -263,6 +265,7 @@ if($uploaded == EXCEL_FILE_NOT_PREPARED){
 					break;
 			}
 		} else {
+			echo "現状ここで中断\n";
 			$lot ="003";
 			write_table($data,$ken_or_shi, $lot);
 		}
