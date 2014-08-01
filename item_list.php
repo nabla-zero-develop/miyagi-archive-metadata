@@ -5,28 +5,33 @@ include_once(dirname(__FILE__) . "/Classes/PHPExcel/IOFactory.php");
 ignore_user_abort(1);
 set_time_limit(86400);
 
-//定数 
+////
+//// 定数 
+//// 
+
+// エクセルバージョン
 define("EXCEL2007", "Excel2007");
 define("EXCEL5", "Excel5");
+// エクセルファイルアップロードに関するエラー定義
 define("EXCEL_FILE_NOT_PREPARED", "-10");
 define("EXCEL_FILE_NOT_UPLOADED", "-20");
-//
-define("INPUT_SHEET_NAME", "整理表");
-//
+// 整理表シートに関するエラー定義
 define("SHEET_TITLE_ERR", "-30");
 define("KEN_LEFT_END_ERR", "-41");
 define("SHI_LEFT_END_ERR", "-42");
 define("RIGHT_END_ERR", "-50");
 define("HEADER_BOTTOM_ERR", "-60");
 define("SHEET_DEF_ERR", "-70");
-//
+// 整理表名前
+define("INPUT_SHEET_NAME", "整理表");
+// 整理表項目位置情報
 define("SHEET_TITLE_ROW", "1");
 define("SHEET_TITLE_COLUMN", "4");
 define("FIRST_DATA_ROW", "9");
 define("LAST_COLUMN", "33");
 define("DIVISION_NAME_ROW", "2");
 define("DIVISION_NAME_COLUMN", "4");
-//
+// 整理表列情報
 define("SHIRYO_SHUBETU_COLUMN", "1");
 define("SHIRYO_SHUBETU_HEADER", "資料種別記号");
 define("SHICHOSON_KANRI_BANGOU_COLUMN", "2");
@@ -38,16 +43,21 @@ define("BUNRUI_CODE_COLUMN", "6");
 define("TITLE_COLUMN", "8");
 define("TITLE_HEADER", "タイトル");
 define("SAKUSEISHA_COLUMN", "9");
-define("SAKUSEISHA_HEADER", "作成・撮影者");
+define("SAKUSEISHA_HEADER", "作成者・撮影者");
 define("SAKUSEIBASHO_COLUMN", "15");
 define("SAKUSEIBASHO_HEADER", "撮影場所");
 define("KEYWORD_COLUMN", "19");
 define("KEYWORD_HEADER", "キーワード");
-//
+// メタデータ処理ページ
 define("METADATA_INPUT_PAGE", "./metadata4.php");
 
-$test_flag = !isset($_FILES["upfile"]["name"]); 
+////
+//// 大域変数
+////
+
+// エクセルの要求バージョン
 $required_excel_version= EXCEL2007;
+// 表示する列の定義
 $visible_columns = array(
 	array(SHIRYO_SHUBETU_COLUMN, SHIRYO_SHUBETU_HEADER),
 	array(SHICHOSON_KANRI_BANGOU_COLUMN, SHICHOSON_KANRI_BANGOU_HEADER),
@@ -57,7 +67,8 @@ $visible_columns = array(
 	array(KEYWORD_COLUMN, KEYWORD_HEADER),
 	);
 
-// シェル上のテストかどうか	
+// シェル上のテストかウェべページ動作かの判定
+$test_flag = !isset($_FILES["upfile"]["name"]); 
 if($test_flag){
 	// テスト用のファイルパス
 	$original_file_path = "/home/taka/disks/d/Data/Work/Downloads/食産業振興課【回答様式】基本情報整理表20140606-1.xlsx";
@@ -72,6 +83,10 @@ if($test_flag){
 	//県版か市町村版か(0->県版, 1->市町村版)
 	$ken_or_shi = $_REQUEST['ken_or_shi'];
 }
+
+////
+//// 関数定義
+////
 
 // エクセルのファイルか？
 function is_excel_file($file_path, $required_excel_version){
@@ -201,68 +216,6 @@ function is_valid_seirihyo($data, $ken_or_shi){
 	return TRUE;
 }
 
-// 表示する列かどうか
-function is_visible_column($c){
-	global $visible_columns;
-	foreach($visible_columns as $col_info){
-		if($col_info[0] == $c && $c > 0){
-			return TRUE;
-		}
-	}
-	return FALSE;
-}
-
-// 表示列の見出し
-function get_visible_column_header($c){
-	global $visible_columns;
-	foreach($visible_columns as $col_info){
-		if($col_info[0] == $c){
-			return $col_info[1];
-		}
-	}
-	return "";
-}
-
-
-// テーブルの出力
-function write_table($data, $ken_or_shi, $lot){
-	$division_name = $data[DIVISION_NAME_ROW][DIVISION_NAME_COLUMN];
-	$num_rows = count($data);
-	
-	//echo "div: " .$division_name ."\n";
-	//echo "lines:" . $num_rows."\n";
-	$s = "<table class='table_1'>\n";
-	// 見出し
-	$s .= "<tr class='color_0'>";
-	for ($c=1; $c<=LAST_COLUMN; $c++){
-		if(is_visible_column($c)){
-			$s .= "<td>".get_visible_column_header($c)."<br></td>\n";
-		}
-	}
-	$s .= "<td></td>\n";
-	$s .= "</tr>";
-	// データ内容
-	for ($r=FIRST_DATA_ROW ; $r<=$num_rows; $r++){
-		if (isset($data[$r][1]) && $data[$r][1] != ""){
-			$s .= "<tr class='color_". (($r % 2) +1) ."'>"; //<td>".$division_name."</td>";
-			$s .= "<form method='post' action ='". METADATA_INPUT_PAGE ."?lot=". $lot ."&"."row_no=".$r."'>\n";
-			for ($c=1; $c<=LAST_COLUMN; $c++){
-				$item = $data[$r][$c];
-				$s .= "<input type='hidden' name='r".$r."c".$c."' value='".$item."'>";
-				if(is_visible_column($c)){
-					$s .= "<td>".$item."<br></td>";
-				}
-				$s .= "\n"; 
-		    }
-		    $s .= "<input type='hidden' name='ken_or_shi' value='".$ken_or_shi."'>\n";
-		    $s .= "<td><input type='submit' value='メタデータ入力'>\n";
-		    $s .= "</form>\n";
-			$s .= "</tr>\n";
-		}
-	}
-	$s .= "</table>\n";
-	return $s;
-}
 
 // HTMLヘッダ部分文字列出力
 function output_header(){
@@ -282,6 +235,12 @@ function output_css(){
 	return <<< EOS
 <STYLE TYPE="text/css"> 
 <!-- 
+.table_0 { 
+	width: 48%; /* テーブルの横幅 */ 
+	border-collapse: collapse; /* 枠線の表示方法 */ 
+	border: 1px #1C79C6 solid; /* テーブル全体の枠線（太さ・色・スタイル） */ 
+} 
+
 .table_1 { 
 	width: 96%; /* テーブルの横幅 */ 
 	border-collapse: collapse; /* 枠線の表示方法 */ 
@@ -311,7 +270,7 @@ tr.color_2 {
 } 
 
 td.color_0 { 
-	background-color: #C9E2F8; /* 見出し列の背景色 */ 
+	background-color: #A7C0E8; /* 見出し列の背景色 */ 
 } 
 
 td.color_1 { 
@@ -322,12 +281,77 @@ td.color_1 {
 EOS;
 }
 
-// ファイル情報文字列出力
-function output_file_info($original_file_path, $uploaded_file_path, $ken_or_shi){
-	return "<table class='table_1'>".
-			"<tr><td class='color_0'>アップロードされたファイル</td><td class='color_1'>".basename($original_file_path)."</td></tr>".
-			"<tr><td class='color_0'>ファイルの仕様</td><td class='color_1'>".(($ken_or_shi == 0) ? "県" : "市町村")."</td></tr>".
+// ファイル情報表文字列出力
+function output_file_info($original_file_path, $uploaded_file_path, $ken_or_shi, $division_name){
+	return "<table class='table_0'>".
+			"<caption>アップロードされたファイルの情報</caption>".
+			"<tr><td class='color_0'>ファイル名</td><td class='color_1'>".basename($original_file_path)."</td></tr>".
+			"<tr><td class='color_0'>ファイルの仕様</td><td class='color_1'>".(($ken_or_shi == 0) ? "県版" : "市町村版")."</td></tr>".
+			"<tr><td class='color_0'>部署情報</td><td class='color_1'>".$division_name."</td></tr>".
 			"<input type='hidden' name='uploaded_file_path' value='".$uploaded_file_path."'><br><br>\n";
+}
+
+
+// 表示する列かどうか
+function is_visible_column($c){
+	global $visible_columns;
+	foreach($visible_columns as $col_info){
+		if($col_info[0] == $c && $c > 0){
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+// 表示列の見出し
+function get_visible_column_header($c){
+	global $visible_columns;
+	foreach($visible_columns as $col_info){
+		if($col_info[0] == $c){
+			return $col_info[1];
+		}
+	}
+	return "";
+}
+
+
+// テーブルの出力
+function write_table($data, $ken_or_shi, $lot){
+	$num_rows = count($data);
+	$s = "<table class='table_1'>\n";
+	$s .= "<caption>基本情報整理表主要内容一覧</caption>\n";
+	// 見出し
+	$s .= "<tr class='color_0'>";
+	for ($c=1; $c<=LAST_COLUMN; $c++){
+		if(is_visible_column($c)){
+			$s .= "<td>".get_visible_column_header($c)."<br></td>\n";
+		}
+	}
+	$s .= "<td></td>\n";
+	$s .= "</tr>";
+	// データ内容
+	for ($r=FIRST_DATA_ROW ; $r<=$num_rows; $r++){
+		if (isset($data[$r][1]) && $data[$r][1] != ""){
+			$s .= "<tr class='color_". (($r % 2) +1) ."'>"; //<td>".$division_name."</td>";
+			$s .= "<form method='post' action ='". METADATA_INPUT_PAGE ."?lot=". $lot ."&"."row_no=".$r."'>\n";
+			for ($c=1; $c<=LAST_COLUMN; $c++){
+				$item = $data[$r][$c];
+				$s .= "<input type='hidden' name='r".$r."c".$c."' value='".$item."'>";
+				if(is_visible_column($c)){ //表示項目
+					$s .= "<td>".$item."<br></td>";
+				}
+				$s .= "\n"; 
+			}
+			// 整理表以外の項目とボタン 
+		    $s .= "<td><input type='hidden' name='ken_or_shi' value='".$ken_or_shi."'>\n";
+		    $s .= "<input type='hidden' name='orginal_file_path' value='".$original_file_path."'>\n";
+		    $s .= "<input type='submit' value='メタデータ入力'></td>\n";
+		    $s .= "</form>\n";
+			$s .= "</tr>\n";
+		}
+	}
+	$s .= "</table>\n";
+	return $s;
 }
 
 // HTML フッダ部分文字列出力
@@ -340,9 +364,13 @@ EOS;
 }
 
 
-// メイン
+////
+//// メイン
+////
+// HTML/CSS出力
 echo output_header();
 echo output_css();
+// エクセルファイル受け取り
 $uploaded = receive_file($original_file_path, $uploaded_file_path, $test_flag);
 if($uploaded == EXCEL_FILE_NOT_PREPARED){
 	echo "ファイルをアップロードできません。";
@@ -351,11 +379,14 @@ if($uploaded == EXCEL_FILE_NOT_PREPARED){
 } else if (!is_excel_file($original_file_path, $required_excel_version)){
 	echo "Excelのファイルのバージョンが異なります。";
 } else {
-	echo output_file_info($original_file_path, $uploaded_file_path, $ken_or_shi);
+	// ワークシート読み取り
 	$data = load_sheet($uploaded, INPUT_SHEET_NAME, $required_excel_version);
 	if(!$data){
 		echo "Excelのファイルから読み取りをおこなうことができませんでした。";
 	} else {
+		// エクセルファイル情報出力
+		echo output_file_info($original_file_path, $uploaded_file_path, $ken_or_shi, $data[DIVISION_NAME_ROW][DIVISION_NAME_COLUMN]);
+		// 整理表フォーマットチェック
 		$err = is_valid_seirihyo($data);
 		if ($err<0){
 			echo "整理表のフォーマットが不適切です。";
@@ -380,14 +411,16 @@ if($uploaded == EXCEL_FILE_NOT_PREPARED){
 					break;
 			}
 		} else {
+			// 整理表内容出力
 			$lot ="003";
 			echo write_table($data,$ken_or_shi, $lot);
 		}
 	}
-	//
+	// テンポラリファイル削除
 	if(file_exists($uploaded_file_path)) unlink($uploaded_file_path);
 	if(file_exists($uploaded)) unlink($uploaded);	
 }
+// HTML フッダー出力
 echo output_footer();
 ?>
 
