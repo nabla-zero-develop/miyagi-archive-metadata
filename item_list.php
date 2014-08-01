@@ -12,7 +12,7 @@ define("TITLE_COLUMN", "4");
 define("FIRST_DATA_ROW", "9");
 define("LAST_COLUMN", "33");
 define("DIVISION_NAME_ROW", "2");
-define("DIVISION_NAME_COLUMN", "5");
+define("DIVISION_NAME_COLUMN", "4");
 define("EXCEL2007", "Excel2007");
 define("EXCEL5", "Excel5");
 define("EXCEL_FILE_NOT_PREPARED", "-10");
@@ -23,6 +23,7 @@ define("SHI_LEFT_END_ERR", "-42");
 define("RIGHT_END_ERR", "-50");
 define("HEADER_BOTTOM_ERR", "-60");
 define("SHEET_DEF_ERR", "-70");
+define("METADATA_INPUT_PAGE", "./metadata4.php");
 
 $test_flag = !isset($_FILES["upfile"]["name"]); 
 $required_excel_version= EXCEL2007;
@@ -176,20 +177,21 @@ function write_table($data, $ken_or_shi, $lot){
 	$division_name = $data[DIVISION_NAME_ROW][DIVISION_NAME_COLUMN];
 	$num_rows = count($data);
 	
+	//echo "div: " .$division_name ."\n";
 	//echo "lines:" . $num_rows."\n";
 	$s = "<table border=1>\n";
 	for ($r=FIRST_DATA_ROW ; $r<=$num_rows; $r++){
 		if (isset($data[$r][1]) && $data[$r][1] != ""){
 			$s .= "<tr><td>".$division_name."</td>";
-			$s .= "<form method='post' action ='metadata4.php?lot=". $lot ."&"."row_no=".$r."'>\n";
-			for ($c=1; $c<=$last_column; $c++){
+			$s .= "<form method='post' action ='". METADATA_INPUT_PAGE ."?lot=". $lot ."&"."row_no=".$r."'>\n";
+			for ($c=1; $c<=LAST_COLUMN; $c++){
 				$item = $data[$r][$c];
-				$s .= "<input type='hidden' name='r".$r."c".$c."' value='".$item."'>\n";
-				$s .= "<td>".$item."<br></td>";
+				$s .= "<input type='hidden' name='r".$r."c".$c."' value='".$item."'>";
+				$s .= "<td>".$item."<br></td>\n";
 		    }
 		    $s .= "<input type='hidden' name='ken_or_shi' value='".$ken_or_shi."'>\n";
 		    $s .= "<td><input type='submit' value='Meta入力'>\n";
-		    $s .= "\n</form>\n";
+		    $s .= "</form>\n";
 			$s .= "</tr>\n";
 		}
 	}
@@ -265,9 +267,8 @@ if($uploaded == EXCEL_FILE_NOT_PREPARED){
 					break;
 			}
 		} else {
-			echo "現状ここで中断\n";
 			$lot ="003";
-			write_table($data,$ken_or_shi, $lot);
+			echo write_table($data,$ken_or_shi, $lot);
 		}
 	}
 	//
