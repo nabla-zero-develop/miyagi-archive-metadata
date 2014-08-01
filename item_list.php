@@ -63,13 +63,13 @@ if($test_flag){
 	$original_file_path = "/home/taka/disks/d/Data/Work/Downloads/食産業振興課【回答様式】基本情報整理表20140606-1.xlsx";
 	$uploaded_file_path = tempnam(sys_get_temp_dir(), '');
 	copy($original_file_path, $uploaded_file_path);
-	//県版か市町村県版か(0->県版, 1->市町村版)
+	//県版か市町村版か(0->県版, 1->市町村版)
 	$ken_or_shi = 0;
 } else {
 	// 実際にアップロードされたファイルのパス
 	$original_file_path = $_FILES["upfile"]["name"]; // 日本語表示を含む可能性のある元々のファイル名
 	$uploaded_file_path = $_FILES["upfile"]["tmp_name"]; // 内部処理用のテンポラリファイル(エクセルファイルの実体)
-	//県版か市町村県版か(0->県版, 1->市町村版)
+	//県版か市町村版か(0->県版, 1->市町村版)
 	$ken_or_shi = $_REQUEST['ken_or_shi'];
 }
 
@@ -205,7 +205,7 @@ function is_valid_seirihyo($data, $ken_or_shi){
 function is_visible_column($c){
 	global $visible_columns;
 	foreach($visible_columns as $col_info){
-		if($col_info[0] == $c){
+		if($col_info[0] == $c && $c > 0){
 			return TRUE;
 		}
 	}
@@ -231,19 +231,20 @@ function write_table($data, $ken_or_shi, $lot){
 	
 	//echo "div: " .$division_name ."\n";
 	//echo "lines:" . $num_rows."\n";
-	$s = "<table border=1>\n";
+	$s = "<table class='table_1'>\n";
 	// 見出し
-	$s .= "<tr>";
+	$s .= "<tr class='color_0'>";
 	for ($c=1; $c<=LAST_COLUMN; $c++){
 		if(is_visible_column($c)){
 			$s .= "<td>".get_visible_column_header($c)."<br></td>\n";
 		}
 	}
+	$s .= "<td></td>\n";
 	$s .= "</tr>";
 	// データ内容
 	for ($r=FIRST_DATA_ROW ; $r<=$num_rows; $r++){
 		if (isset($data[$r][1]) && $data[$r][1] != ""){
-			$s .= "<tr><td>".$division_name."</td>";
+			$s .= "<tr class='color_". (($r % 2) +1) ."'>"; //<td>".$division_name."</td>";
 			$s .= "<form method='post' action ='". METADATA_INPUT_PAGE ."?lot=". $lot ."&"."row_no=".$r."'>\n";
 			for ($c=1; $c<=LAST_COLUMN; $c++){
 				$item = $data[$r][$c];
@@ -254,7 +255,7 @@ function write_table($data, $ken_or_shi, $lot){
 				$s .= "\n"; 
 		    }
 		    $s .= "<input type='hidden' name='ken_or_shi' value='".$ken_or_shi."'>\n";
-		    $s .= "<td><input type='submit' value='Meta入力'>\n";
+		    $s .= "<td><input type='submit' value='メタデータ入力'>\n";
 		    $s .= "</form>\n";
 			$s .= "</tr>\n";
 		}
@@ -276,10 +277,57 @@ function output_header(){
 EOS;
 }
 
+// CSS
+function output_css(){
+	return <<< EOS
+<STYLE TYPE="text/css"> 
+<!-- 
+.table_1 { 
+	width: 96%; /* テーブルの横幅 */ 
+	border-collapse: collapse; /* 枠線の表示方法 */ 
+	border: 1px #1C79C6 solid; /* テーブル全体の枠線（太さ・色・スタイル） */ 
+} 
+
+.table_1 th { 
+	border: 1px #1C79C6 solid; /* セルの枠線（太さ・色・スタイル） */ 
+	padding: 4px; /* セル内の余白 */ 
+} 
+
+.table_1 td { 
+	border: 1px #1C79C6 solid;
+	padding: 4px;
+} 
+
+tr.color_0 { 
+	background-color: #A7C0E8; /* 見出し行の背景色 */ 
+} 
+
+tr.color_1 { 
+	background-color: #C9E2F8; /* 奇数行の背景色 */ 
+} 
+
+tr.color_2 { 
+	background-color: #E3F0FB; /* 偶数行の背景色 */ 
+} 
+
+td.color_0 { 
+	background-color: #C9E2F8; /* 見出し列の背景色 */ 
+} 
+
+td.color_1 { 
+	background-color: #E3F0FB; /* データ列の背景色 */ 
+} 
+--> 
+</STYLE> 
+EOS;
+}
+
 // ファイル情報文字列出力
-function output_file_info($original_file_path, $uploaded_file_path){
-	return "<table><tr><td>アップロードされたファイル</td><td>".$original_file_path."</td></tr>".
-			"<input type='hidden' name='uploaded_file_path' value='".$uploaded_file_path."'>\n";
+function output_file_info($original_file_path, $uploaded_file_path, $ken_or_shi){
+	return "<table class='table_1'>".
+			"<tr><td class='color_0'>アップロードされたファイル</td><td class='color_1'>".basename($original_file_path)."</td></tr>".
+			"<tr><td class='color_0'>ファイルの仕様</td><td class='color_1'>".(($ken_or_shi == 0) ? "県" : "市町村")."</td></tr>".
+			"<input type='hidden' name='uploaded_file_path' value='".$uploaded_file_path."'><br><br>\n";
 }
 
 // HTML フッダ部分文字列出力
@@ -294,6 +342,7 @@ EOS;
 
 // メイン
 echo output_header();
+echo output_css();
 $uploaded = receive_file($original_file_path, $uploaded_file_path, $test_flag);
 if($uploaded == EXCEL_FILE_NOT_PREPARED){
 	echo "ファイルをアップロードできません。";
@@ -302,7 +351,7 @@ if($uploaded == EXCEL_FILE_NOT_PREPARED){
 } else if (!is_excel_file($original_file_path, $required_excel_version)){
 	echo "Excelのファイルのバージョンが異なります。";
 } else {
-	echo output_file_info($original_file_path, $uploaded_file_path);
+	echo output_file_info($original_file_path, $uploaded_file_path, $ken_or_shi);
 	$data = load_sheet($uploaded, INPUT_SHEET_NAME, $required_excel_version);
 	if(!$data){
 		echo "Excelのファイルから読み取りをおこなうことができませんでした。";
