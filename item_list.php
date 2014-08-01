@@ -6,27 +6,56 @@ ignore_user_abort(1);
 set_time_limit(86400);
 
 //定数 
-define("INPUT_SHEET_NAME", "整理表");
-define("TITLE_ROW", "1");
-define("TITLE_COLUMN", "4");
-define("FIRST_DATA_ROW", "9");
-define("LAST_COLUMN", "33");
-define("DIVISION_NAME_ROW", "2");
-define("DIVISION_NAME_COLUMN", "4");
 define("EXCEL2007", "Excel2007");
 define("EXCEL5", "Excel5");
 define("EXCEL_FILE_NOT_PREPARED", "-10");
 define("EXCEL_FILE_NOT_UPLOADED", "-20");
+//
+define("INPUT_SHEET_NAME", "整理表");
+//
 define("SHEET_TITLE_ERR", "-30");
 define("KEN_LEFT_END_ERR", "-41");
 define("SHI_LEFT_END_ERR", "-42");
 define("RIGHT_END_ERR", "-50");
 define("HEADER_BOTTOM_ERR", "-60");
 define("SHEET_DEF_ERR", "-70");
+//
+define("SHEET_TITLE_ROW", "1");
+define("SHEET_TITLE_COLUMN", "4");
+define("FIRST_DATA_ROW", "9");
+define("LAST_COLUMN", "33");
+define("DIVISION_NAME_ROW", "2");
+define("DIVISION_NAME_COLUMN", "4");
+//
+define("SHIRYO_SHUBETU_COLUMN", "1");
+define("SHIRYO_SHUBETU_HEADER", "資料種別記号");
+define("SHICHOSON_KANRI_BANGOU_COLUMN", "2");
+define("SHICHOSON_KANRI_BANGOU_HEADER", "管理番号");
+define("SHIRYO_JYURYOUBI_COLUMN", "3");
+define("SHIRYO_TEIKYOSHA_COLUMN", "4");
+define("SHIRYO_TEIKYOSHA_HEADER", "資料提供者");
+define("BUNRUI_CODE_COLUMN", "6");
+define("TITLE_COLUMN", "8");
+define("TITLE_HEADER", "タイトル");
+define("SAKUSEISHA_COLUMN", "9");
+define("SAKUSEISHA_HEADER", "作成・撮影者");
+define("SAKUSEIBASHO_COLUMN", "15");
+define("SAKUSEIBASHO_HEADER", "撮影場所");
+define("KEYWORD_COLUMN", "19");
+define("KEYWORD_HEADER", "キーワード");
+//
 define("METADATA_INPUT_PAGE", "./metadata4.php");
 
 $test_flag = !isset($_FILES["upfile"]["name"]); 
 $required_excel_version= EXCEL2007;
+$visible_columns = array(
+	array(SHIRYO_SHUBETU_COLUMN, SHIRYO_SHUBETU_HEADER),
+	array(SHICHOSON_KANRI_BANGOU_COLUMN, SHICHOSON_KANRI_BANGOU_HEADER),
+	array(SAKUSEISHA_COLUMN, SAKUSEISHA_HEADER),
+	array(TITLE_COLUMN, TITLE_HEADER),
+	array(SAKUSEIBASHO_COLUMN, SAKUSEIBASHO_HEADER),
+	array(KEYWORD_COLUMN, KEYWORD_HEADER),
+	);
 
 // シェル上のテストかどうか	
 if($test_flag){
@@ -156,7 +185,7 @@ function load_sheet($file_path, $sheet_name, $required_excel_version){
 // 有効な基本情報整理表かどうかを確認する
 function is_valid_seirihyo($data, $ken_or_shi){
 	// [row][column]
-	if ((trim($data[TITLE_ROW][TITLE_COLUMN]) <> "基本情報整理表")) return SHEET_TITLE_ERR;
+	if ((trim($data[SHEET_TITLE_ROW][SHEET_TITLE_COLUMN]) <> "基本情報整理表")) return SHEET_TITLE_ERR;
 	// 左端
 	if($ken_or_shi == 0){
 		if ((trim($data[FIRST_DATA_ROW-4][0]) <> "＊課･室・地方機関コード")) return KEN_LEFT_END_ERR; 
@@ -172,6 +201,29 @@ function is_valid_seirihyo($data, $ken_or_shi){
 	return TRUE;
 }
 
+// 表示する列かどうか
+function is_visible_column($c){
+	global $visible_columns;
+	foreach($visible_columns as $col_info){
+		if($col_info[0] == $c){
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+// 表示列の見出し
+function get_visible_column_header($c){
+	global $visible_columns;
+	foreach($visible_columns as $col_info){
+		if($col_info[0] == $c){
+			return $col_info[1];
+		}
+	}
+	return "";
+}
+
+
 // テーブルの出力
 function write_table($data, $ken_or_shi, $lot){
 	$division_name = $data[DIVISION_NAME_ROW][DIVISION_NAME_COLUMN];
@@ -180,6 +232,15 @@ function write_table($data, $ken_or_shi, $lot){
 	//echo "div: " .$division_name ."\n";
 	//echo "lines:" . $num_rows."\n";
 	$s = "<table border=1>\n";
+	// 見出し
+	$s .= "<tr>";
+	for ($c=1; $c<=LAST_COLUMN; $c++){
+		if(is_visible_column($c)){
+			$s .= "<td>".get_visible_column_header($c)."<br></td>\n";
+		}
+	}
+	$s .= "</tr>";
+	// データ内容
 	for ($r=FIRST_DATA_ROW ; $r<=$num_rows; $r++){
 		if (isset($data[$r][1]) && $data[$r][1] != ""){
 			$s .= "<tr><td>".$division_name."</td>";
@@ -187,7 +248,10 @@ function write_table($data, $ken_or_shi, $lot){
 			for ($c=1; $c<=LAST_COLUMN; $c++){
 				$item = $data[$r][$c];
 				$s .= "<input type='hidden' name='r".$r."c".$c."' value='".$item."'>";
-				$s .= "<td>".$item."<br></td>\n";
+				if(is_visible_column($c)){
+					$s .= "<td>".$item."<br></td>";
+				}
+				$s .= "\n"; 
 		    }
 		    $s .= "<input type='hidden' name='ken_or_shi' value='".$ken_or_shi."'>\n";
 		    $s .= "<td><input type='submit' value='Meta入力'>\n";
