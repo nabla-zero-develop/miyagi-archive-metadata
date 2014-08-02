@@ -721,10 +721,11 @@ $string .="<td><input type='text' name='creator_yomi' size='40' value='".$creato
 <tr class='kiyo_flag_option'><th>寄与者（寄贈者）
 <td><input type='text' name='contributor' size='40' value='<?php echo $contributor; ?>'></td></tr>
 <tr class='kiyo_flag_option'><th>寄与者（寄贈者）のヨミ
-<!-- 澤田さん
-		$contributor_yomi = ($contributor_yomi <> '') ? $contributor_yomi : mecab($contributor) ;
-        $string .="<td><input type='text' name='contributor_yomi' size='40' value='".$contributor_yomi."'></td></tr>\n";
--->
+<!-- 澤田さん -->
+<?php 
+$contributor_yomi = ($contributor_yomi <> '') ? $contributor_yomi : mecab($contributor) ;
+?>
+<td><input type='text' name='contributor_yomi' size='40' value='<?php echo $contributor_yomi; ?>'></td></tr>
 
 <!--異版-->
 <tr class='iban_flag_option'><th>異版名(第x版）
@@ -734,9 +735,16 @@ $string .="<td><input type='text' name='creator_yomi' size='40' value='".$creato
 
 <!--出版社・公開者-->
 <tr><th>出版社・公開者
-<!--澤田さん
-<td><input type='text' name='publisher' size='40'value='".get_info('dc_publisher')."'></td></tr>\n";
--->
+<!--澤田さん-->
+<?php 
+if($md_type=="図書"){
+	$publisher = get_info('dc_publisher');
+} else {
+	$publisher ="";
+}
+?>
+<td><input type='text' name='publisher' size='40' value='<?php echo $publisher; ?>' ></td></tr>
+
 
 <!--サブジェクト（キーワード）-->
 <tr><th class='opthissu opthissu_音声・映像 opthissu_写真 opthissu_絵画・絵はがき' >主題（キーワード）
@@ -768,11 +776,10 @@ $string .="<td><input type='text' name='creator_yomi' size='40' value='".$creato
 
 <!--公開日・出版日-->
 <tr><th>公開日
-<!--澤田さん
-<td><input type='text' name='koukai_nen' size='4' value='".$y."'>年（西暦）
-<input type='text' name='koukai_tuki' size='2' value='".$m."'>月
-<input type='text' name='koukai_hi' size='2' value='".$d."'>日
--->
+<!--澤田さん-->
+<td><input type='text' name='koukai_nen' size='4' value='<?php $y; ?>'>年（西暦）
+<input type='text' name='koukai_tuki' size='2' value='<?php $m; ?>'>月
+<input type='text' name='koukai_hi' size='2' value='<?php $d; ?>'>日
 </td></tr>
 
 <!--言語-->
@@ -941,10 +948,12 @@ $string .="<td><input type='text' name='creator_yomi' size='40' value='".$creato
 <!--配布場所とヨミ、配付日時、配付対象-->
 <tr class='optional optional_チラシ optional_会議録・含資料'><th>配布場所<br>
 <td><input type='text' name='haifu_basho' size='40' value='<?php echo $haifu_basho; ?>'></td></tr>
-<!--澤田さん<tr><th>配布場所のヨミ<br> 
+<!--澤田さん-->
+<?php
    $haifu_basho_yomi = yomi($haifu_basho_yomi, mecab($haifu_basho));
-   $string .="<td><input type='text' name='haifu_basho_yomi' size='40' value='".$haifu_basho_yomi."'></td></tr>\n";
--->
+?>
+<tr><th>配布場所のヨミ<br> 
+<td><input type='text' name='haifu_basho_yomi' size='40' value='<?php echo $haifu_basho_yomi; ?>'></td></tr>
 <tr class='optional optional_チラシ optional_会議録・含資料'><th>配付日時
 <td><input type='text' name='haifu_nen' value='<?php echo $haifu_nen; ?>' size='4'>年（西暦）
 <input type='text' name='haifu_tuki' value='<?php echo $haifu_tuki; ?>' size='2'>月
