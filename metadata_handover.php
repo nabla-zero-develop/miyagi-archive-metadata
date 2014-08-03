@@ -11,7 +11,7 @@
 <input type='hidden' name='creator_yomi' value='<?php echo $creator_yomi; ?>'>
 <input type='hidden' name='sakusei_nen'  value='<?php echo $sakusei_nen; ?>'>
 <input type='hidden' name='sakusei_tuki' value='<?php echo $sakusei_tuki; ?>'>
-<input type='hidden' name='sakusei_hi'   value='<?php echo $sakusei_hi; ?>'>
+<input type='hidden' name='sakusei_bi'   value='<?php echo $sakusei_bi; ?>'>
 <input type='hidden' name='satuei_basho_zip'          value='<?php echo $satuei_basho_zip; ?>'>
 <input type='hidden' name='satuei_basho_address'      value='<?php echo $satuei_basho__address; ?>'>
 <input type='hidden' name='satuei_basho_address_yomi' value='<?php echo $satuei_basho_address_yomi; ?>'>

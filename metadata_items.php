@@ -71,7 +71,7 @@ function output_items_last($items){
 	<tr><th>公開日</th><td>
 		<input type='text' name='koukai_nen' size='4' value='$koukai_nen'>年（西暦）
 		<input type='text' name='koukai_tuki' size='2' value='$koukai_tuki'>月
-		<input type='text' name='koukai_hi' size='2' value='$koukai_hi>日</td></tr>
+		<input type='text' name='koukai_bi' size='2' value='$koukai_bi>日</td></tr>
 
 	<tr><th>言語<td>
 	<select name='language'>

@@ -80,7 +80,7 @@ function output_shiryo_keitai($shiryo_keitai){
  
 function output_text_input($var_name){
 	return <<< EOS;
-	<td><input type='text' name='$var_name' size='40' value='$$var_name'></td></tr>
+	<td><input type='text' name='$var_name' size='40' value='$var_name'></td></tr>
 EOS;
 }
 
