@@ -2,9 +2,8 @@
 include_once(dirname(__FILE__) . "/NDL/NDL.php");
 include_once(dirname(__FILE__) . "/NDL/utils.php");
 include_once(dirname(__FILE__) . "/metadata_utils.php");
-include_once(dirname(__FILE__) . "/metadata_headers.php");
+include_once(dirname(__FILE__) . "/metadata_header.php");
 include_once(dirname(__FILE__) . "/metadata_items.php");
-include_once(dirname(__FILE__) . "/metadata_handovers.php");
 
 function get_item($col_num){
 	global $row_no;
@@ -74,7 +73,7 @@ $items = array();
 foreach(array($common_items, $ken_items,  $shi_items) as $is){
 	foreach($is as $i){
 		$$i[0] = get_item($i[1]);
-		$items += array($s => $$s);
+		$items += array($i[1] => $$i[0]);
 	}
 }
 
@@ -167,7 +166,7 @@ echo output_image_script($files);
 
 	<form name="input_form" method ="post" action="metadata65.php" onSubmit="return check()">
 	<table>
-		<?php echo metadata_items1(); ?>
+		<?php echo metadata_items1($items); ?>
 
     <!--オリジナル資料の形態-->
     <?php
@@ -249,7 +248,7 @@ if($md_type=="図書"){
 </td><tr></td>
 
 
-	<?php echo output_handover_items(); ?>
+	<?php echo output_handover_items($items); ?>
 </table>
 <?php echo output_handover_items(); ?>
 <input type="submit" value="確認画面へ">

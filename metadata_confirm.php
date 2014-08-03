@@ -6,7 +6,6 @@ include_once(dirname(__FILE__) . "/NDL/utils.php");
 include_once(dirname(__FILE__) . "/metadata_utils.php");
 include_once(dirname(__FILE__) . "/metadata_headers.php");
 include_once(dirname(__FILE__) . "/metadata_items.php");
-include_once(dirname(__FILE__) . "/metadata_handovers.php");
 
 $lot_id = intval($_GET['lot']);
 $id = isset($_GET['id'])?intval($_GET['id']):1;

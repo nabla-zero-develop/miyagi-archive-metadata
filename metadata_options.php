@@ -3,10 +3,10 @@
 function output_radio($name, $flag, $first, $second, $default_flag=0){
 	$checked_0 = ($default_flag <> 1) ? 'checked' : '';
 	$checked_1 = ($default_flag == 1) ? 'checked' : '';
-	return <<< EOS;
+	return <<< EOS
 	<input class='optctrl' type='radio' value=0 name='$name' $checked_0>$first　
 	<input class='optctrl' type='radio' value=1 name='$name' $checked_1>$second　
-	EOS;
+EOS;
 }
 
 function selection($name, $is, $default_selection, $type=1){
@@ -39,7 +39,7 @@ array('TF0',"その他"),array('WA0',"国立大学等"),array('WB0',"国立大�
 	return selection('gov_issue', $gov_types, $gov_issue, 2);
 }
 
-function output_gov_issue_selection($gov_issue_miyagi){
+function output_gov_issue_miyagi_selection($gov_issue_miyagi){
 	$gov_types_miyagi = array(array('', '該当しない'),array('4100', '仙台市'),array('4202', '石巻市'),array('4203', '塩竈市'),
 array('4204', '古川市'),array('4205', '気仙沼市'),array('4206', '白石市'),array('4207', '名取市'),
 array('4208', '角田市'),array('4209', '多賀城市'),array('4210', '泉市'),array('4211', '岩沼市'),
@@ -64,24 +64,47 @@ array('4602', '津山町'),array('4603', '本吉町'),array('4604', '唐桑町')
 	return selection('gov_issue_miyagi', $gov_types_miyagi, $gov_issue_miyagi, 2);
 }
 
-function output_for_handicapped($for_handicapped){
+function output_for_handicapped_selection($for_handicapped){
 	$for_handicapped_types = array(array('', '該当しない'), array('Braille', '点字'), array('DAISY','DAISY'),
 	array('AudioBookInSoundD', '録音図書（DVD・CD）'), array('AudioBookInSoundT', '録音図書（カセットテープ）'));
 	return selection('for_handicapped', $for_handicapped_types, $for_handicapped, 2);
 }
 
-function output_shiryo_keitai($shiryo_keitai){
+function output_shiryo_keitai_selection($shiryo_keitai){
 	$shiryo_ = array(array('0','該当しない'), array('03', '大活字'), array('04', '文庫本'), array('05', '新書'), array('85', '絵本'),
 		array('06', '大型絵本'),	array('07', '紙芝居'), array('08', '紙芝居舞台'), array('09', 'かるた'), array('10', '絵葉書'),
 		array('11', 'ちりめん本'), array('12', '大型紙芝居'));
 	return selection('shiryo_keitai', $shiryo, $shiryo_keitai, 2);
 }
 
- 
+function output_language_selection($language){
+	$languages = array(array('JPN','日本語'),array('ENG','英語'),array('CHI','中国語'),
+		array('KOR','韓国語'),array('GER','ドイツ語'),array('FRE','フランス語'),
+		array('SPA','スペイン語'),array('ITA','イタリア語'),array('RUS','ロシア語'),
+		array('POR','ポルトガル語'), array('TGL','タガログ語'));
+	return selection('language', $languages, $language, 2);
+}
+
+function output_original_shiryo_keitai_selection($original_shiryo_keitai){
+        $shiryos = array(array('31','ＣＤ'),array('32','カセット'),array('33','レコード'),array('34','リールテープ'),
+                array('35','ＭＤ'),array('36','録音図書'),array('39','録音その他'),array('41','ビデオテープ'),
+                array('42','ＬＤ'),array('43','ＤＶＤ'),array('44','ＥＬＩＢ'),array('45','ブルーレイディスク'),
+                array('46','映像フィルム'),array('49','映像その他'),array('51','磁気テープ'),array('52','ＦＤ'),
+                array('53','ＣＤ－ＲＯＭ'),array('54','ＭＯ'),array('59','機械その他'),array('61','ネガ・ポジ'),
+                array('62','プリント'),array('63','スライド'),array('69','写真その他'),array('71','楽譜'),
+                array('81','マイクロＬ'),array('82','マイクロＣ'),array('91','別置解説書'),array('92','その他ＡＶ'));
+	return selection('original_shiryo_keitai', $shiryos, $original_shiryo_keitai, 2);
+}
+
 function output_text_input($var_name){
-	return <<< EOS;
+	return <<< EOS
 	<td><input type='text' name='$var_name' size='40' value='$$var_name'></td></tr>
 EOS;
 }
 
+function output_hidden_input($var_name){
+	return <<< EOS
+	<td><input type='hidden' name='$var_name' size='40' value='$$var_name'></td></tr>
+EOS;
+}
 ?>

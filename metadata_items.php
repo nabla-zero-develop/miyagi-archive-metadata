@@ -1,11 +1,11 @@
 <?php
 
-include_once(dirname(__FILE__) . "metadata_options.php");
+include_once(dirname(__FILE__) . "/metadata_options.php");
 
 function metadata_items1($items){
 	$_uniqid = $items['uniqid'];
 	$_md_type = output_md_type_selection($items['md_type']);
-    $_series_flag = output_radio('series_flag', $items['series_flag'], '該当しない', '該当する'); 
+        $_series_flag = output_radio('series_flag', $items['series_flag'], '該当しない', '該当する'); 
 	$_betu_title_flag = output_radio('betu_title_flag', $items['betu_title_flag'], '無', '有'); 
 	$_kiyo_flag = output_radio('kiyo_flag', $items['kiyo_flag'], '無', '有'); 
 	$_iban_flag = output_radio('iban_flag', $items['iban_flag'], '該当しない', '該当する');
@@ -15,7 +15,7 @@ function metadata_items1($items){
 	$_gov_issue_2 = output_text_input('gov_issue_2', $items['gov_issue_2']);
 	$_gov_issue_chihou = output_text_input('gov_issue_chihou', $items['gov_issue_chihou']);
 	$_gov_issue_miyagi = output_gov_issue_miyagi_selection($items['gov_issue_miyagi']); 
-	$_for_handicapped = output_for_handicapped($items['for_handicapped']);
+	$_for_handicapped = output_for_handicapped_selection($items['for_handicapped']);
 	return <<< EOS
 	<tr><th>ユニークID</th><td>$_uniqid </td></tr>
 	<tr><th class='hissu'>資料種別</th><td>$_md_type</td></tr>
@@ -35,7 +35,9 @@ EOS;
 
 function output_items_last($items){
 	$text_fields = array('contributor', 'contributor_yomi', 'iban', 'iban_chosha','publisher',
-	'keyword', 'chuuki', 'youyaku', 'mokuji');
+	'keyword', 'chuuki', 'youyaku', 'mokuji', 'is_bubun', 'ioya_uri', 'shigen_mei', 'has_bubun', 'ko_uri',
+	'taisho_basho_uri', 'taisho_basho_keni', 'taisho_basho_shi', 'taisho_basho_banchii', 'taisho_basho_ido',
+	'taisho_basho_keido');
 	foreach($text_fields as $f){
 		$$f = output_text_input($f, $items[$f]);
 	}
@@ -48,7 +50,9 @@ function output_items_last($items){
 	$koukai_nen = $item['koukai_nen'];
 	$koukai_tuki = $item['koukai_tuki'];
 	$koukai_hi = $item['koukai_hi'];
-	$shiryo_keitai = output_shiryo_keitai($items['shiryo_keitai']);
+	$shiryo_keitai = output_shiryo_keitai_selection($items['shiryo_keitai']);
+	$language = output_for_handicapped_selection($items['language']);
+
 	return <<< EOS
 	<tr class='kiyo_flag_option'><th>寄与者（寄贈者）</th><td>$contributor</td></tr>	
 	<tr class='kiyo_flag_option'><th>寄与者（寄贈者）のヨミ</th><td>$contributor_yomi</td></tr>
@@ -58,8 +62,7 @@ function output_items_last($items){
 	<tr><th class='optional optional_音声・映像 optional_写真 optional_絵画・絵はがき'>主題（キーワード）</th><td>$keyword</td></tr>
 	<tr><th>注記等</th><td>$chuuki</td></tr>
 	<tr><th>要約</th><td>$youyaku</td></tr>
-	<tr class='optional optional_図書 optional_記事 optional_雑誌・新聞 optional_映像・音声 optional_文書・楽譜 optional_地図・地図帳 optional_チラシ optional_会議録・含資料 optional_博物資料 optional_絵画・絵はがき'><th>目次
-</th><td>$mokuji</td></tr>
+	<tr class='optional optional_図書 optional_記事 optional_雑誌・新聞 optional_映像・音声 optional_文書・楽譜 optional_地図・地図帳 optional_チラシ optional_会議録・含資料 optional_博物資料 optional_絵画・絵はがき'><th>目次</th><td>$mokuji</td></tr>
 	<tr><th>作成・撮影日</th><td>
 		<input type='text' name='sakusei_nen' size='4' value='$sakusei_nen'>年（西暦）
 		<input type='text' name='sakusei_tuki' size='2' value='$sakusei_tuki; ?>'>月
@@ -72,49 +75,22 @@ function output_items_last($items){
 		<input type='text' name='koukai_nen' size='4' value='$koukai_nen'>年（西暦）
 		<input type='text' name='koukai_tuki' size='2' value='$koukai_tuki'>月
 		<input type='text' name='koukai_hi' size='2' value='$koukai_hi>日</td></tr>
+	<tr><th>言語</th><td>$language</td></tr>
+	<!--引用資料-->
+	<tr class='inyou_flag_option'><th>～の一部分である</th><td>$is_bubun</td></tr>
+	<tr class='inyou_flag_option'><th>親URIへの参照</th><td>$ioya_uri</td></tr>
+	<tr class='inyou_flag_option'><th>参照する情報資源の名称</th><td>$shigen_mei</td></tr>
+	<tr class='inyou_flag_option'><th>～を一部分として持つ</th><td>$has_bubun</td></tr>
+	<tr class='inyou_flag_option'><th>子URIへの参照</th><td>$ko_uri</td></tr>
 
-	<tr><th>言語<td>
-	<select name='language'>
-            <option value='JPN' <?php if ($language=="JPN") { echo "selected"; } ?>>日本語</option>
-            <option value='ENG' <?php if ($language=="ENG") { echo "selected"; } ?>>英語</option>
-            <option value='CHI' <?php if ($language=="CHI") { echo "selected"; } ?>>中国語</option>
-            <option value='KOR' <?php if ($language=="KOR") { echo "selected"; } ?>>韓国語</option>
-            <option value='GER' <?php if ($language=="GER") { echo "selected"; } ?>>ドイツ語</option>
-            <option value='FRE' <?php if ($language=="FRE") { echo "selected"; } ?>>フランス語</option>
-            <option value='SPA' <?php if ($language=="SPA") { echo "selected"; } ?>>スペイン語</option>
-            <option value='ITA' <?php if ($language=="ITA") { echo "selected"; } ?>>イタリア語</option>
-            <option value='RUS' <?php if ($language=="RUS") { echo "selected"; } ?>>ロシア語</option>
-            <option value='POR' <?php if ($language=="POR") { echo "selected"; } ?>>ポルトガル語</option>
-            <option value='TGL' <?php if ($language=="TGL") { echo "selected"; } ?>>タガログ語</option>
-    </select>
-	</td></tr>
+        <!--情報資源が対象とする場所-->
+	<tr><th>情報資源が対象とする場所(URI)<br><input type='button' value='地図から取得'></th><td>$taisho_basho_uri</td></tr>
+	<tr><th>情報資源が対象とする場所（県名）</th><td>$taisho_basho_keni</td></tr>
+	<tr><th>情報資源が対象とする場所（市町村）</th><td>$taisho_basho_shi</td></tr>
+	<tr><th>情報資源が対象とする場所（街路番地）</th><td>$taisho_basho_banchii</td></tr>
+	<tr><th>情報資源が対象とする場所（緯度）</th><td>$taisho_basho_id</td></tr>
+	<tr><th>情報資源が対象とする場所（経度）</th><td>$taisho_basho_keido</td></tr>
 
-<!--引用資料-->
-<tr class='inyou_flag_option'><th>～の一部分である
-<td><input type='text' name='is_bubun' value='<?php echo $is_bubun; ?>' size='40'></td></tr>
-<tr class='inyou_flag_option'><th>親URIへの参照
-<td><input type='text' name='oya_uri' value='<?php echo $ioya_uri; ?>' size='40'></td></tr>
-<tr class='inyou_flag_option'><th>参照する情報資源の名称
-<td><input type='text' name='shigen_mei' value='<?php echo $shigen_mei; ?>' size='40'></td></tr>
-<tr class='inyou_flag_option'><th>～を一部分として持つ
-<td><input type='text' name='has_bubun' value='<?php echo $has_bubun; ?>' size='40'></td></tr>
-<tr class='inyou_flag_option'><th>子URIへの参照
-<td><input type='text' name='ko_uri' value='<?php echo $ko_uri; ?>' size='40'></td></tr>
-
-<!--情報資源が対象とする場所-->
-<tr><th>情報資源が対象とする場所(URI)<br>
-<input type='button' value='地図から取得'>
-<td><input type='text' name='taisho_basho_uri' value='<?php echo $taisho_basho_uri; ?>' size='40'></td></tr>
-<tr><th>情報資源が対象とする場所（県名）
-<td><input type='text' name='taisho_basho_ken' value='<?php echo $taisho_basho_keni; ?>' size='40'></td></tr>
-<tr><th>情報資源が対象とする場所（市町村）
-<td><input type='text' name='taisho_basho_shi' value='<?php echo $taisho_basho_shi; ?>' size='40'></td></tr>
-<tr><th>情報資源が対象とする場所（街路番地）
-<td><input type='text' name='taisho_basho_banchi' value='<?php echo $taisho_basho_banchii; ?>' size='40'></td></tr>
-<tr><th>情報資源が対象とする場所（緯度）
-<td><input type='text' name='taisho_basho_ido' value='<?php echo $taisho_basho_id; ?>' size='40'></td></tr>
-<tr><th>情報資源が対象とする場所（経度）
-<td><input type='text' name='taisho_basho_keido' value='<?php echo $taisho_basho_keido; ?>' size='40'></td></tr>
 
 <!--撮影場所-->
 <tr class='optional optional_音声・映像 optional_地図・地図帳 optional_写真 optional_語り optional_絵画・絵はがき' ><th>撮影場所（緯度）<br>
@@ -171,7 +147,6 @@ function output_items_last($items){
 <td><input type='text' name='keisai_kan'  value='<?php echo $keisai_kan; ?>' size='40'></td></tr>
 <tr class='optional optional_記事 optional_会議録・含資料'><th>掲載ページ
 <td><input type='text' name='keisai_page'  value='<?php echo $keisai_page; ?>' size='40'></td></tr>
-
 
 <!--アクセス制御-->
 <tr><th class='hissu'>アクセス制御
@@ -266,4 +241,22 @@ function output_items_last($items){
 <!--閲覧注意-->
 	<tr><th>情報の質</th><td>
 		<td><?php echo output_radio('seigen', $seigen, '該当しない', '悲惨（閲覧注意）'); ?></td></tr>
+EOS;
 }
+
+function  output_handover_items($items){
+  $hidden_fields = array(
+  	        // 基本情報整理表より
+                'local_code','kanri_bango','contributor','contributor_yomi','bunrui_code',
+                'bunsho_bunrui','title','creator','creator_yomi','sakusei_nen',
+                'sakusei_tuki','sakusei_hi','satuei_basho_zip','satuei_basho_address',
+                'satuei_basho_address_yomi','haifu_basho','haifu_basho_yomi','keyword',
+                'renraku_saki_zip','renraku_saki_address','renraku_saki_tel','renraku_saki_other',
+                'kenri_shori','horyu_reason','open_level','media_code',
+                //
+                'lot','id');
+	foreach($hidden_fields as $f){
+		$$f = output_hidden_input($f, $items[$f]);
+	}
+}
+

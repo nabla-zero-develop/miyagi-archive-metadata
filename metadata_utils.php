@@ -1,27 +1,33 @@
 <?php
-function get_data_from_db($lot_id, $id){
-	mysql_connect('localhost','root','');
-	mysql_select_db('metadata_system');
-	mysql_query('set names utf8');
+define('DEBUG_NO_DB', TRUE);
 
-	$res = mysql_query("select count(*) as c from lotfiles where lotid=$lot_id");
-	$row = mysql_fetch_assoc($res);
-	if(!$row)die("No data for lot no. $lot_id.");
-	$num_in_lot = $row['c'];
-	$res = mysql_query("select * from lotfiles where lotid=$lot_id and id=$id");
-	//
-	$row = mysql_fetch_assoc($res);
-	if(!$row)die("No data for lot no. $lot_id and id $id.");
-	$uniqid=$row['uniqid'];
-	$filedir = $row['filepath'];
-	$files = glob($filedir.'/*');
-	$res = mysql_query("select * from content where uniqid=$uniqid");
-	$data = mysql_fetch_assoc($res);
-	if(!$data){
-		$data = array(
-	'md_type' => '','md_title' => '','md_copywriter' => '','md_copywriter_other' => '','md_copyrigher_uri' => '','md_copyrighter_yomi' => '','md_content_year' => '-1','md_content_month' => '-1','md_content_day' => '-1','md_content_hour' => '-1','md_content_min' => '-1','md_content_sec' => '-1','md_publish_year' => '-1','md_publish_month' => '-1','md_publish_day' => '-1','md_setting_year' => '-1','md_setting_month' => '-1','md_seting_day' => '-1','md_setting_place' => '','md_issue_for' => '','md_issue_year' => '-1','md_issue_month' => '-1','md_issue_day' => '-1','md_narrator' => '','md_content_restriction' => ''
-		);
-		return array($data, $num_in_lot, $uniqid, $files);
+function get_data_from_db($lot_id, $id){
+        if(!DEBUG_NO_DB){
+	        mysql_connect('localhost','root','');
+	        mysql_select_db('metadata_system');
+	        mysql_query('set names utf8');
+
+	        $res = mysql_query("select count(*) as c from lotfiles where lotid=$lot_id");
+	        $row = mysql_fetch_assoc($res);
+	        if(!$row)die("No data for lot no. $lot_id.");
+	        $num_in_lot = $row['c'];
+	        $res = mysql_query("select * from lotfiles where lotid=$lot_id and id=$id");
+	        //
+	        $row = mysql_fetch_assoc($res);
+	        if(!$row)die("No data for lot no. $lot_id and id $id.");
+	        $uniqid=$row['uniqid'];
+	        $filedir = $row['filepath'];
+	        $files = glob($filedir.'/*');
+	        $res = mysql_query("select * from content where uniqid=$uniqid");
+	        $data = mysql_fetch_assoc($res);
+	        if(!$data){
+		        $data = array(
+	        'md_type' => '','md_title' => '','md_copywriter' => '','md_copywriter_other' => '','md_copyrigher_uri' => '','md_copyrighter_yomi' => '','md_content_year' => '-1','md_content_month' => '-1','md_content_day' => '-1','md_content_hour' => '-1','md_content_min' => '-1','md_content_sec' => '-1','md_publish_year' => '-1','md_publish_month' => '-1','md_publish_day' => '-1','md_setting_year' => '-1','md_setting_month' => '-1','md_seting_day' => '-1','md_setting_place' => '','md_issue_for' => '','md_issue_year' => '-1','md_issue_month' => '-1','md_issue_day' => '-1','md_narrator' => '','md_content_restriction' => '');
+	        }
+	        return array($data, $num_in_lot, $uniqid, $files);
+        } else {
+                return array(array(), -1, -1, array());
+        }	  
 }
 
 function yomi_check($yomi){
@@ -71,6 +77,7 @@ function numArray($start,$end,$unknown = false){
 	return $a;
 }
 
+// 以下、現状使われていない
 function outputSelect($name,$options,$value,$valueiskey = false){
 	global $data;
 	$value = $data[$name];
