@@ -76,11 +76,10 @@ function output_shiryo_keitai($shiryo_keitai){
 		array('11', 'ちりめん本'), array('12', '大型紙芝居'));
 	return selection('shiryo_keitai', $shiryo, $shiryo_keitai, 2);
 }
-
  
 function output_text_input($var_name){
 	return <<< EOS;
-	<td><input type='text' name='$var_name' size='40' value='$var_name'></td></tr>
+	<td><input type='text' name='$var_name' size='40' value='$$var_name'></td></tr>
 EOS;
 }
 
