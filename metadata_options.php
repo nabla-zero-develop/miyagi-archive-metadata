@@ -13,9 +13,9 @@ function selection($name, $is, $default_selection, $type=1){
 	$s = "<select name = '$name'>";
 	foreach($is as $i){
 		if($type == 1){
-			$s .= "<option value='" .$i. "' ". ($i==$default_selection) ? 'selected' : '' .">".$i."</option>";
+			$s .= "<option value='" .$i. "' ". (($i==$default_selection) ? 'selected' : '') .">".$i."</option>\n";
 		} else {
-			$s .= "<option value='" .$i[0]. "' ". ($i[1]==$default_selection) ? 'selected' : '' .">".$i[0]."</option>";
+			$s .= "<option value='" .$i[0]. "' ". (($i[0]==$default_selection) ? 'selected' : '') .">".$i[1]."</option>\n";
 		}
 	}
 	$s .= "</select>";
