@@ -43,7 +43,7 @@ $metadata_input_items = array()
 	'rippou_flag', //立法資料か否か
 	'betsu_title', 'betsu_title_yomi', 'series_title', 'series_title_yomi', 'naiyo_saimoku_title', 'betu_series_title_yomi', 'naiyo_saimoku_title_yomi',
 	'naiyo_saimoku_chosha','naiyo_saimoku_chosha_yomi','buhenmei','buhenmei_yomi','makiji_bango','makiji_bango_yomi','iban', 'iban_chosha',
-	'publisher','chuuki','youyaku','mokuji','standard_id','sakusei_nen','sakussi_tuki','sakussi_bi',
+	'publisher','chuuki','youyaku','mokuji','standard_id','sakusei_nen','sakusei_tuki','sakusei_bi',
 	'online_nen','online_tuki','online_bi','koukai_nen','koukai_tuki','koukai_bi','language','is_bubun','oya_uri','shigen_mei','has_bubun','taisho_basho_uri',
 	'taisho_basho_ken','taisho_basho_shi','taisho_basho_banchi','taisho_basho_ido','taisho_basho_keido','satuei_ido','satuei_keido','satuei_ken','satuei_shi',
 	'satuei_banchi','kanko_hindo','kanko_status','kanko_kanji','doctor_bango','doctor_nen','doctor_tuki','doctor_bi','doctor_daigaku','keisai_go1','keisai_go2',

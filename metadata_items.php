@@ -74,7 +74,7 @@ function output_items_last($items){
 	<tr><th>公開日</th><td>
 		<input type='text' name='koukai_nen' size='4' value='$koukai_nen'>年（西暦）
 		<input type='text' name='koukai_tuki' size='2' value='$koukai_tuki'>月
-		<input type='text' name='koukai_hi' size='2' value='$koukai_hi>日</td></tr>
+        	<input type='text' name='koukai_hi' size='2' value='$koukai_hi>日</td></tr>
 	<tr><th>言語</th><td>$language</td></tr>
 	<!--引用資料-->
 	<tr class='inyou_flag_option'><th>～の一部分である</th><td>$is_bubun</td></tr>
@@ -88,7 +88,7 @@ function output_items_last($items){
 	<tr><th>情報資源が対象とする場所（県名）</th><td>$taisho_basho_keni</td></tr>
 	<tr><th>情報資源が対象とする場所（市町村）</th><td>$taisho_basho_shi</td></tr>
 	<tr><th>情報資源が対象とする場所（街路番地）</th><td>$taisho_basho_banchii</td></tr>
-	<tr><th>情報資源が対象とする場所（緯度）</th><td>$taisho_basho_id</td></tr>
+	<tr><th>情報資源が対象とする場所（緯度）</th><td>$taisho_basho_ido</td></tr>
 	<tr><th>情報資源が対象とする場所（経度）</th><td>$taisho_basho_keido</td></tr>
 
 
