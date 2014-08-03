@@ -69,7 +69,15 @@ function output_for_handicapped($for_handicapped){
 	array('AudioBookInSoundD', '録音図書（DVD・CD）'), array('AudioBookInSoundT', '録音図書（カセットテープ）'));
 	return selection('for_handicapped', $for_handicapped_types, $for_handicapped, 2);
 }
-	
+
+function output_shiryo_keitai($shiryo_keitai){
+	$shiryo_ = array(array('0','該当しない'), array('03', '大活字'), array('04', '文庫本'), array('05', '新書'), array('85', '絵本'),
+		array('06', '大型絵本'),	array('07', '紙芝居'), array('08', '紙芝居舞台'), array('09', 'かるた'), array('10', '絵葉書'),
+		array('11', 'ちりめん本'), array('12', '大型紙芝居'));
+	return selection('shiryo_keitai', $shiryo, $shiryo_keitai, 2);
+}
+
+ 
 function output_text_input($var_name){
 	return <<< EOS;
 	<td><input type='text' name='$var_name' size='40' value='$$var_name'></td></tr>

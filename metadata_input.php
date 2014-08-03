@@ -124,9 +124,9 @@ if($md_type=="図書"){
 	$creator_yomi = yomi($creator_yomi, mecab($creator)) ;
 	$publisher = get_info('dc_publisher');
 }
-$items += array('y' => $y);
-$items += array('m' => $m);
-$items += array('d' => $d);
+$items += array('koukai_nen' => $koukai_nen);
+$items += array('koukai_tsuki' => $koukai_tsuki);
+$items += array('koukai_hi' => $koukai_hi);
 $items += array('creator_yomi' => $creator_yomi);
 $items += array('publisher' => $publisher);
 

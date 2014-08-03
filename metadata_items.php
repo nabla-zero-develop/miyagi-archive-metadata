@@ -34,57 +34,47 @@ EOS;
 }
 
 function output_items_last($items){
-	$_contributor = output_text_input('contributor', $items['contributor']);
-	$_contributor_yomi = output_text_input('contributor_yomi', $items['contributor_yomi']);
-	$_iban = output_text_input('iban', $items['iban']);
-	$_iban_chosha = output_text_input('iban_chosha', $items['iban_chosha']);
-	$_publisher = output_text_input('publisher', $items['publisher']);
+	$text_fields = array('contributor', 'contributor_yomi', 'iban', 'iban_chosha','publisher',
+	'keyword', 'chuuki', 'youyaku', 'mokuji');
+	foreach($text_fields as $f){
+		$$f = output_text_input($f, $items[$f]);
+	}
+	$sakusei_nen = $item['sakusei_nen'];
+	$sakusei_tuki = $item['sakusei_tuki'];
+	$sakusei_bi = $item['sakusei_bi'];
+	$online_nen = $item['online_nen'];
+	$online_tuki = $item['online_tuki'];
+	$online_bi = $item['online_bi'];
+	$koukai_nen = $item['koukai_nen'];
+	$koukai_tuki = $item['koukai_tuki'];
+	$koukai_hi = $item['koukai_hi'];
+	$shiryo_keitai = output_shiryo_keitai($items['shiryo_keitai']);
 	return <<< EOS
-	<tr class='kiyo_flag_option'><th>寄与者（寄贈者）</th><td>$_contributor</td></tr>	
-	<tr class='kiyo_flag_option'><th>寄与者（寄贈者）のヨミ</th><td>$_contributor_yomi</td></tr>
-	<tr class='iban_flag_option'><th>異版名(第x版）</th><td>$_iban</td></tr>
-	<tr class='iban_flag_option'><th>異版の著者名</th><td>$_iban_chosha</td></tr>
-	<tr><th>出版社・公開者</th><td>$_publisher</td></tr>
+	<tr class='kiyo_flag_option'><th>寄与者（寄贈者）</th><td>$contributor</td></tr>	
+	<tr class='kiyo_flag_option'><th>寄与者（寄贈者）のヨミ</th><td>$contributor_yomi</td></tr>
+	<tr class='iban_flag_option'><th>異版名(第x版）</th><td>$iban</td></tr>
+	<tr class='iban_flag_option'><th>異版の著者名</th><td>$iban_chosha</td></tr>
+	<tr><th>出版社・公開者</th><td>$publisher</td></tr>
+	<tr><th class='optional optional_音声・映像 optional_写真 optional_絵画・絵はがき'>主題（キーワード）</th><td>$keyword</td></tr>
+	<tr><th>注記等</th><td>$chuuki</td></tr>
+	<tr><th>要約</th><td>$youyaku</td></tr>
+	<tr class='optional optional_図書 optional_記事 optional_雑誌・新聞 optional_映像・音声 optional_文書・楽譜 optional_地図・地図帳 optional_チラシ optional_会議録・含資料 optional_博物資料 optional_絵画・絵はがき'><th>目次
+</th><td>$mokuji</td></tr>
+	<tr><th>作成・撮影日</th><td>
+		<input type='text' name='sakusei_nen' size='4' value='$sakusei_nen'>年（西暦）
+		<input type='text' name='sakusei_tuki' size='2' value='$sakusei_tuki; ?>'>月
+		<input type='text' name='sakusei_bi' size='2' value='$sakusei_bi; ?>'>日</td></tr>
+	<tr class='optional optional_オンライン資料'><th>オンライン資料採取日</th><td>
+		<input type='text' name='online_nen' value='$online_nen' size='4'>年（西暦）
+		<input type='text' name='online_tuki' value='$online_tuki' size='2'>月
+		<input type='text' name='onlilne_bi' value='$online_bi' size='2'>日</td></tr>
+	<tr><th>公開日</th><td>
+		<input type='text' name='koukai_nen' size='4' value='$koukai_nen'>年（西暦）
+		<input type='text' name='koukai_tuki' size='2' value='$koukai_tuki'>月
+		<input type='text' name='koukai_hi' size='2' value='$koukai_hi>日</td></tr>
 
-<!--サブジェクト（キーワード）-->
-<tr><th class='opthissu opthissu_音声・映像 opthissu_写真 opthissu_絵画・絵はがき' >主題（キーワード）
-<td><input type='text' name='subject' size='40' value='<?php echo $keyword; ?>'></td></tr>
-
-<!--注記・要約-->
-<tr><th>注記等
-<td><input type='text' name='chuuki' value='<?php $chuuki; ?>' size='40'></td></tr>
-<tr><th>要約
-<td><input type='text' name='youyaku' value='<?php $youyaku; ?>' size='40'></td></tr>
-
-<!--目次-->
-<tr class='optional optional_図書 optional_記事 optional_雑誌・新聞 optional_映像・音声 optional_文書・楽譜 optional_地図・地図帳 optional_チラシ optional_会議録・含資料 optional_博物資料 optional_絵画・絵はがき'><th>目次
-<td><input type='text' name='mokuji' value='<?php echo $mokuji; ?>' size='40'></td></tr>
-
-<!--作成日-->
-<tr><th>作成・撮影日
-<td><input type='text' name='sakusei_nen' size='4' value='<?php echo $sakusei_nen; ?>'>年（西暦）
-<input type='text' name='sakusei_tuki' size='2' value='<?php echo $sakusei_tuk; ?>'>月
-<input type='text' name='sakusei_bi' size='2' value='<?php echo $sakusei_bi; ?>'>日
-</td></tr>
-
-<!--情報資源採取日-->
-<tr class='optional optional_オンライン資料'><th>Online資料採取日
-<td><input type='text' name='online_nen' value='<?php $online_nen; ?>' size='4'>年（西暦）
-<input type='text' name='online_tuki' value='<?php $online_tuki; ?>' size='2'>月
-<input type='text' name='onlilne_bi' value='<?php $online_bi; ?>' size='2'>日
-</td></tr>
-
-<!--公開日・出版日-->
-<tr><th>公開日
-<!--澤田さん-->
-<td><input type='text' name='koukai_nen' size='4' value='<?php $y; ?>'>年（西暦）
-<input type='text' name='koukai_tuki' size='2' value='<?php $m; ?>'>月
-<input type='text' name='koukai_hi' size='2' value='<?php $d; ?>'>日
-</td></tr>
-
-<!--言語-->
-<tr><th>言語
-<td><select name='language'>
+	<tr><th>言語<td>
+	<select name='language'>
             <option value='JPN' <?php if ($language=="JPN") { echo "selected"; } ?>>日本語</option>
             <option value='ENG' <?php if ($language=="ENG") { echo "selected"; } ?>>英語</option>
             <option value='CHI' <?php if ($language=="CHI") { echo "selected"; } ?>>中国語</option>
@@ -97,7 +87,7 @@ function output_items_last($items){
             <option value='POR' <?php if ($language=="POR") { echo "selected"; } ?>>ポルトガル語</option>
             <option value='TGL' <?php if ($language=="TGL") { echo "selected"; } ?>>タガログ語</option>
     </select>
-</td></tr>
+	</td></tr>
 
 <!--引用資料-->
 <tr class='inyou_flag_option'><th>～の一部分である
@@ -202,23 +192,7 @@ function output_items_last($items){
 <tr  class='license_flag_option'><th>権利・利用条件に関する注記
 <td><input type='text' name='license_chuki' value='<?php echo $license_chuki; ?>' size='40'></td></tr>
 
-<!--資料形態-->
-<tr class='optional optional_図書 optional_記事 optional_新聞・雑誌 optional_文書・楽譜 optional_地図・地図帳 optional_ポスター optional_チラシ optional_会議録・含資料 optional_絵画・絵はがき'><th>資料形態（大活字等)</th><td>
-<select name='shiryo_keitai'>
-		<option value='' <?php if ($shiryo_keitai=="0") { echo "selected"; } ?>> 該当しない</option>
-		<option value='03' <?php if ($shiryo_keitai=="03") { echo "selected"; } ?>> 大活字</option>
-	    <option value='04' <?php if ($shiryo_keitai=="04") { echo "selected"; } ?>> 文庫本</option>
-		<option value='05' <?php if ($shiryo_keitai=="05") { echo "selected"; } ?>> 新書</option>
-		<option value='85' <?php if ($shiryo_keitai=="85") { echo "selected"; } ?>> 絵本</option>
-		<option value='06' <?php if ($shiryo_keitai=="06") { echo "selected"; } ?>> 大型絵本</option>
-		<option value='07' <?php if ($shiryo_keitai=="07") { echo "selected"; } ?>> 紙芝居</option>
-		<option value='08' <?php if ($shiryo_keitai=="08") { echo "selected"; } ?>> 紙芝居舞台</option>
-		<option value='09' <?php if ($shiryo_keitai=="09") { echo "selected"; } ?>> かるた</option>
-		<option value='10' <?php if ($shiryo_keitai=="10") { echo "selected"; } ?>> 絵葉書</option>
-		<option value='11' <?php if ($shiryo_keitai=="11") { echo "selected"; } ?>> ちりめん本</option>
-		<option value='12' <?php if ($shiryo_keitai=="12") { echo "selected"; } ?>> 大型紙芝居</option>
- </select>
-</td></tr>
+	<tr class='optional optional_図書 optional_記事 optional_新聞・雑誌 optional_文書・楽譜 optional_地図・地図帳 optional_ポスター optional_チラシ optional_会議録・含資料 optional_絵画・絵はがき'><th>資料形態（大活字等)</th><td>$shiryo_keitai </td></tr>
 
 
 
