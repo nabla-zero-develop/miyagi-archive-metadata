@@ -159,6 +159,8 @@ function showOptCtrl(name){
 
 
 </script>
+<!--これはテストです-->
+
 <body>
 <div id='imageDiv'>
 <div id='imageWrap'>
