@@ -193,7 +193,7 @@ echo output_image_script($files);
 			<table>
 				<?php echo metadata_items_first($items, _INPUT_); ?>
 				<tr><td></td></tr>
-				<?php echo metadata_items_last($items, _INPUT_); ?>
+				<?php echo output_items_last($items, _INPUT_); ?>
 			</table>
 			<?php echo output_handover_items($items, _INPUT_); ?>
 			<input type="submit" value="確認画面へ">
