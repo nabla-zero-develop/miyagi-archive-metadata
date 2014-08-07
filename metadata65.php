@@ -1,38 +1,14 @@
 <?php
 	
 //確認、登録へ
-
+include_once(dirname(__FILE__) . "/metadata_utils.php");
 include_once(dirname(__FILE__) . "/NDL/NDL.php");
 include_once(dirname(__FILE__) . "/NDL/utils.php");
-
-mysql_connect('localhost','root','');
-mysql_select_db('metadata_system');
-mysql_query('set names utf8');
-
-$lot_id = intval($_REQUEST['lot']);
-$id = isset($_REQUEST['id'])?intval($_REQUEST['id']):1;
-
-$res = mysql_query("select count(*) as c from lotfiles where lotid=$lot_id");
-$row = mysql_fetch_assoc($res);
-if(!$row)die("No data for lot no. $lot_id.");
-$num_in_lot = $row['c'];
-
-$res = mysql_query("select * from lotfiles where lotid=$lot_id and id=$id");
-$row = mysql_fetch_assoc($res);
-if(!$row)die("No data for lot no. $lot_id and id $id.");
-$uniqid=$row['uniqid'];
-
-$filedir = $row['filepath'];
-$files = glob($filedir.'/*');
-
-$res = mysql_query("select * from content where uniqid=$uniqid");
-$data = mysql_fetch_assoc($res);
-if(!$data){
-	$data = array(
-'md_type' => '','md_title' => '','md_copywriter' => '','md_copywriter_other' => '','md_copyrigher_uri' => '','md_copyrighter_yomi' => '','md_content_year' => '-1','md_content_month' => '-1','md_content_day' => '-1','md_content_hour' => '-1','md_content_min' => '-1','md_content_sec' => '-1','md_publish_year' => '-1','md_publish_month' => '-1','md_publish_day' => '-1','md_setting_year' => '-1','md_setting_month' => '-1','md_seting_day' => '-1','md_setting_place' => '','md_issue_for' => '','md_issue_year' => '-1','md_issue_month' => '-1','md_issue_day' => '-1','md_narrator' => '','md_content_restriction' => ''
-	);
-}
+$lot_id = intval($_GET['lot']);
+$id = isset($_GET['id'])?intval($_GET['id']):1;
+$data = get_data_from_db($lot_id, $id);
 ?>
+
 <html>
 <script type="text/javascript" src="js/jquery/jquery-1.8.0.min.js"></script>
 <style>
@@ -994,18 +970,6 @@ if($md_type=="図書"){
 		list($y, $m, $d) = explode("-", date("Y-m-d", strtotime($pubDate)));
 	}
 }
-
-//次画面の変数引き渡し
-//$string.="<input type='hidden' name='gov_issue' value='".$gov_issue."'>\n";
-//$string.="<input type='hidden' name='gov_issue2' value='".$gov_issue2."'>\n";
-//$string.="<input type='hidden' name='gov_issue_chihou' value='".$gov_issue_chihou."'>\n";
-//$string.="<input type='hidden' name='gov_issue_miyagi' value='".$gov_issue_miyagi."'>\n";
-//$string.="<input type='hidden' name='for_handicapped' value='".$for_handicapped."'>\n";
-//$string.="<input type='hidden' name='origina_shiryo_keitai' value='".$origina_shiryo_keitai."'>\n";
-//$string.="<input type='hidden' name='rippou_flag' value='".$rippou_flag."'>\n";
-//$string.="<input type ='submit' value='確認・登録'>\n";
-//$string.="<input type='button'  value='前画面へ' onClick='history.back();'>\n";
-//echo $string;
 ?>
 	
 </table>
@@ -1056,30 +1020,3 @@ if($md_type=="図書"){
 </div>
 </body>
 </html>
-<?php
-function numArray($start,$end,$unknown = false){
-	$a = array();
-	if($unknown)$a[-1] = '';
-	for($i=$start;$i<=$end;$i++){
-		$a[$i] = $i;
-	}
-	return $a;
-}
-function outputSelect($name,$options,$value,$valueiskey = false){
-	global $data;
-	$value = $data[$name];
-	echo "<select name='$name'>";
-	foreach($options as $key => $val){
-		if($valueiskey)$key = $val;
-		$selected = ($value == $key)? "selected='selected'": '';
-		echo "<option value='$key' $selected>$val</option>";
-	}
-	echo "</select>";
-}
-function outputText($name,$value,$imeDisable=false,$size=70){
-	global $data;
-	$value = $data[$name];
-	$class = $imeDisable? 'imeDisable':'';
-	echo "<input type='text' name='$name' value='$value' size=$size class='$class'>";
-}
-?>
