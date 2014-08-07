@@ -44,11 +44,14 @@ EOS;
 
 function output_items_last($items){
 	$text_fields = array('standard_id', 'title', 'title_yomi', 'series_title', 'series_title_yomi', 'betu_title', 'betu_title_yomi', 'betu_series', 'betu_series_yomi', 
-	'naiyo_saimoku_title_yomi',	'naiyo_saimoku_title_yomi','naiyo_saimoku_chosha', 'buhenmei', 'buhenmei_yomi', 'makiji_bango', 'makiji_bango_yomi',
-	'creator', 'contributor', 'contributor_yomi', 'iban', 'iban_chosha','publisher',
-	'keyword', 'chuuki', 'youyaku', 'mokuji', 'is_bubun', 'ioya_uri', 'shigen_mei', 'has_bubun', 'ko_uri',
-	'taisho_basho_uri', 'taisho_basho_keni', 'taisho_basho_shi', 'taisho_basho_banchii', 'taisho_basho_ido',
-	'taisho_basho_keido');
+		'naiyo_saimoku_title_yomi',	'naiyo_saimoku_title_yomi','naiyo_saimoku_chosha', 'buhenmei', 'buhenmei_yomi', 'makiji_bango', 'makiji_bango_yomi',
+		'creator', 'contributor', 'contributor_yomi', 'iban', 'iban_chosha','publisher',
+		'keyword', 'chuuki', 'youyaku', 'mokuji', 'is_bubun', 'ioya_uri', 'shigen_mei', 'has_bubun', 'ko_uri',
+		'taisho_basho_uri', 'taisho_basho_keni', 'taisho_basho_shi', 'taisho_basho_banchii', 'taisho_basho_ido', 'taisho_basho_keido',
+		'satusei_ido','satuei_keido','satuei_basho_address','satuei_shi','satuei_banch','kanko_hindo', 'kanko_kanji',
+		'doctor','doctor_bango', 'doctor_nen', 'doctor_tuki', 'doctor_bi', 'doctor_daigaku', 'doctor_daigaku_yomi', 
+		'keisai_go1', 'keisai_go2', 'keisa_shimei', 'keisai_kan', 'keisai_page', 'license_info','license_uri','license_holder','license_chuki','shiryo_keitai',
+		'teller', 'teller_yomi', 'haifu_basho', 'haifu_basho_yomi', 'haifu_nen', 'haifu_tuki', 'haifu_bi', 'keiji_basho', 'keiji_basho_yomi', 'keiji_nen', 'keiji_tuki', 'keiji_bi');
 	foreach($text_fields as $f){
 		$$f = output_text_input($f, $items[$f]);
 	}
@@ -63,6 +66,14 @@ function output_items_last($items){
 	$koukai_hi = $item['koukai_hi'];
 	$shiryo_keitai = output_shiryo_keitai_selection($items['shiryo_keitai']);
 	$language = output_for_handicapped_selection($items['language']);
+	$kanko_status = output_kanko_status_selection($items['kanko_status']);
+	$open_level = output_open_level_selection($item['open_level']);	
+	$hakubutu_kubun = output_radio('hakubutu_kubun', $items['hakubutu_kubun'], '人工物', '自然物');
+	$shosha_flag = output_radio('shosha_flag', $items['shosha_flag'], '該当しない', '該当する');
+	$online_flag = output_radio('online_flag', $items['online_flag'], '該当しない', '該当する');
+	$shoshi_flag = output_radio('shoshi_flag', $items['shoshi_flag'], '該当しない', '該当する');
+	$chizu_kubun = output_radio('chizu_kubun', $items['chizu_kubun'], '地図', '地図帳');
+	$seigen = output_radio('seigen', $items['seigen'], '該当しない', '悲惨（閲覧注意）');
 	//
 	$class_option1= 'optional optional_図書 optional_記事 optional_新聞・雑誌 optional_音声・映像 optional_文書・楽譜 optional_地図・地図帳 optional__チラシ optional_会議録・含資料 optional_博物資料 optional_オンライン資料 optional__語り optional__絵画・絵はがき optional_プログラム（スマホアプリ・ゲーム等）';
 	$class_option2= 'optional optional_図書 optional_記事  optional_映像・音声  optional_文書・楽譜 optional_地図・地図帳';
@@ -121,15 +132,6 @@ function output_items_last($items){
 	<tr><th>情報資源が対象とする場所（街路番地）</th><td>$taisho_basho_banchii</td></tr>
 	<tr><th>情報資源が対象とする場所（緯度）</th><td>$taisho_basho_ido</td></tr>
 	<tr><th>情報資源が対象とする場所（経度）</th><td>$taisho_basho_keido</td></tr>
-
-
-
-
-
-
-
-
-	<!--撮影場所-->
 	<tr class='$class_option4'><th>撮影場所（緯度）<br><input type='button' value='地図から取得'></th><td>$satusei_ido</td></tr>
 	<tr class='$class_option4'><th>撮影場所（経度）</th><td>$satuei_keido</td></tr>
 	<tr class='$class_option4'><th>撮影場所（県名）
@@ -137,17 +139,10 @@ function output_items_last($items){
 		</th><td>$satuei_basho_address</td></tr>
 	<tr class='$class_option4'><th>撮影場所（市町村）</th><td>$satuei_shi</td></tr>
 	<tr class='$class_option4'><th>撮影場所（街路番地）</th><td>$satuei_banch</td></tr>
-
 	<!--刊行頻度・状態・巻次（雑誌の場合のみ）-->
 	<tr class='optional optional_雑誌・新聞'><th>刊行頻度</th><td>$kanko_hindo</td></tr>
-	<tr class='series_flag_option'><th>刊行状態<td><select name='kanko_status'>
-	        <option value='u' <?php if ($kanko_status=="c") { echo "selected"; } ?>>不明</option>
-            <option value='c' <?php if ($kanko_status=="d") { echo "selected"; } ?>>刊行中</option>
-            <option value='d' <?php if ($kanko_status=="u") { echo "selected"; } ?>>廃刊</option>
-    </select>
-	</td></tr>
-	<tr class='optional optional_雑誌・新聞'><th>刊行巻次</th><td>$kanko_kanji</td></tr>
-	
+	<tr class='series_flag_option'><th>刊行状態</th><td>$kanko_status</td></tr>	
+	<tr class='optional optional_雑誌・新聞'><th>刊行巻次</th><td>$kanko_kanji</td></tr>	
 	<!--博士論文-->
 	<tr class="doctor_flag_option"><th>学位</th><td>$doctor</td></tr>
 	<tr class="doctor_flag_option"><th>報告番号</th><td>$doctor_bango</td></tr> 
@@ -157,53 +152,24 @@ function output_items_last($items){
 		<input type='text' name='doctor_bi' value='$doctor_bi' size='2'>日</td></tr>
 	<tr class="doctor_flag_option"><th>授与大学</th><td>$doctor_daigaku</td></tr>
 	<tr class="doctor_flag_option"><th>授与大学のヨミ</th><td>$doctor_daigaku_yomi</td></tr>
-	<tr class="doctor_flag_option"><th></th><td></tr>
-
+	<!-- <tr class="doctor_flag_option"><th></th><td></tr> -->
 	<!--通巻番号等-->
 	<tr class='optional optional_記事 optional_会議録・含資料'><th>掲載通号</th><td>$keisai_go1</td></tr>
 	<tr class='optional optional_記事 optional_会議録・含資料'><th>掲載号</th><td>$keisai_go2</td></tr>
 	<tr class='optional optional_記事 optional_会議録・含資料'><th>掲載誌名</th><td>$keisa_shimei</td></tr>
 	<tr class='optional optional_記事 optional_会議録・含資料'><th>掲載巻（論文の場合）</th><td>$keisai_kan</td></tr>
 	<tr class='optional optional_記事 optional_会議録・含資料'><th>掲載ページ</th><td>$keisai_page</td></tr>
-
-	<!--アクセス制御-->
-	<tr><th class='hissu'>アクセス制御
-	<td><select name='open_level'>
-			<option value='0' <?php if ($open_level=="0") { echo "selected"; } ?>>非公開</option>
-            <option value='1' <?php if ($open_level=="1") { echo "selected"; } ?>>公開</option>
-            <option value='2' <?php if ($open_level=="2") { echo "selected"; } ?>>限定公開</option>
-            <option value='3' <?php if ($open_level=="3") { echo "selected"; } ?>>公開保留</option>
-		</select>
-	</td></tr>
-
+	<tr><th class='hissu'>アクセス制御</th><td>$open_level</td></tr>
 	<tr class='license_flag_option'><th>ライセンス情報</th><td>$license_info</td></tr>
 	<tr class='license_flag_option'><th>URIへの参照</th><td>$license_uri</td></tr>
 	<tr class='license_flag_option'><th>ライセンス保有者名</th><td>$license_holder</td></tr>
 	<tr class='license_flag_option'><th>権利・利用条件に関する注記</th><td>$license_chuki</td></tr>
 	<tr class='optional optional_図書 optional_記事 optional_新聞・雑誌 optional_文書・楽譜 optional_地図・地図帳 optional_ポスター optional_チラシ optional_会議録・含資料 optional_絵画・絵はがき'><th>資料形態（大活字等)</th><td>$shiryo_keitai </td></tr>
-
-	<!--博物資料の区分 -->
-	<tr class='optional optional_博物資料'><th>博物資料の区分</th><td>
-		<input type='radio' value='人工物' name = 'hakubutu_kubun' <?php if ($hakubutu_kubun=="人工物") { echo "checked"; } ?>>人工物
-		<input type='radio' value='自然物' name = 'hakubutu_kubun' <?php if ($hakubutu_kubun=="自然物") { echo "checked"; } ?>>自然物
-	</td></tr>
-
-	<!--書写資料-->
-	<tr class='optional optional_図書 optional_記事 optional_新聞・雑誌 optional_文書・楽譜 optional_地図・地図帳 optional_ポスター optional_チラシ optional_会議録・含資料 optional_絵画・絵はがき'><th>書写資料</th><td>
-		<input type='radio' value=0 name = 'shosha_flag' <?php if ($shosha_flag==0) { echo "checked"; } ?>>該当しない
-		<input type='radio' value=1 name = 'shosha_flag' <?php if ($shosha_flag==1) { echo "checked"; } ?>>該当する
-	</td></tr>
-
-	<!--オンラインジャーナル-->
-	<tr class='optional optional_記事 optional_雑誌・新聞'><th>オンラインジャーナル（学術系）</th><td>
-		<input type='radio' value=0 name = 'online_flag' <?php if ($online_flag==0) { echo "checked"; } ?>>該当しない
-		<input type='radio' value=1 name = 'online_flag' <?php if ($online_flag==1) { echo "checked"; } ?>>該当する
-	</td></tr>
-
+	<tr class='optional optional_博物資料'><th>博物資料の区分</th><td>$hakubutu_kubun</td></tr>
+	<tr class='optional optional_図書 optional_記事 optional_新聞・雑誌 optional_文書・楽譜 optional_地図・地図帳 optional_ポスター optional_チラシ optional_会議録・含資料 optional_絵画・絵はがき'><th>書写資料</th><td>$shosha_flag</td></tr>
+	<tr class='optional optional_記事 optional_雑誌・新聞'><th>オンラインジャーナル（学術系）</th><td>$online_flag</td></tr>
 	<tr class='optional optional_語り'><th>話者</th><td>$teller</td></tr>
 	<tr class='optional optional_語り'><th>話者のヨミ</th><td>$teller_yomi</td></tr>
-
-	<!--配布場所とヨミ、配付日時、配付対象-->
 	<tr class='optional optional_チラシ optional_会議録・含資料'><th>配布場所</th><td>$haifu_basho</td></tr>
 	<tr class='optional optional_チラシ optional_会議録・含資料'><th>配布場所のヨミ</th><td>$haifu_basho_yomi</td></tr>
 	<tr class='optional optional_チラシ optional_会議録・含資料'><th>配付日時</th><td>
@@ -211,8 +177,6 @@ function output_items_last($items){
 		<input type='text' name='haifu_tuki' value='$haifu_tuki' size='2'>月
 		<input type='text' name='haifu_bi' value='$haifu_bi' size='2'>日</td ></tr>
 	<tr class='optional optional_チラシ optional_会議録・含資料'><th>配布対象（被災者等）</th><td>$haifu_taisho</td></tr>
-
-	<!--掲示・設置場所等 -->
 	<tr class='optional optional_ポスター optional_博物資料'><th>掲示・設置場所</th><td>$keiji_basho</td></tr>
 	<tr class='optional optional_ポスター optional_博物資料'><th>掲示・設置場所のヨミ</th><td>$keiji_basho_yomi</td></tr>
 	<tr class='optional optional_ポスター optional_博物資料'><th>掲示・配付日時</th><td>
@@ -220,22 +184,9 @@ function output_items_last($items){
 		<input type='text' name='keiji_tuki' value='$keiji_tuki' size='2'>月　
 		<input type='text' name='keiji_bi' value='$keiji_bi' size='2'>日
 	</td></tr>
-	
-	<!--書誌データ-->
-	<tr class='optional optional_図書 optional_新聞・雑誌 ptional_記事'><th>書誌データ</th><td>
-		<input type='radio' value=0 name = 'shoshi_flag' <?php if ($shoshi_flag==0) { echo "checked"; } ?>>該当しない
-		<input type='radio' value=1 name = 'shoshi_flag' <?php if ($shoshi_flag==1) { echo "checked"; } ?>>該当する
-	</td></tr>
-
-	<!--地図か地図帳か-->
-	<tr class='optional optional_地図・地図帳'><th>地図か地図帳か</th><td>
-		<input type='radio' value=1 name = 'chizu_kubun' <?php if ($chizu_kubun==0) { echo "checked"; } ?>>地図
-		<input type='radio' value=2 name = 'chizu_kubun' <?php if ($chizu_kubun==1) { echo "checked"; } ?>>地図帳
-	</td></tr>
-
-	<!--閲覧注意-->
-	<tr><th>情報の質</th><td>
-		<td><?php echo output_radio('seigen', $seigen, '該当しない', '悲惨（閲覧注意）'); ?></td></tr>
+	<tr class='optional optional_図書 optional_新聞・雑誌 ptional_記事'><th>書誌データ</th><td>$shoshi_flag</td></tr>
+	<tr class='optional optional_地図・地図帳'><th>地図か地図帳か</th><td>$chizu_kubun</td></tr>
+	<tr><th>情報の質</th><td>$seigen</td></tr>
 EOS;
 }
 

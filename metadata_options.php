@@ -105,14 +105,24 @@ function output_language_selection($language){
 }
 
 function output_original_shiryo_keitai_selection($original_shiryo_keitai){
-        $shiryos = array(array('31','ＣＤ'),array('32','カセット'),array('33','レコード'),array('34','リールテープ'),
-                array('35','ＭＤ'),array('36','録音図書'),array('39','録音その他'),array('41','ビデオテープ'),
-                array('42','ＬＤ'),array('43','ＤＶＤ'),array('44','ＥＬＩＢ'),array('45','ブルーレイディスク'),
-                array('46','映像フィルム'),array('49','映像その他'),array('51','磁気テープ'),array('52','ＦＤ'),
-                array('53','ＣＤ－ＲＯＭ'),array('54','ＭＯ'),array('59','機械その他'),array('61','ネガ・ポジ'),
-                array('62','プリント'),array('63','スライド'),array('69','写真その他'),array('71','楽譜'),
-                array('81','マイクロＬ'),array('82','マイクロＣ'),array('91','別置解説書'),array('92','その他ＡＶ'));
+	$shiryos = array(array('31','ＣＤ'),array('32','カセット'),array('33','レコード'),array('34','リールテープ'),
+            array('35','ＭＤ'),array('36','録音図書'),array('39','録音その他'),array('41','ビデオテープ'),
+            array('42','ＬＤ'),array('43','ＤＶＤ'),array('44','ＥＬＩＢ'),array('45','ブルーレイディスク'),
+            array('46','映像フィルム'),array('49','映像その他'),array('51','磁気テープ'),array('52','ＦＤ'),
+            array('53','ＣＤ－ＲＯＭ'),array('54','ＭＯ'),array('59','機械その他'),array('61','ネガ・ポジ'),
+            array('62','プリント'),array('63','スライド'),array('69','写真その他'),array('71','楽譜'),
+            array('81','マイクロＬ'),array('82','マイクロＣ'),array('91','別置解説書'),array('92','その他ＡＶ'));
 	return selection('original_shiryo_keitai', $shiryos, $original_shiryo_keitai, 2);
+}
+
+function output_kanko_status_selection($kanko_status){
+	$status = array(array('c','不明'),array('d','刊行中'),array('u','廃刊'));
+	return selection('kanko_status', $status, $kanko_status, 2);
+}
+
+function output_open_level_selection($open_level){
+	$levels = array(array('0','非公開'),array('1','公開'),array('2','限定公開'),array('3','公開保留'));
+	return selection('open_level', $levels, $open_level, 2);
 }
 
 ?>
