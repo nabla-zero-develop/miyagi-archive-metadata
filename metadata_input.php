@@ -5,22 +5,33 @@ include_once(dirname(__FILE__) . "/metadata_utils.php");
 include_once(dirname(__FILE__) . "/metadata_header.php");
 include_once(dirname(__FILE__) . "/metadata_items.php");
 
-function get_item($col_num){
-	global $row_no;
-	return $_REQUEST["r".$row_no."c".$col_num];
+function get_item($row_no, $col_num){
+	if(isset($_REQUEST["r".$row_no."c".$col_num])){
+		return $_REQUEST["r".$row_no."c".$col_num];
+	} else {
+		return '[データ無し]';
+	}
+}
+
+if(isset($_GET['row_no'])){
+	$row_no = $_GET['row_no'];
+	$ken_or_shi = $_REQUEST['ken_or_shi']; 
+	$lot_id = intval($_GET['lot']);
+	$id = isset($_GET['id'])?intval($_GET['id']):1;
+} else {
+	$row_no = 1;
+	$ken_or_shi = 0; 
+	$lot_id = '003';
+	$id = 1;
 }
 
 // DB取得
-$lot_id = intval($_GET['lot']);
-$id = isset($_GET['id'])?intval($_GET['id']):1;
 list($data, $num_in_lot, $uniqid, $files) = get_data_from_db($lot_id, $id);
 
 //基本情報整理表に書かれたデータ（行・列）を変数に格納
 //県版と市町村県版で列が同じ項目
 
 //A列：課室コード（県版）、市町村コード（市町村版）
-$row_no     = $_GET['row_no'];
-$ken_or_shi = $_REQUEST['ken_or_shi']; 
 
 $common_items = array(
 	array('local_code', 0),
@@ -36,7 +47,7 @@ $common_items = array(
 	array('creator_yomi', 10),//K列：作成者のヨミ
 	array('sakusei_nen', 11),//L列：作成日(年)
 	array('sakusei_tuki', 12),//M列：作成日(月)
-	array('sakusei_bi', 13),//N列：作成日(日)
+	array('sakusei_hi', 13),//N列：作成日(日)
 	array('satuei_basho_zip', 14));//O列：撮影場所（〒番号)
 	
 $ken_items = array(
@@ -72,12 +83,13 @@ $shi_items = array(
 $items = array();
 foreach(array($common_items, $ken_items,  $shi_items) as $is){
 	foreach($is as $i){
-		$$i[0] = get_item($i[1]);
-		$items += array($i[1] => $$i[0]);
+		$$i[0] = get_item($row_no, $i[1]);
+		$items += array($i[0] => $$i[0]);
 	}
 }
 
 // 種別
+$md_type = '';
 if ($shubetu=="v"){$md_type="映像"; } //映像
 if ($shubetu=="p"){$md_type="チラシ"; } //チラシ
 if ($shubetu=="d"){$md_type="文書"; } //文書
@@ -110,24 +122,29 @@ if($ken_or_shi==0){ //県版
 }
 $items += array('open_level' => $open_level);
 
+$koukai_nen = '';
+$koukai_tsuki = '';
+$koukai_hi = '';
 if($md_type=="図書"){
 	$pubDate = get_info('pubDate');
-	$y = '';
-	$m = '';
-	$d = '';
 	if($pubDate <>''){
-		list($y, $m, $d) = explode("-", date("Y-m-d", strtotime($pubDate)));
+		list($koukai_nen, $koukai_tsuki, $koukai_hi) = explode("-", date("Y-m-d", strtotime($pubDate)));
 	}
 	// 図書の場合はNDLに問い合わせ、情報がなければMecabを使う
 	$creator_yomi = yomi($creator_yomi, ndl_creator_yomi($creator)) ;
 	$creator_yomi = yomi($creator_yomi, mecab($creator)) ;
 	$publisher = get_info('dc_publisher');
+} else {
+	$publisher = '';
 }
 $items += array('koukai_nen' => $koukai_nen);
 $items += array('koukai_tsuki' => $koukai_tsuki);
 $items += array('koukai_hi' => $koukai_hi);
 $items += array('creator_yomi' => $creator_yomi);
 $items += array('publisher' => $publisher);
+//
+$items += array('id' => $id);
+$items += array('lot_id' => $lot_id);
 
 ///
 echo output_header();
@@ -250,7 +267,7 @@ if($md_type=="図書"){
 
 	<?php echo output_handover_items($items); ?>
 </table>
-<?php echo output_handover_items(); ?>
+<?php echo output_handover_items($items); ?>
 <input type="submit" value="確認画面へ">
 <!--
 <input type="submit" name='next' value="登録して次へ">

@@ -27,7 +27,7 @@ function metadata_items1($items){
 	<tr><th>引用資料<br><font size='-1'>親となる資料からの引用</font></th><td>$_inyou_flag</td></tr>
 	<tr><th>政府刊行物・刊行元<br><font size='-1'>x省等が発行元</font></th><td>$_gov_issue</td></tr>
 	<tr><th>官公庁刊行物<br><font size='-1'>該当する場合刊行元（機関名）<br><font size='-1'>x省等の下部機関が発行元</font></th><td>$_gov_issue_2</td></tr>
-	<!--地方公共団体刊行物 --><tr><th>官公庁刊行物<br><font size='-1'>該当する場合刊行元（団体名）</font></th><td>$_gov_issue_chihou</td></tr>
+	<!--地方公共団体刊行物 --><tr><th>地方公共団体刊行物<br><font size='-1'>該当する場合刊行元（団体名）</font></th><td>$_gov_issue_chihou</td></tr>
     <tr><th>宮城県内地方公共団体刊行物<br><font size='-1'>宮城県内の自治体が発行元</font></th><td><td>$_gov_issue_miyagi</td></tr>
 	<tr><th>視聴覚者向け資料</th><td><td>$_for_handicapped</td></tr>
 EOS;
@@ -254,7 +254,7 @@ function  output_handover_items($items){
                 'renraku_saki_zip','renraku_saki_address','renraku_saki_tel','renraku_saki_other',
                 'kenri_shori','horyu_reason','open_level','media_code',
                 //
-                'lot','id');
+                'lot_id','id'); // lotをlot_idに統一
 	foreach($hidden_fields as $f){
 		$$f = output_hidden_input($f, $items[$f]);
 	}
