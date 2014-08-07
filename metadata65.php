@@ -135,6 +135,8 @@ function showOptCtrl(name){
 
 
 </script>
+<!--これはテストです-->
+
 <body>
 <div id='imageDiv'>
 <div id='imageWrap'>
@@ -480,7 +482,7 @@ $seigen = $_REQUEST['seigen'];
     <tr><th>官公庁刊行物<br><font size='-1'>該当する場合刊行元（機関名）<br><font size='-1'>x省等の下部機関が発行元</font></th><td>
     <input type='text' name='gov_issue_2' size='40' value='<?php echo $gov_issue_2; ?>'></td></tr>
     <!--地方公共団体刊行物 -->
-    <tr><th>官公庁刊行物<br><font size='-1'>該当する場合刊行元（団体名）</font></th><td>
+    <tr><th>地方公共団体刊行物<br><font size='-1'>該当する場合刊行元（団体名）</font></th><td>
     <input type='text' name='gov_issue_chihou' size='40' value='<?php echo $gov_issue_chihou; ?>'></td></tr>
     <!--宮城県内地方公共団体刊行物-->
     <tr><th>宮城県内地方公共団体刊行物<br><font size='-1'>宮城県内の自治体が発行元</font></th><td>
