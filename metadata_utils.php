@@ -1,5 +1,7 @@
 <?php
 define('DEBUG_NO_DB', TRUE);
+define('_INPUT_', '_INPUT_');
+define('_CONFIRM_', '_CONFIRM_');
 
 function get_data_from_db($lot_id, $id){
         if(!DEBUG_NO_DB){

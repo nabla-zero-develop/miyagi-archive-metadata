@@ -42,7 +42,7 @@ $common_items = array(
 	array('contributor_yomi', 5),//F列：資料提供者のヨミ
 	array('bunrui_code', 6),//G列：分類コード
 	array('bunsho_bunrui', 7),//H列：文書分類記号（県版）、市町村分類（市町村版）
-	array('title ', 8),//I列：タイトル hiddenで次へ(このプログラムの-行目あたり）
+	array('title', 8),//I列：タイトル hiddenで次へ(このプログラムの-行目あたり）
 	array('creator', 9),//J列：撮影者・作成者
 	array('creator_yomi', 10),//K列：作成者のヨミ
 	array('sakusei_nen', 11),//L列：作成日(年)
@@ -122,6 +122,7 @@ if($ken_or_shi==0){ //県版
 }
 $items += array('open_level' => $open_level);
 
+// 図書情報
 $koukai_nen = '';
 $koukai_tsuki = '';
 $koukai_hi = '';
@@ -142,9 +143,18 @@ $items += array('koukai_tsuki' => $koukai_tsuki);
 $items += array('koukai_hi' => $koukai_hi);
 $items += array('creator_yomi' => $creator_yomi);
 $items += array('publisher' => $publisher);
-//
+
+// 整理表では提供されない情報
+$new_items = array('series_flag', 'betu_title_flag', 'kiyo_flag', 'iban_flag', 'license_flag', 'inyou_flag',
+		'gov_issue', 'gov_issue_2', 'gov_issue_chihou', 'gov_issue_miyagi', 'for_handicapped');
+foreach($new_items as $i){
+	$items += array($i => '');
+}
+
+// データベースによる情報
 $items += array('id' => $id);
 $items += array('lot_id' => $lot_id);
+$items += array('uniqid' => $uniqid);
 
 ///
 echo output_header();
@@ -154,125 +164,44 @@ echo output_image_script($files);
 ?>
 
 <body>
-<div id='imageDiv'>
-<div id='imageWrap'>
-<img src='' id='image'>
-</div>
-<br>
-<!--
-<span>
-<input type='button' value='<<' onClick='chgImage(0)'>
-<input type='button' value='<' onClick='prevImage()'>
-<span id='filename'></span>
-<input type='button' value='>' onClick='nextImage()'>
-<input type='button' value='>>' onClick='lastImage()'>
-</span>
-<span>
-<input type='button' value='左回転' onClick='rotate(-90);'>
-<input type='button' value='無回転' onClick='rotate(0);'>
-<input type='button' value='右回転' onClick='rotate(90);'>
-</span>
--->
-</div>
+	<div id='imageDiv'>
+		<div id='imageWrap'>
+			<img src='' id='image'>
+		</div>
+		<br>
+		<!--
+		<span>
+			<input type='button' value='<<' onClick='chgImage(0)'>
+			<input type='button' value='<' onClick='prevImage()'>
+			<span id='filename'></span>
+			<input type='button' value='>' onClick='nextImage()'>
+			<input type='button' value='>>' onClick='lastImage()'>
+			</span>
+			<span>
+			<input type='button' value='左回転' onClick='rotate(-90);'>
+			<input type='button' value='無回転' onClick='rotate(0);'>
+			<input type='button' value='右回転' onClick='rotate(90);'>
+		</span>
+		-->
+	</div>
 
-
-<div id='formDiv'>
-	<p>
-	<h4>ロットNo.<?php printf("%03d",$lot_id); ?></h4>
-	<?php echo "$id/$num_in_lot"; ?><br>
-
-	<form name="input_form" method ="post" action="metadata65.php" onSubmit="return check()">
-	<table>
-		<?php echo metadata_items1($items); ?>
-
-    <!--オリジナル資料の形態-->
-    <?php
-     $selection0="selected";
-     if ($media_code=="32"){ $selection32="selected"; } //カセット
-    ?>
-    <tr><th>オリジナル資料の形態</th><td>
-    <select name='origina_shiryo_keitai'>
-    	<option value= ''  <?php echo $selection0; ?>>該当なし（その他）</option>
-		<option value='32' <?php echo $selection32; ?>>カセット</option>
-	<td><?php echo output_original_shiryo_keitai_selection($original_shiryo_keitai); ?></td></tr>
-
-    <!--立法資料-->
-    <tr><th>立法資料</th><td>
-	<input type="radio" value=0 name = "rippou_flag" checked >該当しない　
-	<input type="radio" value=1 name = "rippou_flag">該当する　
-
-	<!--博士論文-->
-    <tr class='optional optional_図書'><th>博士論文</th><td>
-	<label><input type="radio" class='optctrl' value=0 name="doctor_flag" checked >該当しない　</label>
-	<label><input type="radio" class='optctrl' value=1 name="doctor_flag">該当する　</label>
-
-<tr><td></td></tr>
-
-<!--原資料の標準番号-->
-<tr><th>標準番号(ISBN等)<BR>
-<input type='button' value='NDLチェック'>
-<td><input type='text' name='standard_id' value='<?php echo $standard_id; ?>' size='40'></td></tr>
-
-<!--タイトル-->
-<tr><th class='opthissu opthissu_図書 opthissu_記事 opthissu_新聞・雑誌 opthissu_音声・映像 opthissu_文書・楽譜 opthissu_地図・地図帳 opthissu_チラシ opthissu_会議録・含資料 opthissu_博物資料 opthissu_オンライン資料opthissu_語り opthissu_絵画・絵はがき opthissu_プログラム（スマホアプリ・ゲーム等）'>タイトル<BR>
-<input type='button' value='NDLチェック'><br></th>
-<td><input type='text' name='title' size='40' value='<?php echo $title; ?>'></td></tr>
-
-<!--タイトルのヨミ-->
-<tr><th>タイトルのヨミ
-<td><input type='text' name='title_yomi' size='40' value='<?php //mecab($title); ?>'></td></tr>
-<!-- NDL問い合わせ
-if($md_type=="図書"){
-	$book_info = ndl_title_info($title);
-}-->
-	
-<!--シリーズタイトル-->
-<tr class='series_flag_option'><th class='opthissu opthissu_図書 opthissu_記事 opthissu_新聞・雑誌 opthissu_音声・映像 opthissu_文書・楽譜 opthissu_地図・地図帳 opthissu_チラシ opthissu_会議録・含資料 opthissu_博物資料 opthissu_オンライン資料opthissu_語り opthissu_絵画・絵はがき opthissu_プログラム（スマホアプリ・ゲーム等）'>シリーズタイトル
-<td><input type='text' name='series_title' value='<?php echo $series_title; ?>'size='40'></td>
-<tr class='series_flag_option'><th class='opthissu opthissu_図書 opthissu_記事 opthissu_新聞・雑誌 opthissu_音声・映像 opthissu_文書・楽譜 opthissu_地図・地図帳 opthissu_チラシ opthissu_会議録・含資料 opthissu_博物資料 opthissu_オンライン資料opthissu_語り opthissu_絵画・絵はがき opthissu_プログラム（スマホアプリ・ゲーム等）'>シリーズタイトルのヨミ
-<td><input type='text' name='series_title_yomi' value='<?php echo $series_title_yomi; ?>' size='40'></td></tr>	
- 
-<!--別タイトル-->
-<tr class="betu_title_flag_option"><th>別タイトル　
-<td><input type='text' name='betu_title' value='<?php echo $betu_title; ?>' size='40'></td></tr>
-<tr class="betu_title_flag_option"><th>別タイトルのヨミ
-<td><input type='text' name='betu_title_yomi' value='<?php echo $betu_title_yomi; ?>' size='40'></td></tr>
-
-<!--別シリーズタイトル-->
-<tr class='betu_title_flag_option'><th>別シリーズタイトル
-<td ><input type='text' name='betu_series_title' value='<?php echo $betu_series_title; ?>' size='40'></td></tr>
-<tr class='betu_title_flag_option'><th>別シリーズタイトルのヨミ
-<td><input type='text' name ='betu_series_title_yomi' value='<?php echo $betu_series_title_yomi; ?>' size='40'></td></tr>	
-
-<!--内容細目-->	
-<tr class='optional optional_図書 optional_記事  optional_映像・音声  optional_文書・楽譜 optional_地図・地図帳'><th>内容細目タイトル	
-<td><input type='text' name='naiyo_saimoku_title' value='<?php echo $naiyo_saimoku_title_yomi; ?>' size='40'></td></tr>
-<tr class='optional optional_図書 optional_記事  optional_映像・音声 optional_文書・楽譜 optional_地図・地図帳'><th>内容細目タイトルのヨミ	
-<td><input type='text' name='naiyo_saimoku_title_yomi' value='<?php echo $naiyo_saimoku_title_yomi; ?>' size='40'></td></tr>
-<tr class='optional optional_図書 optional_記事  optional_映像・音声 optional_文書・楽譜 optional_地図・地図帳'><th>内容細目著者
-<td><input type='text' name='naiyo_saimoku_chosha' value='<?php echo $naiyo_saimoku_chosha; ?>' size='40'></td></tr>	
-<tr class='optional optional_図書 optional_記事  optional_映像・音声 optional_文書・楽譜 optional_地図・地図帳'><th>部編名
-<td><input type='text' name='buhenmei' value='<?php echo $buhenmei; ?>' size='40'></td></tr>
-<tr class='optional optional_図書 optional_記事  optional_映像・音声 optional_文書・楽譜 optional_地図・地図帳'><th>部編名のヨミ
-<td><input type='text' name='buhenmei_yomi' value='<?php echo $buhenmei_yomi; ?>' size='40'></td></tr>
-<tr class='optional optional_図書 optional_記事  optional_映像・音声 optional_文書・楽譜 optional_地図・地図帳'><th>巻次・部編番号
-<td><input type='text' name='makiji_bango' value='<?php echo $makiji_bango; ?>' size='40'></td></tr>
-<tr class='optional optional_図書 optional_記事  optional_映像・音声 optional_文書・楽譜 optional_地図・地図帳'><th>巻次・部編番号のヨミ
-<td><input type='text' name='makiji_bango_yomi' value='<?php echo $makiji_bango_yomi; ?>' size='40'></td></tr>	
-	
-<!--作成者・著者-->
-<tr><th class='hissu'>作成者・著者名
-</td><tr></td>
-
-
-	<?php echo output_handover_items($items); ?>
-</table>
-<?php echo output_handover_items($items); ?>
-<input type="submit" value="確認画面へ">
-<!--
-<input type="submit" name='next' value="登録して次へ">
-<input type="submit" name='quit' value="中断">
---></form>
-</div>
+	<div id='formDiv'>
+		<p>
+		<h4>ロットNo.<?php printf("%03d", $lot_id); ?></h4>
+		<?php echo "$id/$num_in_lot"; ?><br>
+		<form name="input_form" method ="post" action="./metadata_confirm.php" onSubmit="return check()">
+			<table>
+				<?php echo metadata_items_first($items, _INPUT_); ?>
+				<tr><td></td></tr>
+				<?php echo metadata_items_last($items, _INPUT_); ?>
+			</table>
+			<?php echo output_handover_items($items, _INPUT_); ?>
+			<input type="submit" value="確認画面へ">
+			<!--
+			<input type="submit" name='next' value="登録して次へ">
+			<input type="submit" name='quit' value="中断">
+			-->
+		</form>
+	</div>
 </body>
 </html>

@@ -4,8 +4,8 @@ function output_radio($name, $flag, $first, $second, $default_flag=0){
 	$checked_0 = ($default_flag <> 1) ? 'checked' : '';
 	$checked_1 = ($default_flag == 1) ? 'checked' : '';
 	return <<< EOS
-	<input class='optctrl' type='radio' value=0 name='$name' $checked_0>$first　
-	<input class='optctrl' type='radio' value=1 name='$name' $checked_1>$second　
+	<input class='optctrl' type='radio' value=0 name='$name' $checked_0>{$first}　
+	<input class='optctrl' type='radio' value=1 name='$name' $checked_1>{$second}
 EOS;
 }
 
