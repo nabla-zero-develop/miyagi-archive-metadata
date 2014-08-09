@@ -43,20 +43,25 @@ EOS;
 }
 
 function output_items_last($items){
-	$text_fields = array('standard_id', 'title', 'title_yomi', 'series_title', 'series_title_yomi', 'betu_title', 'betu_title_yomi', 'betu_series', 'betu_series_yomi', 'betu_series_title', 'betu_series_title_yomi',
-		'naiyo_saimoku_title_yomi',	'naiyo_saimoku_title_yomi','naiyo_saimoku_chosha', 'buhenmei', 'buhenmei_yomi', 'makiji_bango', 'makiji_bango_yomi',
-		'creator', 'contributor', 'contributor_yomi', 'iban', 'iban_chosha','publisher',
+	$text_fields = array('standard_id', 'title', 'series_title',  'betu_title',  'betu_series', 'betu_series_title','naiyo_saimoku_title',
+			'naiyo_saimoku_chosha', 'buhenmei',  'makiji_bango', 
+		'creator', 'contributor','iban', 'iban_chosha','publisher',
 		'keyword', 'chuuki', 'youyaku', 'mokuji', 'is_bubun', 'ioya_uri', 'shigen_mei', 'has_bubun', 'ko_uri',
 		'taisho_basho_uri', 'taisho_basho_keni', 'taisho_basho_shi', 'taisho_basho_banchii', 'taisho_basho_ido', 'taisho_basho_keido',
 		'satusei_ido','satuei_keido','satuei_basho_address','satuei_shi','satuei_banch','kanko_hindo', 'kanko_kanji',
 		'doctor','doctor_bango', // 'doctor_nen', 'doctor_tuki', 'doctor_bi', 
-		'doctor_daigaku', 'doctor_daigaku_yomi', 
+		'doctor_daigaku',  
 		'keisai_go1', 'keisai_go2', 'keisa_shimei', 'keisai_kan', 'keisai_page', 'license_info','license_uri','license_holder','license_chuki','shiryo_keitai',
-		'teller', 'teller_yomi', 'haifu_taisho', 'haifu_basho', 'haifu_basho_yomi', // 'haifu_nen', 'haifu_tuki', 'haifu_bi', 
-		'keiji_basho', 'keiji_basho_yomi');
+		'teller',  'haifu_taisho', 'haifu_basho', // 'haifu_nen', 'haifu_tuki', 'haifu_bi', 
+		'keiji_basho', 
+		'title_yomi', 'series_title_yomi','betu_title_yomi', 'betu_series_yomi', 'betu_series_title_yomi','naiyo_saimoku_title_yomi','buhenmei_yomi','makiji_bango_yomi', 'contributor_yomi', 'doctor_daigaku_yomi','teller_yomi','haifu_basho_yomi', 'keiji_basho_yomi');
 		// 'keiji_nen', 'keiji_tuki', 'keiji_bi');
 	foreach($text_fields as $f){
 		$$f = output_text_input($f, $items[$f]);
+	}
+	$yomi_fields = array('title', 'series_title','betu_title', 'betu_series', 'betu_series_title','naiyo_saimoku_title','buhenmei','makiji_bango', 'contributor', 'doctor_daigaku','teller','haifu_basho', 'keiji_basho');
+	foreach($yomi_fields as $f){
+		${$f.'_button'} = output_yomi_button($f, $f."_yomi", $items[$f]);
 	}
 	$sakusei_nen = $items['sakusei_nen'];
 	$sakusei_tuki = $items['sakusei_tuki'];
@@ -94,23 +99,23 @@ function output_items_last($items){
 	return <<< EOS
 	<tr><th>標準番号(ISBN等)<br><input type='button' value='NDLチェック'></th><td>$standard_id</td></tr>	
 	<tr><th class='$class_hissu1'>タイトル<br><input type='button' value='NDLチェック'></th><td>$title</td></tr>		
-	<tr class='series_flag_option'><th class='$class_hissu1'>タイトルのヨミ</th><td>$title_yomi</td></tr>
+	<tr class='series_flag_option'><th class='$class_hissu1'>タイトルのヨミ<br>$title_button</th><td>$title_yomi</td></tr>
 	<tr class='series_flag_option'><th class='$class_hissu1'>シリーズタイトル</th><td>$series_title</td></tr>
-	<tr class='series_flag_option'><th class='$class_hissu1'>シリーズタイトルのヨミ</th><td>$series_title_yomi</td></tr>	 
-	<tr class='betu_title_flag_option'><th>別タイトル</th><td>$betu_title</td></tr>
+	<tr class='series_flag_option'><th class='$class_hissu1'>シリーズタイトルのヨミ<br>$series_title_button</th><td>$series_title_yomi</td></tr>	 
+	<tr class='betu_title_flag_option'><th>別タイトル<br>$betu_title_button</th><td>$betu_title</td></tr>
 	<tr class='betu_title_flag_option'><th>別タイトルのヨミ</th><td>$betu_title_yomi</td></tr>
 	<tr class='betu_title_flag_option'><th>別シリーズタイトル</th><td>$betu_series_title</td></tr>
-	<tr class='betu_title_flag_option'><th>別シリーズタイトルのヨミ</th><td>$betu_series_title_yomi</td></tr>	
-	<tr class='$class_option2'><th>内容細目タイトル</th><td>$naiyo_saimoku_title_yomi</td></tr>	
-	<tr class='$class_option2'><th>内容細目タイトルのヨミ</th><td>$naiyo_saimoku_title_yomi</td></tr>	
+	<tr class='betu_title_flag_option'><th>別シリーズタイトルのヨミ<br>$betu_series_title_button</th><td>$betu_series_title_yomi</td></tr>	
+	<tr class='$class_option2'><th>内容細目タイトル</th><td>$naiyo_saimoku_title</td></tr>	
+	<tr class='$class_option2'><th>内容細目タイトルのヨミ<br>$naiyo_saimoku_title_button</th><td>$naiyo_saimoku_title_yomi</td></tr>	
 	<tr class='$class_option2'><th>内容細目著者</th><td>$naiyo_saimoku_chosha</td></tr>	
 	<tr class='$class_option2'><th>部編名</th><td>$buhenmei</td></tr>	
-	<tr class='$class_option2'><th>部編名のヨミ</th><td>$buhenmei_yomi</td></tr>	
+	<tr class='$class_option2'><th>部編名のヨミ<br>$buhenmei_button</th><td>$buhenmei_yomi</td></tr>	
 	<tr class='$class_option2'><th>巻次・部編番号</th><td>$makiji_bango</td></tr>	
-	<tr class='$class_option2'><th>巻次・部編番号のヨミ</th><td>$makiji_bango_yomi</td></tr>	
+	<tr class='$class_option2'><th>巻次・部編番号のヨミ<br>$makiji_bango_button</th><td>$makiji_bango_yomi</td></tr>	
 	<tr><th class='hissu'>作成者・著者名</th><td>$creator</td></tr>
 	<tr class='kiyo_flag_option'><th>寄与者（寄贈者）</th><td>$contributor</td></tr>	
-	<tr class='kiyo_flag_option'><th>寄与者（寄贈者）のヨミ</th><td>$contributor_yomi</td></tr>
+	<tr class='kiyo_flag_option'><th>寄与者（寄贈者）のヨミ<br>$contributor_button</th><td>$contributor_yomi</td></tr>
 	<tr class='iban_flag_option'><th>異版名(第x版）</th><td>$iban</td></tr>
 	<tr class='iban_flag_option'><th>異版の著者名</th><td>$iban_chosha</td></tr>
 	<tr><th>出版社・公開者</th><td>$publisher</td></tr>
@@ -163,7 +168,7 @@ function output_items_last($items){
 		<input type='text' name='doctor_tuki' value='$doctor_tuki' size='2'>月　
 		<input type='text' name='doctor_bi' value='$doctor_bi' size='2'>日</td></tr>
 	<tr class="doctor_flag_option"><th>授与大学</th><td>$doctor_daigaku</td></tr>
-	<tr class="doctor_flag_option"><th>授与大学のヨミ</th><td>$doctor_daigaku_yomi</td></tr>
+	<tr class="doctor_flag_option"><th>授与大学のヨミ<br>$doctor_daigaku_button</th><td>$doctor_daigaku_yomi</td></tr>
 	<!-- <tr class="doctor_flag_option"><th></th><td></tr> -->
 	<!--通巻番号等-->
 	<tr class='optional optional_記事 optional_会議録・含資料'><th>掲載通号</th><td>$keisai_go1</td></tr>
@@ -180,17 +185,17 @@ function output_items_last($items){
 	<tr class='optional optional_博物資料'><th>博物資料の区分</th><td>$hakubutu_kubun</td></tr>
 	<tr class='optional optional_図書 optional_記事 optional_新聞・雑誌 optional_文書・楽譜 optional_地図・地図帳 optional_ポスター optional_チラシ optional_会議録・含資料 optional_絵画・絵はがき'><th>書写資料</th><td>$shosha_flag</td></tr>
 	<tr class='optional optional_記事 optional_雑誌・新聞'><th>オンラインジャーナル（学術系）</th><td>$online_flag</td></tr>
-	<tr class='optional optional_語り'><th>話者</th><td>$teller</td></tr>
+	<tr class='optional optional_語り'><th>話者<br>$teller_button</th><td>$teller</td></tr>
 	<tr class='optional optional_語り'><th>話者のヨミ</th><td>$teller_yomi</td></tr>
 	<tr class='optional optional_チラシ optional_会議録・含資料'><th>配布場所</th><td>$haifu_basho</td></tr>
-	<tr class='optional optional_チラシ optional_会議録・含資料'><th>配布場所のヨミ</th><td>$haifu_basho_yomi</td></tr>
+	<tr class='optional optional_チラシ optional_会議録・含資料'><th>配布場所のヨミ<br>$haifu_basho_button</th><td>$haifu_basho_yomi</td></tr>
 	<tr class='optional optional_チラシ optional_会議録・含資料'><th>配付日時</th><td>（西暦）
 		<input type='text' name='haifu_nen' size='4' value='$haifu_nen'>年
 		<input type='text' name='haifu_tuki' value='$haifu_tuki' size='2'>月
 		<input type='text' name='haifu_bi' value='$haifu_bi' size='2'>日</td ></tr>
 	<tr class='optional optional_チラシ optional_会議録・含資料'><th>配布対象（被災者等）</th><td>$haifu_taisho</td></tr>
 	<tr class='optional optional_ポスター optional_博物資料'><th>掲示・設置場所</th><td>$keiji_basho</td></tr>
-	<tr class='optional optional_ポスター optional_博物資料'><th>掲示・設置場所のヨミ</th><td>$keiji_basho_yomi</td></tr>
+	<tr class='optional optional_ポスター optional_博物資料'><th>掲示・設置場所のヨミ</br>$keiji_basho_button</th><td>$keiji_basho_yomi</td></tr>
 	<tr class='optional optional_ポスター optional_博物資料'><th>掲示・配付日時</th><td>（西暦）
 		<input type='text' name='keiji_nen' size='4' value='$keiji_nen'>年
 		<input type='text' name='keiji_tuki' size='2' value='$keiji_tuki'>月　

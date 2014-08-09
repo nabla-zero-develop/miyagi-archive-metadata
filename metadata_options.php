@@ -34,6 +34,12 @@ function output_hidden_input($var_name, $value){
 EOS;
 }
 
+function output_yomi_button($field, $yomi_field, $s){
+	return <<< EOS
+	<button id="text-button-{$field}" onClick="yomi('{$yomi_field}', '{$s}')">候補</button>
+EOS;
+}
+
 function output_md_type_selection($md_type){
 	$md_types = array('', '図書', '記事','雑誌・新聞','音声・映像','文書・楽譜','地図・地図帳','ポスター','写真','チラシ','会議録・含資料','博物資料','オンライン資料','語り','絵画・絵はがき','プログラム（スマホアプリ・ゲーム等）');
 	return selection('md_type', $md_types, $md_type);
