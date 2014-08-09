@@ -223,5 +223,9 @@ function  output_handover_items($items){
 	foreach($hidden_fields as $f){
 		$$f = output_hidden_input($f, $items[$f]);
 	}
+	// こちらだけでいいのでは？
+	foreach($items as $f){
+		$$f = output_hidden_input($f, $items[$f]);
+	}
 }
 
