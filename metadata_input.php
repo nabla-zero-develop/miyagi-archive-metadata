@@ -9,7 +9,7 @@ function get_item($row_no, $col_num){
 	if(isset($_REQUEST["r".$row_no."c".$col_num])){
 		return $_REQUEST["r".$row_no."c".$col_num];
 	} else {
-		return '[データ無し]';
+		return '[整理表データ無し]';
 	}
 }
 
@@ -48,7 +48,7 @@ $common_items = array(
 	array('creator_yomi', 10),//K列：作成者のヨミ
 	array('sakusei_nen', 11),//L列：作成日(年)
 	array('sakusei_tuki', 12),//M列：作成日(月)
-	array('sakusei_hi', 13),//N列：作成日(日)
+	array('sakusei_bi', 13),//N列：作成日(日)
 	array('satuei_basho_zip', 14));//O列：撮影場所（〒番号)
 	
 $ken_items = array(
@@ -166,6 +166,7 @@ echo output_item_script();
 echo output_image_script($files);
 ?>
 
+</header>
 <body>
 	<div id='imageDiv'>
 		<div id='imageWrap'>

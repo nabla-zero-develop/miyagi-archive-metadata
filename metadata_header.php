@@ -1,9 +1,16 @@
 <?php
 
+// 大域
+$jquery = './js/jquery-1.11.1.min.js';
+
 function output_header(){
+	global $jquery;
 	return <<< EOS
+<!DOCTYPE html>
 <html>
-<script type="text/javascript" src="js/jquery/jquery-1.8.0.min.js"></script>
+	<!-- header -->
+		<!-- meta http-equiv="Content-Type" content="text/html; charset=UTF-8" -->
+		<script type="text/javascript" src="{$jquery}"></script>
 EOS;
 }
 
@@ -57,7 +64,6 @@ function output_image_script($files){
 	foreach($files as $file) $ff[] = "'$file'";
 	$f = implode(',', $ff);
 	return <<< EOS
-
 <script>
 var images = [$f];
 var degree = 0;
@@ -123,8 +129,9 @@ EOS;
 }
 
 function output_item_script(){
+	global $jquery;
 	return <<< EOS
-<script type="text/javascript">
+<script>
 //資料種別による項目変更
 //trタグを<tr class='optional optional_図書'>とすると図書が選択されたときに表示される
 //<tr class='optional optional_type1 optional_type2'>等とすると複数の選択肢(type1およびtype2)で表示できる
@@ -135,6 +142,7 @@ $(document).ready(function(){
 
 function showOptional(){
 	var type = $('select[name=md_type]').val();
+	//alert(type);
 	$('.optional').css('display','none');
 	$('.optional_'+type).css('display','');
 	$('.opthissu').removeClass('hissu');

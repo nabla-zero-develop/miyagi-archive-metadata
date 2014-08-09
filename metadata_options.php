@@ -22,15 +22,15 @@ function selection($name, $is, $default_selection, $type=1){
 	return $s;
 }
 
-function output_text_input($var_name){
+function output_text_input($var_name, $value){
 	return <<< EOS
-	<td><input type='text' name='$var_name' size='40' value='$$var_name'></td></tr>
+	<input type='text' name='$var_name' size='40' value='$value'>
 EOS;
 }
 
-function output_hidden_input($var_name){
+function output_hidden_input($var_name, $value){
 	return <<< EOS
-	<td><input type='hidden' name='$var_name' size='40' value='$$var_name'></td></tr>
+	<input type='hidden' name='$var_name' size='40' value='$value'>
 EOS;
 }
 
