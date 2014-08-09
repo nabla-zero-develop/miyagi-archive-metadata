@@ -90,7 +90,7 @@ function output_for_handicapped_selection($for_handicapped){
 }
 
 function output_shiryo_keitai_selection($shiryo_keitai){
-	$shiryo_ = array(array('0','該当しない'), array('03', '大活字'), array('04', '文庫本'), array('05', '新書'), array('85', '絵本'),
+	$shiryo = array(array('0','該当しない'), array('03', '大活字'), array('04', '文庫本'), array('05', '新書'), array('85', '絵本'),
 		array('06', '大型絵本'),	array('07', '紙芝居'), array('08', '紙芝居舞台'), array('09', 'かるた'), array('10', '絵葉書'),
 		array('11', 'ちりめん本'), array('12', '大型紙芝居'));
 	return selection('shiryo_keitai', $shiryo, $shiryo_keitai, 2);

@@ -7,7 +7,7 @@ function output_header(){
 EOS;
 }
 
-function output_css($show__image_flag){
+function output_css($show_image_flag){
 	if($show_image_flag){
 		$width = "100";
 		$height = "100";
@@ -118,11 +118,13 @@ $(document).ready(function(){
 		}
 	});
 });
+</script>
 EOS;
 }
 
 function output_item_script(){
 	return <<< EOS
+<script type="text/javascript">
 //資料種別による項目変更
 //trタグを<tr class='optional optional_図書'>とすると図書が選択されたときに表示される
 //<tr class='optional optional_type1 optional_type2'>等とすると複数の選択肢(type1およびtype2)で表示できる
@@ -152,7 +154,6 @@ function showOptCtrl(name){
 		$('.'+name+'_option').css('display','none');
 	}
 }
-</script>
 
 function check(){
  var flag=0;
@@ -166,6 +167,6 @@ function check(){
   	  return true;
   }
 }	    
-
+</script>
 EOS;
 }

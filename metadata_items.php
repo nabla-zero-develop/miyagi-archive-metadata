@@ -18,7 +18,7 @@ function metadata_items_first($items, $caller){
 	$_gov_issue_miyagi = output_gov_issue_miyagi_selection($items['gov_issue_miyagi']); 
 	$_for_handicapped = output_for_handicapped_selection($items['for_handicapped']);
 	// 整理表の段階でカセットテープが指定されていたら、入力時のみカセットテープ選択に自動設定する
-	$_original_shiryo_keitai = output_original_shiryo_keitai_selection((($items['media_code'] == "32") && ($caller == _INPUT_)) ? "32" : $original_shiryo_keitai);
+	$_original_shiryo_keitai = output_original_shiryo_keitai_selection((($items['media_code'] == "32") && ($caller == _INPUT_)) ? "32" : $items['original_shiryo_keitai']);
 	$_rippou_flag = output_radio('rippou_flag', $items['rippou_flag'], '該当しない', '該当する'); 
 	$_doctor_flag = output_radio('doctor_flag', $items['doctor_flag'], '該当しない', '該当する'); 
 
@@ -43,7 +43,7 @@ EOS;
 }
 
 function output_items_last($items){
-	$text_fields = array('standard_id', 'title', 'title_yomi', 'series_title', 'series_title_yomi', 'betu_title', 'betu_title_yomi', 'betu_series', 'betu_series_yomi', 
+	$text_fields = array('standard_id', 'title', 'title_yomi', 'series_title', 'series_title_yomi', 'betu_title', 'betu_title_yomi', 'betu_series', 'betu_series_yomi', 'betu_series_title', 'betu_series_title_yomi',
 		'naiyo_saimoku_title_yomi',	'naiyo_saimoku_title_yomi','naiyo_saimoku_chosha', 'buhenmei', 'buhenmei_yomi', 'makiji_bango', 'makiji_bango_yomi',
 		'creator', 'contributor', 'contributor_yomi', 'iban', 'iban_chosha','publisher',
 		'keyword', 'chuuki', 'youyaku', 'mokuji', 'is_bubun', 'ioya_uri', 'shigen_mei', 'has_bubun', 'ko_uri',
@@ -51,23 +51,23 @@ function output_items_last($items){
 		'satusei_ido','satuei_keido','satuei_basho_address','satuei_shi','satuei_banch','kanko_hindo', 'kanko_kanji',
 		'doctor','doctor_bango', 'doctor_nen', 'doctor_tuki', 'doctor_bi', 'doctor_daigaku', 'doctor_daigaku_yomi', 
 		'keisai_go1', 'keisai_go2', 'keisa_shimei', 'keisai_kan', 'keisai_page', 'license_info','license_uri','license_holder','license_chuki','shiryo_keitai',
-		'teller', 'teller_yomi', 'haifu_basho', 'haifu_basho_yomi', 'haifu_nen', 'haifu_tuki', 'haifu_bi', 'keiji_basho', 'keiji_basho_yomi', 'keiji_nen', 'keiji_tuki', 'keiji_bi');
+		'teller', 'teller_yomi', 'haifu_taisho', 'haifu_basho', 'haifu_basho_yomi', 'haifu_nen', 'haifu_tuki', 'haifu_bi', 'keiji_basho', 'keiji_basho_yomi', 'keiji_nen', 'keiji_tuki', 'keiji_bi');
 	foreach($text_fields as $f){
 		$$f = output_text_input($f, $items[$f]);
 	}
-	$sakusei_nen = $item['sakusei_nen'];
-	$sakusei_tuki = $item['sakusei_tuki'];
-	$sakusei_bi = $item['sakusei_bi'];
-	$online_nen = $item['online_nen'];
-	$online_tuki = $item['online_tuki'];
-	$online_bi = $item['online_bi'];
-	$koukai_nen = $item['koukai_nen'];
-	$koukai_tuki = $item['koukai_tuki'];
-	$koukai_hi = $item['koukai_hi'];
+	$sakusei_nen = $items['sakusei_nen'];
+	$sakusei_tuki = $items['sakusei_tuki'];
+	$sakusei_bi = $items['sakusei_bi'];
+	$online_nen = $items['online_nen'];
+	$online_tuki = $items['online_tuki'];
+	$online_bi = $items['online_bi'];
+	$koukai_nen = $items['koukai_nen'];
+	$koukai_tuki = $items['koukai_tuki'];
+	$koukai_hi = $items['koukai_hi'];
 	$shiryo_keitai = output_shiryo_keitai_selection($items['shiryo_keitai']);
 	$language = output_for_handicapped_selection($items['language']);
 	$kanko_status = output_kanko_status_selection($items['kanko_status']);
-	$open_level = output_open_level_selection($item['open_level']);	
+	$open_level = output_open_level_selection($items['open_level']);	
 	$hakubutu_kubun = output_radio('hakubutu_kubun', $items['hakubutu_kubun'], '人工物', '自然物');
 	$shosha_flag = output_radio('shosha_flag', $items['shosha_flag'], '該当しない', '該当する');
 	$online_flag = output_radio('online_flag', $items['online_flag'], '該当しない', '該当する');
@@ -89,7 +89,7 @@ function output_items_last($items){
 	<tr class='betu_title_flag_option'><th>別タイトルのヨミ</th><td>$betu_title_yomi</td></tr>
 	<tr class='betu_title_flag_option'><th>別シリーズタイトル</th><td>$betu_series_title</td></tr>
 	<tr class='betu_title_flag_option'><th>別シリーズタイトルのヨミ</th><td>$betu_series_title_yomi</td></tr>	
-	<tr class='$class_option2'><th>内容細目タイトル</th>$naiyo_saimoku_title_yomiv<td></td></tr>	
+	<tr class='$class_option2'><th>内容細目タイトル</th>$naiyo_saimoku_title_yomi<td></td></tr>	
 	<tr class='$class_option2'><th>内容細目タイトルのヨミ</th><td>$naiyo_saimoku_title_yomi</td></tr>	
 	<tr class='$class_option2'><th>内容細目著者</th><td>$naiyo_saimoku_chosha</td></tr>	
 	<tr class='$class_option2'><th>部編名</th><td>$buhenmei</td></tr>	
