@@ -1,31 +1,50 @@
 <?php
-mysql_connect('localhost','root','');
-mysql_select_db('metadata_system');
-mysql_query('set names utf8');
+require_once('include/config.php');
 
-$lot_id = intval($_POST['lot']);
-$id = isset($_POST['id'])?intval($_POST['id']):1;
+$lotid = intval($_REQUEST['lotid']);
+$uniqid = isset($_REQUEST['uniqid'])?$_REQUEST['uniqid']:0;
+if(!is_numeric($uniqid))die('uniqidが不正です');
 
-$res = mysql_query("select count(*) as c from lotfiles where lotid=$lot_id");
-$row = mysql_fetch_assoc($res);
-if(!$row)die("No data for lot no. $lot_id.");
-$num_in_lot = $row['c'];
+if(isset($_REQUEST['quit'])){
+	header('Location: index.php');
+	die();
+}
 
-$res = mysql_query("select * from lotfiles where lotid=$lot_id and id=$id");
-$row = mysql_fetch_assoc($res);
-if(!$row)die("No data for lot no. $lot_id and id $id.");
-$uniqid = $row['uniqid'];
+//データ書き込み
+mysql_query("delete from metadata where uniqid=$uniqid");
 
-mysql_query("delete from content where uniqid=$uniqid");
-
-$query = sprintf("insert into content (uniqid ,md_type ,md_title ,md_copywriter ,md_copywriter_other ,md_copyrigher_uri ,md_copyrighter_yomi ,md_content_year ,md_content_month ,md_content_day ,md_content_hour ,md_content_min ,md_content_sec ,md_publish_year ,md_publish_month ,md_publish_day ,md_setting_year ,md_setting_month ,md_seting_day ,md_setting_place ,md_issue_for ,md_issue_year ,md_issue_month ,md_issue_day ,md_narrator ,md_content_restriction ) values ('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')",
-$uniqid, mysql_real_escape_string($_POST['md_type']), mysql_real_escape_string($_POST['md_title']), mysql_real_escape_string($_POST['md_copywriter']), mysql_real_escape_string($_POST['md_copywriter_other']), mysql_real_escape_string($_POST['md_copyrigher_uri']), mysql_real_escape_string($_POST['md_copyrighter_yomi']), mysql_real_escape_string($_POST['md_content_year']), mysql_real_escape_string($_POST['md_content_month']), mysql_real_escape_string($_POST['md_content_day']), mysql_real_escape_string($_POST['md_content_hour']), mysql_real_escape_string($_POST['md_content_min']), mysql_real_escape_string($_POST['md_content_sec']), mysql_real_escape_string($_POST['md_publish_year']), mysql_real_escape_string($_POST['md_publish_month']), mysql_real_escape_string($_POST['md_publish_day']), mysql_real_escape_string($_POST['md_setting_year']), mysql_real_escape_string($_POST['md_setting_month']), mysql_real_escape_string($_POST['md_seting_day']), mysql_real_escape_string($_POST['md_setting_place']), mysql_real_escape_string($_POST['md_issue_for']), mysql_real_escape_string($_POST['md_issue_year']), mysql_real_escape_string($_POST['md_issue_month']), mysql_real_escape_string($_POST['md_issue_day']), mysql_real_escape_string($_POST['md_narrator']), mysql_real_escape_string($_POST['md_content_restriction']));
+$items = array('uniqid', 'md_type', 'series_flag', 'betu_title_flag', 'kiyo_flag', 'iban_flag', 'license_flag', 'inyou_flag', 'gov_issue', 'gov_issue_2', 'gov_issue_chihou', 'gov_issue_miyagi', 'for_handicapped', 'media_code', 'rippou_flag', 'doctor_flag', 'standard_id', 'title', 'title_yomi', 'series_title', 'series_title_yomi', 'betu_series_title', 'betu_series_title_yomi', 'betu_title', 'betu_title_yomi', 'naiyo_saimoku_chosha', 'naiyo_saimoku_title', 'naiyo_saimoku_title_yomi', 'buhenmei', 'buhenmei_yomi', 'makiji_bango', 'makiji_bango_yomi', 'contributor', 'contributor_yomi', 'iban', 'iban_chosha', 'publisher', 'subject', 'chuuki', 'youyaku', 'mokuji', 'sakusei_nen', 'sakusei_tuki', 'sakusei_bi', 'online_nen', 'online_tuki', 'online_bi', 'koukai_nen', 'koukai_tuki', 'koukai_bi', 'language', 'is_bubun', 'oya_uri', 'shigen_mei', 'has_bubun', 'ko_uri', 'taisho_basho_uri', 'taisho_basho_ken', 'taisho_basho_shi', 'taisho_basho_banchi', 'taisho_basho_ido', 'taisho_basho_keido', 'satuei_ken', 'satuei_shi', 'satuei_banchi', 'satuei_keido', 'satusei_ido', 'kanko_hindo', 'kanko_status', 'kanko_kanji', 'doctor', 'doctor_bango', 'doctor_nen', 'doctor_tuki', 'doctor_bi', 'doctor_daigaku', 'doctor_daigaku_yomi', 'keisai_go1', 'keisai_go2', 'keisai_shimei', 'keisai_kan', 'keisai_page', 'open_level', 'license_info', 'license_uri', 'license_holder', 'license_chuki', 'origina_shiryo_keitai', 'hakubutu_kubun', 'shosha_flag', 'online_flag', 'teller', 'teller_yomi', 'haifu_basho', 'haifu_basho_yomi', 'haifu_nen', 'haifu_tuki', 'haifu_bi', 'haifu_taisho', 'keiji_basho', 'keiji_basho_yomi', 'keiji_nen', 'keiji_tuki', 'keiji_bi', 'shoshi_flag', 'chizu_kubun', 'seigen');
+$values = array();
+foreach($items as $item)$values[] = "'".mysql_real_escape_string($_REQUEST[$item])."'";
+$query = sprintf("insert into metadata (%s) values (%s)", implode(',',$items), implode(',',$values));
 $res = mysql_query($query);
 if(!$res)die($query.mysql_error());
 
-if($num_in_lot == $id){
-	header('Location: index.php');
-}else{
-	header("Location: metadata.php?lot=$lot_id&id=".($id+1));
+mysql_query("update lotfile set finish=1 where uniqid=$uniqid");
+
+
+$res = mysql_query("select * from lot where lotid=$lotid");
+$lot = mysql_fetch_assoc($res);
+if(!$lot['start_date']){
+	mysql_query("update lot set start_date = now() where lotid = $lotid");
 }
+mysql_query("update lot set status = 1 where lotid = $lotid");
+
+//ロット内のデータ数
+$res = mysql_query("select uniqid from lotfile where lotid=$lotid order by ord");
+$num_in_lot = mysql_num_rows($res);
+$actualord = 1;
+while($row2 = mysql_fetch_assoc($res)){
+	var_dump($row2);
+	if($row2['uniqid'] == $uniqid)break;
+	$actualord++;
+}
+
+if($row2 = mysql_fetch_assoc($res)){
+	header("Location: metadata.php?lotid=$lotid&uniqid={$row2['uniqid']}");
+}else{
+	mysql_query("update lot set status = 2, finish_date = now() where lotid = $lotid");
+	header('Location: index.php');
+}
+
 ?>
