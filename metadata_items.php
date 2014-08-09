@@ -102,8 +102,8 @@ function output_items_last($items){
 	<tr class='series_flag_option'><th class='$class_hissu1'>タイトルのヨミ<br>$title_button</th><td>$title_yomi</td></tr>
 	<tr class='series_flag_option'><th class='$class_hissu1'>シリーズタイトル</th><td>$series_title</td></tr>
 	<tr class='series_flag_option'><th class='$class_hissu1'>シリーズタイトルのヨミ<br>$series_title_button</th><td>$series_title_yomi</td></tr>	 
-	<tr class='betu_title_flag_option'><th>別タイトル<br>$betu_title_button</th><td>$betu_title</td></tr>
-	<tr class='betu_title_flag_option'><th>別タイトルのヨミ</th><td>$betu_title_yomi</td></tr>
+	<tr class='betu_title_flag_option'><th>別タイトル</th><td>$betu_title</td></tr>
+	<tr class='betu_title_flag_option'><th>別タイトルのヨミ<br>$betu_title_button</th><td>$betu_title_yomi</td></tr>
 	<tr class='betu_title_flag_option'><th>別シリーズタイトル</th><td>$betu_series_title</td></tr>
 	<tr class='betu_title_flag_option'><th>別シリーズタイトルのヨミ<br>$betu_series_title_button</th><td>$betu_series_title_yomi</td></tr>	
 	<tr class='$class_option2'><th>内容細目タイトル</th><td>$naiyo_saimoku_title</td></tr>	
@@ -185,8 +185,8 @@ function output_items_last($items){
 	<tr class='optional optional_博物資料'><th>博物資料の区分</th><td>$hakubutu_kubun</td></tr>
 	<tr class='optional optional_図書 optional_記事 optional_新聞・雑誌 optional_文書・楽譜 optional_地図・地図帳 optional_ポスター optional_チラシ optional_会議録・含資料 optional_絵画・絵はがき'><th>書写資料</th><td>$shosha_flag</td></tr>
 	<tr class='optional optional_記事 optional_雑誌・新聞'><th>オンラインジャーナル（学術系）</th><td>$online_flag</td></tr>
-	<tr class='optional optional_語り'><th>話者<br>$teller_button</th><td>$teller</td></tr>
-	<tr class='optional optional_語り'><th>話者のヨミ</th><td>$teller_yomi</td></tr>
+	<tr class='optional optional_語り'><th>話者</th><td>$teller</td></tr>
+	<tr class='optional optional_語り'><th>話者のヨミ<br>$teller_button</th><td>$teller_yomi</td></tr>
 	<tr class='optional optional_チラシ optional_会議録・含資料'><th>配布場所</th><td>$haifu_basho</td></tr>
 	<tr class='optional optional_チラシ optional_会議録・含資料'><th>配布場所のヨミ<br>$haifu_basho_button</th><td>$haifu_basho_yomi</td></tr>
 	<tr class='optional optional_チラシ optional_会議録・含資料'><th>配付日時</th><td>（西暦）
@@ -195,7 +195,7 @@ function output_items_last($items){
 		<input type='text' name='haifu_bi' value='$haifu_bi' size='2'>日</td ></tr>
 	<tr class='optional optional_チラシ optional_会議録・含資料'><th>配布対象（被災者等）</th><td>$haifu_taisho</td></tr>
 	<tr class='optional optional_ポスター optional_博物資料'><th>掲示・設置場所</th><td>$keiji_basho</td></tr>
-	<tr class='optional optional_ポスター optional_博物資料'><th>掲示・設置場所のヨミ</br>$keiji_basho_button</th><td>$keiji_basho_yomi</td></tr>
+	<tr class='optional optional_ポスター optional_博物資料'><th>掲示・設置場所のヨミ<br>$keiji_basho_button</th><td>$keiji_basho_yomi</td></tr>
 	<tr class='optional optional_ポスター optional_博物資料'><th>掲示・配付日時</th><td>（西暦）
 		<input type='text' name='keiji_nen' size='4' value='$keiji_nen'>年
 		<input type='text' name='keiji_tuki' size='2' value='$keiji_tuki'>月　

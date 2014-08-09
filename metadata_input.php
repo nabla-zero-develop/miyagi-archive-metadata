@@ -193,7 +193,8 @@ echo output_image_script($files);
 		<p>
 		<h4>ロットNo.<?php printf("%03d", $lot_id); ?></h4>
 		<?php echo "$id/$num_in_lot"; ?><br>
-		<form name="input_form" method ="post" action="./metadata_confirm.php" onSubmit="return check()">
+		<!-- form name="input_form" method ="post" action="./metadata_confirm.php" onSubmit="return check()" ->
+		<form name="input_form">
 			<table>
 				<?php echo metadata_items_first($items, _INPUT_); ?>
 				<tr><td></td></tr>
