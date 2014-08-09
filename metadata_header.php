@@ -179,9 +179,7 @@ function check(){
 
 // 読み
 function yomi(field, yomi_field, init_value) {
-	//s = "日本語解析" ;//
 	s = $.trim($("input[name='" + field + "']").val());
-	//s = $.trim($("input[name='betu_title']").val());
 	if(s.length == 0){s = init_value};
 	if(s != ""){
 		$.ajax({
@@ -189,11 +187,11 @@ function yomi(field, yomi_field, init_value) {
 			dataType: 'text',
 			data: {"s": s },
 			success: function(data) {
-				alert(data);
-				$(yomi_field).val(data);
+				//alert(data);
+				$("input[name='" + yomi_field + "']").val(data);
 			},
 			error: function(data) {
-				alert("error:"+data);
+				//alert("error:"+data);
 			}
 		} );
 	};

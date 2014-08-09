@@ -36,7 +36,7 @@ EOS;
 
 function output_yomi_button($field, $yomi_field, $init_value){
 	return <<< EOS
-	<button id="text-button-{$field}" onClick="yomi('{$field}', '#{$yomi_field}', '{$init_value}')">候補</button>
+	<button id="text-button-{$field}" onClick="yomi('{$field}', '{$yomi_field}', '{$init_value}')">候補</button>
 EOS;
 }
 

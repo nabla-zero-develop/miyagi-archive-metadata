@@ -13,11 +13,11 @@ function get_item($row_no, $col_num){
 	}
 }
 
-if(isset($_GET['row_no'])){
-	$row_no = $_GET['row_no'];
+if(isset($_REQUEST['row_no'])){
+	$row_no = $_REQUEST['row_no'];
 	$ken_or_shi = $_REQUEST['ken_or_shi']; 
-	$lot_id = intval($_GET['lot']);
-	$id = isset($_GET['id'])?intval($_GET['id']):1;
+	$lot_id = intval($_REQUEST['lot']);
+	$id = isset($_REQUEST['id'])?intval($_REQUEST['id']):1;
 } else {
 	$row_no = 1;
 	$ken_or_shi = 0; 
@@ -154,6 +154,13 @@ foreach($new_items as $i){
 	$items += array($i => '');
 }
 
+// 引数での上書き
+foreach($items as $k => $v){
+	if($v == '' && $_REQUEST[$k] != ''){
+		$items[$k] = $_GET[$k];
+	}
+}
+
 // データベースによる情報
 $items += array('id' => $id);
 $items += array('lot_id' => $lot_id);
@@ -193,7 +200,7 @@ echo output_image_script($files);
 		<p>
 		<h4>ロットNo.<?php printf("%03d", $lot_id); ?></h4>
 		<?php echo "$id/$num_in_lot"; ?><br>
-		<!-- form name="input_form" method ="post" action="./metadata_confirm.php" onSubmit="return check()" ->
+		<!-- form name="input_form" method ="post" action="./metadata_confirm.php" onSubmit="return check()" -->
 		<form name="input_form">
 			<table>
 				<?php echo metadata_items_first($items, _INPUT_); ?>
