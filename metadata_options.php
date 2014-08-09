@@ -66,7 +66,7 @@ function output_md_type_selection($md_type, $caller){
 	return selection('md_type', $md_types, $md_type, $caller, 1);
 }
 
-function output_gov_issue_selection($gov_issue){
+function output_gov_issue_selection($gov_issue, $caller){
 	$gov_types = array(array("","該当しない"),array('AA0',"衆議院"),array('AB0',"参議院"),array('AC0',"国立国会図書館"),
 	        array('AD0',"裁判官弾劾裁判所"),array('AE0',"裁判官訴追委員会"),array('BA0',"会計検査院"),array('CA0',"内閣"),array('CB0',"安全保障会議"),
                 array('CC0',"人事院"),array('DA0',"内閣府"),array('DB0',"宮内庁"),array('DC0',"国家公安委員会"),array('DD0',"警察庁"),
@@ -85,7 +85,7 @@ function output_gov_issue_selection($gov_issue){
 	return selection('gov_issue', $gov_types, $gov_issue, $caller, 2);
 }
 
-function output_gov_issue_miyagi_selection($gov_issue_miyagi){
+function output_gov_issue_miyagi_selection($gov_issue_miyagi, $caller){
 	$gov_types_miyagi = array(array('', '該当しない'),array('4100', '仙台市'),array('4202', '石巻市'),array('4203', '塩竈市'),
                 array('4204', '古川市'),array('4205', '気仙沼市'),array('4206', '白石市'),array('4207', '名取市'),
                 array('4208', '角田市'),array('4209', '多賀城市'),array('4210', '泉市'),array('4211', '岩沼市'),
@@ -110,20 +110,20 @@ function output_gov_issue_miyagi_selection($gov_issue_miyagi){
 	return selection('gov_issue_miyagi', $gov_types_miyagi, $gov_issue_miyagi, $caller, 2);
 }
 
-function output_for_handicapped_selection($for_handicapped){
+function output_for_handicapped_selection($for_handicapped, $caller){
 	$for_handicapped_types = array(array('', '該当しない'), array('Braille', '点字'), array('DAISY','DAISY'),
 	array('AudioBookInSoundD', '録音図書（DVD・CD）'), array('AudioBookInSoundT', '録音図書（カセットテープ）'));
 	return selection('for_handicapped', $for_handicapped_types, $for_handicapped, $caller, 2);
 }
 
-function output_shiryo_keitai_selection($shiryo_keitai){
+function output_shiryo_keitai_selection($shiryo_keitai, $caller){
 	$shiryo = array(array('0','該当しない'), array('03', '大活字'), array('04', '文庫本'), array('05', '新書'), array('85', '絵本'),
 		array('06', '大型絵本'),	array('07', '紙芝居'), array('08', '紙芝居舞台'), array('09', 'かるた'), array('10', '絵葉書'),
 		array('11', 'ちりめん本'), array('12', '大型紙芝居'));
 	return selection('shiryo_keitai', $shiryo, $shiryo_keitai, $caller, 2);
 }
 
-function output_language_selection($language){
+function output_language_selection($language, $caller){
 	$languages = array(array('JPN','日本語'),array('ENG','英語'),array('CHI','中国語'),
 		array('KOR','韓国語'),array('GER','ドイツ語'),array('FRE','フランス語'),
 		array('SPA','スペイン語'),array('ITA','イタリア語'),array('RUS','ロシア語'),
@@ -131,7 +131,7 @@ function output_language_selection($language){
 	return selection('language', $languages, $language, $caller, 2);
 }
 
-function output_original_shiryo_keitai_selection($original_shiryo_keitai){
+function output_original_shiryo_keitai_selection($original_shiryo_keitai, $caller){
 	$shiryos = array(array('31','ＣＤ'),array('32','カセット'),array('33','レコード'),array('34','リールテープ'),
             array('35','ＭＤ'),array('36','録音図書'),array('39','録音その他'),array('41','ビデオテープ'),
             array('42','ＬＤ'),array('43','ＤＶＤ'),array('44','ＥＬＩＢ'),array('45','ブルーレイディスク'),
@@ -142,12 +142,12 @@ function output_original_shiryo_keitai_selection($original_shiryo_keitai){
 	return selection('original_shiryo_keitai', $shiryos, $original_shiryo_keitai, $caller, 2);
 }
 
-function output_kanko_status_selection($kanko_status){
+function output_kanko_status_selection($kanko_status, $caller){
 	$status = array(array('c','不明'),array('d','刊行中'),array('u','廃刊'));
 	return selection('kanko_status', $status, $kanko_status, $caller, 2);
 }
 
-function output_open_level_selection($open_level){
+function output_open_level_selection($open_level, $caller){
 	$levels = array(array('0','非公開'),array('1','公開'),array('2','限定公開'),array('3','公開保留'));
 	return selection('open_level', $levels, $open_level, $caller, 2);
 }
