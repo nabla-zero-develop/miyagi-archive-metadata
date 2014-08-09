@@ -1,31 +1,52 @@
 <?php 
 
-function output_radio($name, $flag, $first, $second, $default_flag=0){
+include_once(dirname(__FILE__) . "/metadata_utils.php");
+
+function output_radio($name, $flag, $first, $second, $caller, $default_flag=0){
 	$checked_0 = ($default_flag <> 1) ? 'checked' : '';
 	$checked_1 = ($default_flag == 1) ? 'checked' : '';
+	if($caller == _INPUT_){
+		$d = '';
+	} else {
+		$d = ' disabled="disabled" ';
+	}
 	return <<< EOS
-	<input class='optctrl' type='radio' value=0 name='$name' $checked_0>{$first}　
-	<input class='optctrl' type='radio' value=1 name='$name' $checked_1>{$second}
+	<input class='optctrl' type='radio' value=0 name='$name' $checked_0 $d>{$first}　
+	<input class='optctrl' type='radio' value=1 name='$name' $checked_1 $d>{$second}
 EOS;
 }
 
-function selection($name, $is, $default_selection, $type=1){
-	$s = "<select name = '$name'>";
-	foreach($is as $i){
-		if($type == 1){
-			$s .= "<option value='" .$i. "'". (($i==$default_selection) ? ' selected' : '') .">".$i."</option>\n";
-		} else {
-			$s .= "<option value='" .$i[0]. "'". (($i[0]==$default_selection) ? ' selected' : '') .">".$i[1]."</option>\n";
+function selection($name, $is, $default_selection, $caller, $type=1){
+	if($caller == _INPUT_){
+		$s = "<select name = '$name'>";
+		foreach($is as $i){
+			if($type == 1){
+				$s .= "<option value='" .$i. "'". (($i==$default_selection) ? ' selected' : '').">".$i."</option>\n";
+			} else {
+				$s .= "<option value='" .$i[0]. "'". (($i[0]==$default_selection) ? ' selected' : '') .">".$i[1]."</option>\n";
+			}
 		}
+		$s .= "</select>";
+	} else {
+		$v = '';
+		foreach($is as $i){
+			if($i==$default_selection){$v = $i;}
+		}
+		$s = "<input type='text' name='{$var_name}' size='40' value='{$v}' readonly='readonly'>";
 	}
-	$s .= "</select>";
 	return $s;
 }
 
-function output_text_input($var_name, $value){
-	return <<< EOS
+function output_text_input($var_name, $value, $caller){
+	if($caller == _INPUT_){
+		return <<< EOS
 	<input type='text' name='$var_name' size='40' value='$value'>
 EOS;
+	} else {
+	return <<< EOS
+	<input type='text' name='$var_name' size='40' value='$value' readonly="readonly">
+EOS;
+	}
 }
 
 function output_hidden_input($var_name, $value){
@@ -40,9 +61,9 @@ function output_yomi_button($field, $yomi_field, $init_value){
 EOS;
 }
 
-function output_md_type_selection($md_type){
+function output_md_type_selection($md_type, $caller){
 	$md_types = array('', '図書', '記事','雑誌・新聞','音声・映像','文書・楽譜','地図・地図帳','ポスター','写真','チラシ','会議録・含資料','博物資料','オンライン資料','語り','絵画・絵はがき','プログラム（スマホアプリ・ゲーム等）');
-	return selection('md_type', $md_types, $md_type);
+	return selection('md_type', $md_types, $md_type, $caller, 1);
 }
 
 function output_gov_issue_selection($gov_issue){
@@ -61,7 +82,7 @@ function output_gov_issue_selection($gov_issue){
                 array('RA0',"環境省"),array('SA0',"最高裁判所"),array('SB0',"高等裁判所"),array('SC0',"地方裁判所"),array('SD0',"家庭裁判所"),
                 array('TA0',"公団"),array('TB0',"事業団"),array('TC0',"公庫"),array('TD0',"基金"),array('TE0',"銀行"),
                 array('TF0',"その他"),array('WA0',"国立大学等"),array('WB0',"国立大学共同利用機関"));
-	return selection('gov_issue', $gov_types, $gov_issue, 2);
+	return selection('gov_issue', $gov_types, $gov_issue, $caller, 2);
 }
 
 function output_gov_issue_miyagi_selection($gov_issue_miyagi){
@@ -86,20 +107,20 @@ function output_gov_issue_miyagi_selection($gov_issue_miyagi){
                 array('4563', '雄勝町'),array('4564', '河南町'),array('4565', '桃生町'),array('4566', '鳴瀬町'),
                 array('4567', '北上町'),array('4581', '女川町'),array('4582', '牡鹿町'),array('4601', '志津川町'),
                 array('4602', '津山町'),array('4603', '本吉町'),array('4604', '唐桑町'),array('4605', '歌津町'),array('4606', '南三陸町'));
-	return selection('gov_issue_miyagi', $gov_types_miyagi, $gov_issue_miyagi, 2);
+	return selection('gov_issue_miyagi', $gov_types_miyagi, $gov_issue_miyagi, $caller, 2);
 }
 
 function output_for_handicapped_selection($for_handicapped){
 	$for_handicapped_types = array(array('', '該当しない'), array('Braille', '点字'), array('DAISY','DAISY'),
 	array('AudioBookInSoundD', '録音図書（DVD・CD）'), array('AudioBookInSoundT', '録音図書（カセットテープ）'));
-	return selection('for_handicapped', $for_handicapped_types, $for_handicapped, 2);
+	return selection('for_handicapped', $for_handicapped_types, $for_handicapped, $caller, 2);
 }
 
 function output_shiryo_keitai_selection($shiryo_keitai){
 	$shiryo = array(array('0','該当しない'), array('03', '大活字'), array('04', '文庫本'), array('05', '新書'), array('85', '絵本'),
 		array('06', '大型絵本'),	array('07', '紙芝居'), array('08', '紙芝居舞台'), array('09', 'かるた'), array('10', '絵葉書'),
 		array('11', 'ちりめん本'), array('12', '大型紙芝居'));
-	return selection('shiryo_keitai', $shiryo, $shiryo_keitai, 2);
+	return selection('shiryo_keitai', $shiryo, $shiryo_keitai, $caller, 2);
 }
 
 function output_language_selection($language){
@@ -107,7 +128,7 @@ function output_language_selection($language){
 		array('KOR','韓国語'),array('GER','ドイツ語'),array('FRE','フランス語'),
 		array('SPA','スペイン語'),array('ITA','イタリア語'),array('RUS','ロシア語'),
 		array('POR','ポルトガル語'), array('TGL','タガログ語'));
-	return selection('language', $languages, $language, 2);
+	return selection('language', $languages, $language, $caller, 2);
 }
 
 function output_original_shiryo_keitai_selection($original_shiryo_keitai){
@@ -118,17 +139,17 @@ function output_original_shiryo_keitai_selection($original_shiryo_keitai){
             array('53','ＣＤ－ＲＯＭ'),array('54','ＭＯ'),array('59','機械その他'),array('61','ネガ・ポジ'),
             array('62','プリント'),array('63','スライド'),array('69','写真その他'),array('71','楽譜'),
             array('81','マイクロＬ'),array('82','マイクロＣ'),array('91','別置解説書'),array('92','その他ＡＶ'));
-	return selection('original_shiryo_keitai', $shiryos, $original_shiryo_keitai, 2);
+	return selection('original_shiryo_keitai', $shiryos, $original_shiryo_keitai, $caller, 2);
 }
 
 function output_kanko_status_selection($kanko_status){
 	$status = array(array('c','不明'),array('d','刊行中'),array('u','廃刊'));
-	return selection('kanko_status', $status, $kanko_status, 2);
+	return selection('kanko_status', $status, $kanko_status, $caller, 2);
 }
 
 function output_open_level_selection($open_level){
 	$levels = array(array('0','非公開'),array('1','公開'),array('2','限定公開'),array('3','公開保留'));
-	return selection('open_level', $levels, $open_level, 2);
+	return selection('open_level', $levels, $open_level, $caller, 2);
 }
 
 ?>

@@ -5,22 +5,22 @@ include_once(dirname(__FILE__) . "/metadata_options.php");
 
 function metadata_items_first($items, $caller){
 	$_uniqid = $items['uniqid'];
-	$_md_type = output_md_type_selection($items['md_type']);
-    $_series_flag = output_radio('series_flag', $items['series_flag'], '該当しない', '該当する'); 
-	$_betu_title_flag = output_radio('betu_title_flag', $items['betu_title_flag'], '無', '有'); 
-	$_kiyo_flag = output_radio('kiyo_flag', $items['kiyo_flag'], '無', '有'); 
-	$_iban_flag = output_radio('iban_flag', $items['iban_flag'], '該当しない', '該当する');
-	$_license_flag = output_radio('license_flag', $items['license_flag'], '無', '有');
-	$_inyou_flag = output_radio('inyou_flag', $items['inyou_flag'], '該当しない', '該当する'); 
-	$_gov_issue = output_gov_issue_selection($items['gov_issue']);
-	$_gov_issue_2 = output_text_input('gov_issue_2', $items['gov_issue_2']);
-	$_gov_issue_chihou = output_text_input('gov_issue_chihou', $items['gov_issue_chihou']);
-	$_gov_issue_miyagi = output_gov_issue_miyagi_selection($items['gov_issue_miyagi']); 
-	$_for_handicapped = output_for_handicapped_selection($items['for_handicapped']);
+	$_md_type = output_md_type_selection($items['md_type'], $caller);
+    $_series_flag = output_radio('series_flag', $items['series_flag'], '該当しない', '該当する', $caller); 
+	$_betu_title_flag = output_radio('betu_title_flag', $items['betu_title_flag'], '無', '有', $caller); 
+	$_kiyo_flag = output_radio('kiyo_flag', $items['kiyo_flag'], '無', '有', $caller); 
+	$_iban_flag = output_radio('iban_flag', $items['iban_flag'], '該当しない', '該当する', $caller);
+	$_license_flag = output_radio('license_flag', $items['license_flag'], '無', '有', $caller);
+	$_inyou_flag = output_radio('inyou_flag', $items['inyou_flag'], '該当しない', '該当する', $caller); 
+	$_gov_issue = output_gov_issue_selection($items['gov_issue'], $caller);
+	$_gov_issue_2 = output_text_input('gov_issue_2', $items['gov_issue_2'], $caller);
+	$_gov_issue_chihou = output_text_input('gov_issue_chihou', $items['gov_issue_chihou'], $caller);
+	$_gov_issue_miyagi = output_gov_issue_miyagi_selection($items['gov_issue_miyagi'], $caller); 
+	$_for_handicapped = output_for_handicapped_selection($items['for_handicapped'], $caller);
 	// 整理表の段階でカセットテープが指定されていたら、入力時のみカセットテープ選択に自動設定する
-	$_original_shiryo_keitai = output_original_shiryo_keitai_selection((($items['media_code'] == "32") && ($caller == _INPUT_)) ? "32" : $items['original_shiryo_keitai']);
-	$_rippou_flag = output_radio('rippou_flag', $items['rippou_flag'], '該当しない', '該当する'); 
-	$_doctor_flag = output_radio('doctor_flag', $items['doctor_flag'], '該当しない', '該当する'); 
+	$_original_shiryo_keitai = output_original_shiryo_keitai_selection((($items['media_code'] == "32") && ($caller == _INPUT_)) ? "32" : $items['original_shiryo_keitai'], $caller);
+	$_rippou_flag = output_radio('rippou_flag', $items['rippou_flag'], '該当しない', '該当する', $caller); 
+	$_doctor_flag = output_radio('doctor_flag', $items['doctor_flag'], '該当しない', '該当する', $caller); 
 
 	return <<< EOS
 	<tr><th>ユニークID</th><td>$_uniqid </td></tr>
@@ -42,7 +42,7 @@ function metadata_items_first($items, $caller){
 EOS;
 }
 
-function output_items_last($items){
+function output_items_last($items, $caller){
 	$text_fields = array('standard_id', 'title', 'series_title',  'betu_title',  'betu_series', 'betu_series_title','naiyo_saimoku_title',
 			'naiyo_saimoku_chosha', 'buhenmei',  'makiji_bango', 
 		'creator', 'contributor','iban', 'iban_chosha','publisher',
@@ -57,11 +57,13 @@ function output_items_last($items){
 		'title_yomi', 'series_title_yomi','betu_title_yomi', 'betu_series_yomi', 'betu_series_title_yomi','naiyo_saimoku_title_yomi','buhenmei_yomi','makiji_bango_yomi', 'contributor_yomi', 'doctor_daigaku_yomi','teller_yomi','haifu_basho_yomi', 'keiji_basho_yomi');
 		// 'keiji_nen', 'keiji_tuki', 'keiji_bi');
 	foreach($text_fields as $f){
-		$$f = output_text_input($f, $items[$f]);
+		$$f = output_text_input($f, $items[$f], $caller);
 	}
 	$yomi_fields = array('title', 'series_title','betu_title', 'betu_series', 'betu_series_title','naiyo_saimoku_title','buhenmei','makiji_bango', 'contributor', 'doctor_daigaku','teller','haifu_basho', 'keiji_basho');
-	foreach($yomi_fields as $f){
-		${$f.'_button'} = output_yomi_button($f, $f."_yomi", $items[$f]);
+	if($caller == _INPUT_){
+		foreach($yomi_fields as $f){
+			${$f.'_button'} = output_yomi_button($f, $f."_yomi", $items[$f]);
+		}
 	}
 	$sakusei_nen = $items['sakusei_nen'];
 	$sakusei_tuki = $items['sakusei_tuki'];
@@ -81,16 +83,16 @@ function output_items_last($items){
 	$keiji_nen = $items['keiji_nen'];
 	$keiji_tuki = $items['keiji_tuki'];
 	$keiji_bi = $items['keiji_bi'];
-	$shiryo_keitai = output_shiryo_keitai_selection($items['shiryo_keitai']);
-	$language = output_for_handicapped_selection($items['language']);
-	$kanko_status = output_kanko_status_selection($items['kanko_status']);
-	$open_level = output_open_level_selection($items['open_level']);	
-	$hakubutu_kubun = output_radio('hakubutu_kubun', $items['hakubutu_kubun'], '人工物', '自然物');
-	$shosha_flag = output_radio('shosha_flag', $items['shosha_flag'], '該当しない', '該当する');
-	$online_flag = output_radio('online_flag', $items['online_flag'], '該当しない', '該当する');
-	$shoshi_flag = output_radio('shoshi_flag', $items['shoshi_flag'], '該当しない', '該当する');
-	$chizu_kubun = output_radio('chizu_kubun', $items['chizu_kubun'], '地図', '地図帳');
-	$seigen = output_radio('seigen', $items['seigen'], '該当しない', '悲惨（閲覧注意）');
+	$shiryo_keitai = output_shiryo_keitai_selection($items['shiryo_keitai'], $caller);
+	$language = output_for_handicapped_selection($items['language'], $caller);
+	$kanko_status = output_kanko_status_selection($items['kanko_status'], $caller);
+	$open_level = output_open_level_selection($items['open_level'], $caller);	
+	$hakubutu_kubun = output_radio('hakubutu_kubun', $items['hakubutu_kubun'], '人工物', '自然物', $caller);
+	$shosha_flag = output_radio('shosha_flag', $items['shosha_flag'], '該当しない', '該当する', $caller);
+	$online_flag = output_radio('online_flag', $items['online_flag'], '該当しない', '該当する', $caller);
+	$shoshi_flag = output_radio('shoshi_flag', $items['shoshi_flag'], '該当しない', '該当する', $caller);
+	$chizu_kubun = output_radio('chizu_kubun', $items['chizu_kubun'], '地図', '地図帳', $caller);
+	$seigen = output_radio('seigen', $items['seigen'], '該当しない', '悲惨（閲覧注意）', $caller);
 	//
 	$class_hissu1= 'opthissu opthissu_図書 opthissu_記事 opthissu_新聞・雑誌 opthissu_音声・映像 opthissu_文書・楽譜 opthissu_地図・地図帳 opthissu_チラシ opthissu_会議録・含資料 opthissu_博物資料 opthissu_オンライン資料opthissu_語り opthissu_絵画・絵はがき opthissu_プログラム（スマホアプリ・ゲーム等）';
 	$class_option2= 'optional optional_図書 optional_記事  optional_映像・音声  optional_文書・楽譜 optional_地図・地図帳';

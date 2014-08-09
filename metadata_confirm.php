@@ -4,7 +4,7 @@
 include_once(dirname(__FILE__) . "/NDL/NDL.php");
 include_once(dirname(__FILE__) . "/NDL/utils.php");
 include_once(dirname(__FILE__) . "/metadata_utils.php");
-include_once(dirname(__FILE__) . "/metadata_headers.php");
+include_once(dirname(__FILE__) . "/metadata_header.php");
 include_once(dirname(__FILE__) . "/metadata_items.php");
 
 $lot_id = intval($_GET['lot']);
@@ -25,7 +25,7 @@ foreach($seirihyo_items as $s){
 }
 
 //metadata_inputより受け取り
-$metadata_input_items = array()
+$metadata_input_items = array(
 	'md_type', //資料種別
 	'series_flag', //シリーズ資料（継続資料）か否か
 	'ihan_flag', //異版の有無
@@ -50,15 +50,22 @@ $metadata_input_items = array()
 	'keisa_shimei','keisai_ka','keisai_page','license_info','license_uri','license_holder','license_chuki','gov_issue','gov_issue_2','gov_issue_miyagi','gov_issue_chihou',
 	'for_handicapped','hakubutu_kubun','shiryo_keitai','origina_shiryo_keitai','shosha_flag','online_flag','shoshi_flag','chizu_kubun','haifu_taisho',
 	'keiji_nen','keiji_tuki','keiji_bi','keiji_basho','keiji_basho_yomi','sekou_taisho','sekou_nen','sekou_tuki','sekou_bi','teller','teller_yomi','seigen');
-foreach($seirihyo_items as $s){
+foreach($metadata_input_items as $s){
 	$$s = $_REQUEST[$s];
 	$items += array($s => $$s);
 }
 $items += array('uniqid' => $uniqid);
 
+// 引数での上書き
+foreach($items as $k => $v){
+	if($v == '' && $_REQUEST[$k] != ''){
+		$items[$k] = $_GET[$k];
+	}
+}
+
 ///
 echo output_header();
-echo output_css();
+echo output_css($show_image_flag);
 echo output_item_script();
 ?>
 
@@ -67,7 +74,7 @@ echo output_item_script();
 	<h4>ロットNo.<?php printf("%03d", $lot_id); ?></h4>
 	<?php echo "$id/$num_in_lot"; ?><br>
 
-	<font size='+1'><b>　　　　　　　　　　　入力内容を確認して下さい</font></b>
+	<font size='+1'><b>入力内容を確認して下さい</font></b>
 	<form name="input_form" method ="post" action="write.php" onSubmit="return check()">
 		<table>
 			<?php echo metadata_items_first($items, _CONFIRM_); ?>
