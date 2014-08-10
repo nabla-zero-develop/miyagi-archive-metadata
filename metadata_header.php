@@ -9,7 +9,7 @@ function output_header(){
 <!DOCTYPE html>
 <html>
 	<!-- header -->
-		<!-- meta http-equiv="Content-Type" content="text/html; charset=UTF-8" -->
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<script type="text/javascript" src="{$jquery}"></script>
 EOS;
 }
@@ -70,7 +70,7 @@ EOS;
 
 function output_image_script($files){
 	$ff = array();
-	foreach($files as $file) $ff[] = "'$file'";
+	foreach($files as $file) $ff[] = "'image.php?image=".urlencode($file)."'";
 	$f = implode(',', $ff);
 	return <<< EOS
 <script>
