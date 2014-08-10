@@ -158,7 +158,7 @@ if(!isset($md_type) && $is_input){
 	if ($shubetu=="b"){$md_type="図書・雑誌"; } //図書・雑誌
 	if ($shubetu=="s"){$md_type="音声"; } //音声
 }
-$items += array('md_type' => $md_type);
+$items['md_type'] = $md_type;
 
 //権利処理（県版と市町村版で値制約が異なる。県版は「済」「未」、市町村版は9で済）
 //なので、県版の「済」を9に書き換える
@@ -175,7 +175,7 @@ if($is_input){
 		}
 	}
 }
-$items += array('kenri_shori' => $kenri_shori);
+$items['kenri_shori'] = $kenri_shori;
 
 //公開レベル　県版と市町村版で値制約が異なる。県版は、公開の場合、「公開」で、
 //市町村版の場合は１が公開、2が限定公開、3が公開保留なので市町村側に合わせて
@@ -187,7 +187,7 @@ if($is_input){
 		}
 	}
 }
-$items += array('open_level' => $open_level);
+$items['open_level'] = $open_level;
 
 // 図書情報
 if(FALSE){
@@ -248,11 +248,11 @@ if(FALSE){
 	echo $creator_yomi."\n";
 	die;
 }
-$items += array('koukai_nen' => $koukai_nen);
-$items += array('koukai_tsuki' => $koukai_tsuki);
-$items += array('koukai_hi' => $koukai_hi);
-$items += array('creator_yomi' => $creator_yomi);
-$items += array('publisher' => $publisher);
+$items['koukai_nen'] = $koukai_nen;
+$items['koukai_tsuki'] = $koukai_tsuki;
+$items['koukai_hi'] = $koukai_hi;
+$items['creator_yomi'] = $creator_yomi;
+$items['publisher'] = $publisher;
 
 // 整理表では提供されない情報
 $new_items = array('series_flag', 'betu_title_flag', 'kiyo_flag', 'iban_flag', 'license_flag', 'inyou_flag',
@@ -277,9 +277,9 @@ foreach($items as $k => $v){
 }
 
 // データベースによる情報
-$items += array('id' => $id);
-$items += array('lot_id' => $lot_id);
-$items += array('uniqid' => $uniqid);
+$items['id'] = $id;
+$items['lot_id'] = $lot_id;
+$items['uniqid'] = $uniqid;
 
 ///
 echo output_header();

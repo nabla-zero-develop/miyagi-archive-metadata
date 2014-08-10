@@ -17,15 +17,24 @@ function attribute_str($key, $item, $callback = ""){
 }
 
 function get_info_as_string($info_array){
-	$attributes = array('title','link','description','author','category','guid',
-								'pubDate','dc_title','dcndl_titleTranscription','dc_creator','dcndl_seriesTitle',
-								'dcndl_seriesTitleTranscription','dc_publisher','dcterms_issued');
+	$attributes = array('title', // 0
+								'link', // 2
+								'description', // 4
+								'author', // 6
+								'category', // 8
+								'guid', // 10
+								'pubDate', // 12
+								'dc_title', // 14
+								'dcndl_titleTranscription', // 16
+								'dc_creator', // 18
+								'dcndl_seriesTitle', // 20
+								'dcndl_seriesTitleTranscription', // 22
+								'dc_publisher', // 24
+								'dcterms_issued'); // 26
 	$r = '';
 	foreach($info_array as $info){
 		foreach($attributes as $k){
-			if(isset($info[$k])){		
-				$r = $r.$k."\t".$info[$k]."\t";
-			}
+			$r = $r.$k."\t".(isset($info[$k]) ? $info[$k] : '')."\t";
 		}
 		$r = $r."\n";
 	}
