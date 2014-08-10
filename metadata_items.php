@@ -94,7 +94,7 @@ function output_items_last($items, $caller){
 	$chizu_kubun = output_radio('chizu_kubun', $items['chizu_kubun'], '地図', '地図帳', $caller);
 	$seigen = output_radio('seigen', $items['seigen'], '該当しない', '悲惨（閲覧注意）', $caller);
 	//
-	$ndl_button = ($caller == _INPUT_) ? "<input type='button' value='国会図書館問い合わせ' onClick='ndl_check();'>" : '';
+	$ndl_button = ($caller == _INPUT_) ? "<input type='button' value='国会図書館問い合わせ' onClick='ndl_check(); return false;'>" : '';
 	//
 	$class_hissu1= 'opthissu opthissu_図書 opthissu_記事 opthissu_新聞・雑誌 opthissu_音声・映像 opthissu_文書・楽譜 opthissu_地図・地図帳 opthissu_チラシ opthissu_会議録・含資料 opthissu_博物資料 opthissu_オンライン資料opthissu_語り opthissu_絵画・絵はがき opthissu_プログラム（スマホアプリ・ゲーム等）';
 	$class_option2= 'optional optional_図書 optional_記事  optional_映像・音声  optional_文書・楽譜 optional_地図・地図帳';
