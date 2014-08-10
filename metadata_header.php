@@ -163,6 +163,11 @@ function showOptCtrl(name){
 	}
 }
 
+var quit = false;
+function setQuit(tf){
+	quit = tf;
+}
+
 function check(){
  var flag=0;
  if (document.input_form.md_type.value ==""){

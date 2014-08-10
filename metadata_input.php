@@ -52,7 +52,7 @@ if(isset($_GET['uniqid'])){
 	}
 
 	$res = mysql_query("select * from baseinfo where uniqid=$uniqid");
-	$items = mysql_fetch_assoc($res);
+	$items = mysql_fetch_assoc($res); // $baseinfo相当
 } else {
 	// 基本情報整理表からのデータ引き受け
 	if(isset($_REQUEST['row_no'])){
@@ -135,8 +135,12 @@ $shi_items = array(
 
 foreach(array($common_items, $ken_items,  $shi_items) as $is){
 	foreach($is as $i){
-		$$i[0] = get_item($row_no, $i[1]);
-		$items += array($i[0] => $$i[0]);
+		if(isset($items[$i[0]])){
+			$$i[0] = $items[$i[0]];
+		} else {
+			$$i[0] = get_item($row_no, $i[1]);
+			$items += array($i[0] => $$i[0]);
+		}
 	}
 }
 
@@ -178,7 +182,7 @@ $items += array('open_level' => $open_level);
 if(!isset($koukai_nen)){$koukai_nen = '';}
 if(!isset($koukai_tsuki)){$koukai_tsuki = '';}
 if(!isset($koukai_hi)){$koukai_hi = '';}
-if($md_type=="図書"){
+if($md_type=="図書" && $koukai_nen == '' && $koukai_tsuki == '' && $koukai_hi == ''){
 	$pubDate = get_info('pubDate');
 	if($pubDate <>''){
 		list($koukai_nen, $koukai_tsuki, $koukai_hi) = explode("-", date("Y-m-d", strtotime($pubDate)));
@@ -202,13 +206,19 @@ $new_items = array('series_flag', 'betu_title_flag', 'kiyo_flag', 'iban_flag', '
 		'original_shiryo_keitai', 'rippou_flag', 'doctor_flag', 'standard_id', 'title_yomi', 'series_title', 'series_title_yomi', 'betu_title', 'betu_title_yomi', 'betu_series', 'betu_series_yomi', 'betu_series_title', 'betu_series_title_yomi', 'naiyo_saimoku_title', 'naiyo_saimoku_title_yomi', 'naiyo_saimoku_title_yomi', 'naiyo_saimoku_chosha', 'buhenmei', 'buhenmei_yomi', 'makiji_bango', 'makiji_bango_yomi', 'iban', 'iban_chosha', 'chuuki', 'youyaku', 'mokuji', 'is_bubun', 'ioya_uri', 'shigen_mei', 'has_bubun', 'ko_uri', 'taisho_basho_uri', 'taisho_basho_keni', 'taisho_basho_shi', 'taisho_basho_banchii', 'taisho_basho_ido', 'taisho_basho_keido', 'satusei_ido', 'satuei_keido', 'satuei_shi', 'satuei_banch', 'kanko_hindo', 'kanko_kanji', 'doctor', 'doctor_bango', 'doctor_nen', 'doctor_tuki', 'doctor_bi', 'doctor_daigaku', 'doctor_daigaku_yomi', 'keisai_go1', 'keisai_go2', 'keisa_shimei', 'keisai_kan', 'keisai_page', 'license_info', 'license_uri', 'license_holder', 'license_chuki', 'shiryo_keitai', 'teller', 'teller_yomi', 'haifu_taisho', 'haifu_nen', 'haifu_tuki', 'haifu_bi', 'keiji_basho', 'keiji_basho_yomi', 'keiji_nen', 'keiji_tuki', 'keiji_bi', 'sakusei_bi', 'online_nen', 'online_tuki', 'online_bi', 'koukai_tuki', 'shiryo_keitai', 'language', 'kanko_status', 'hakubutu_kubun', 'shosha_flag', 'online_flag', 'shoshi_flag', 'chizu_kubun', 'seigen');
 
 foreach($new_items as $i){
-	$items += array($i => '');
+	if(isset($items[$i])){
+		$$i = $items[$i];
+	} else {
+		$items += array($i => '');
+		$$i = '';
+	}
 }
 
 // 引数での上書き
 foreach($items as $k => $v){
 	if($v == '' && $_REQUEST[$k] != ''){
-		$items[$k] = $_GET[$k];
+		$items[$k] = $_REQUEST[$k];
+		$$k = $_REQUEST[$k];
 	}
 }
 
@@ -252,18 +262,17 @@ echo output_image_script($files);
 		<h4>ロットNo.<?php printf("%03d", $lot_id); ?></h4>
 		<?php echo "$id/$num_in_lot"; ?><br>
 		<!-- form name="input_form" method ="post" action="./metadata_confirm.php" onSubmit="return check()" -->
-		<form name="input_form">
+		<!-- form name="input_form" -->
+		<form name="input_form" method ="post" action="write.php" onSubmit="return check()">
 			<table>
 				<?php echo metadata_items_first($items, _INPUT_); ?>
 				<tr><td></td></tr>
 				<?php echo output_items_last($items, _INPUT_); ?>
 			</table>
 			<?php echo output_handover_items($items, _INPUT_); ?>
-			<input type="submit" value="確認画面へ">
-			<!--
-			<input type="submit" name='next' value="登録して次へ">
-			<input type="submit" name='quit' value="中断">
-			-->
+			<input type="submit" name='next' value="登録して次へ" onClick="setQuit(false);">
+			<input type="submit" name='quit' value="中断" onClick="setQuit(true);">
+			<!--  <input type="submit" value="確認画面へ"> -->
 		</form>
 	</div>
 </body>
