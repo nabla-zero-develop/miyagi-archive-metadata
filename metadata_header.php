@@ -213,6 +213,7 @@ function yomi(field, yomi_field, init_value) {
 			success: function(data) {
 				//alert(data);
 				$("input[name='" + yomi_field + "']").val(data);
+				return data;
 			},
 			error: function(data) {
 				//alert("error:"+data);
@@ -231,9 +232,9 @@ function ndl_check(){
 			success: function(data) {
 				fields = data.split("\t");
 				$("input[name='title']").val(fields[1]);
-				$("input[name='title_yomi']").val(fields[15]);
+				$("input[name='title_yomi']").val(fields[17]); 
 				$("input[name='creator']").val(fields[7]);
-				$("input[name='publisher']").val(fields[19]);
+				$("input[name='publisher']").val(fields[25]);
 				//s = fields[21] + "";
 				//alert(s.length() );
 				//if(s.length() == 7){					
