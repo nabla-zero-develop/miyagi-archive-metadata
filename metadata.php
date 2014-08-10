@@ -144,7 +144,7 @@ foreach(array($common_items, $ken_items,  $shi_items) as $is){
 			$$i[0] = $items[$i[0]];
 		} else {
 			$$i[0] = get_item($row_no, $i[1]);
-			$items += array($i[0] => $$i[0]);
+			$items[$i[0]] = $$i[0];
 		}
 	}
 }
