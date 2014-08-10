@@ -27,6 +27,10 @@ $(document).ready(function(){
 		var lotid = $(this).attr('lotid');
 		location.href = "metadata.php?lotid="+lotid;
 });
+	$('input[value=修正]').click(function(){
+		var lotid = $(this).attr('lotid');
+		location.href = "metadata.php?lotid="+lotid;
+});
 	$('input[value=再開]').click(function(){
 		var lotid = $(this).attr('lotid');
 		location.href = "metadata.php?resume=1&lotid="+lotid;
@@ -55,6 +59,7 @@ foreach($lots as $lot){
 	$button = "";
 	if($lot['status'] == 0){
 		$shinchoku = '未着手';
+		$button .= "<input type='button' value='開始' lotid={$lot['lotid']}>";
 	}elseif($lot['status'] == 1){
 		$countdatas = mysql_get_multi_rows("select count(*),finish from lotfile where lotid={$lot{'lotid'}} group by finish");
 		$counts = array(0=>0,1=>0);
@@ -64,12 +69,18 @@ foreach($lots as $lot){
 			$total += $c['count(*)'];
 		}
 		$shinchoku = "$counts[1]/$total";
-		if(isset($counts[1]))$button .= "<input type='button' value='再開' lotid={$lot['lotid']}>";
+		if(isset($counts[1])){
+			$button .= "<input type='button' value='再開' lotid={$lot['lotid']}>";
+			$button .= "<input type='button' value='修正' lotid={$lot['lotid']}>";
+		}else{
+			$button .= "<input type='button' value='開始' lotid={$lot['lotid']}>";
+		}
 	}else{
 		$shinchoku = '完了';
+		$button .= "<input type='button' value='修正' lotid={$lot['lotid']}>";
 	}
-	$button .= "<input type='button' value='開始' lotid={$lot['lotid']}>";
-	echo "<tr><td>{$lot['lotid']}</td><td>$shinchoku</td><td>$button</td></tr>";
+	$lotid = sprintf("%03d",$lot['lotid']);
+	echo "<tr><td>{$lotid}</td><td>$shinchoku</td><td>$button</td></tr>";
 }
 ?>
 
