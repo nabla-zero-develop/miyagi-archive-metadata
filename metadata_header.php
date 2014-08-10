@@ -24,8 +24,14 @@ function output_css($show_image_flag){
 	}
 	return <<< EOS
 <style>
+#formDiv{
+	width: 500px;
+	height: 100%;
+	overflow: scroll;
+	float: right;
+}
 #imageDiv{
-	width: 00px;
+	width: 1350px;
 	float: left;
 	text-align: center;
 }
@@ -33,18 +39,21 @@ function output_css($show_image_flag){
 	max-width: $width%;
 	max-height: $height%;
 	display: block;
+	position: absolute;
 }
 #imageWrap{
-	width: 00px;
-	height: 00px;
+	width: 1350px;
+	height: 1000px;
 }
 th{
 	background-color: #9292FF;
 	border: 2px solid #ffffff;
+	font-weight: normal;
 }
 td{
 	border: 2px solid #ffffff;
 	background-color: #CEE3F6;
+	font-weight: normal;
 }
 table{
 	border-collapse: collapse;
@@ -69,16 +78,19 @@ var images = [$f];
 var degree = 0;
 function rotate(deg){
 	degree = deg;
-	$('#image').css('transform','rotate('+deg+'deg)')
+	var \$image = $('#image');
+	\$image.css('transform','rotate('+deg+'deg)')
 		.css('width','').css('height','').css('left',0).css('right',0);
 	if(deg == 0){
-		$('#image')
+		\$image
 			.css('max-width',$('#imageWrap').css('width'))
 			.css('max-height',$('#imageWrap').css('height'));
+		\$image.css('top',0);
 	}else{
-		$('#image')
+		\$image
 			.css('max-width',$('#imageWrap').css('height'))
 			.css('max-height',$('#imageWrap').css('width'));
+		\$image.css('top',(\$image.width()-\$image.height())/2);
 	}
 }
 

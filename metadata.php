@@ -295,7 +295,6 @@ echo output_image_script($files);
 			<img src='' id='image'>
 		</div>
 		<br>
-		<!--
 		<span>
 			<input type='button' value='<<' onClick='chgImage(0)'>
 			<input type='button' value='<' onClick='prevImage()'>
@@ -308,7 +307,6 @@ echo output_image_script($files);
 			<input type='button' value='無回転' onClick='rotate(0);'>
 			<input type='button' value='右回転' onClick='rotate(90);'>
 		</span>
-		-->
 	</div>
 
 	<div id='formDiv'>
