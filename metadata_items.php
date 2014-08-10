@@ -33,7 +33,7 @@ function metadata_items_first($items, $caller){
 	<tr><th>引用資料<br><font size='-1'>親となる資料からの引用</font></th><td>$_inyou_flag</td></tr>
 	<tr><th>政府刊行物・刊行元<br><font size='-1'>x省等が発行元</font></th><td>$_gov_issue</td></tr>
 	<tr><th>官公庁刊行物<br><font size='-1'>該当する場合刊行元（機関名）<br>x省等の下部機関が発行元</font></th><td>$_gov_issue_2</td></tr>
-	<!--地方公共団体刊行物 --><tr><th>地方公共団体刊行物<br><font size='-1'>該当する場合刊行元（団体名）</font></th><td>$_gov_issue_chihou</td></tr>
+	<tr><th>地方公共団体刊行物<br><font size='-1'>該当する場合刊行元（団体名）</font></th><td>$_gov_issue_chihou</td></tr>
     <tr><th>宮城県内地方公共団体刊行物<br><font size='-1'>宮城県内の自治体が発行元</font></th><td>$_gov_issue_miyagi</td></tr>
 	<tr><th>視聴覚者向け資料</th><td>$_for_handicapped</td></tr>
 	<tr><th>オリジナル資料の形態</th><td>$_original_shiryo_keitai</td></tr>
@@ -94,14 +94,17 @@ function output_items_last($items, $caller){
 	$chizu_kubun = output_radio('chizu_kubun', $items['chizu_kubun'], '地図', '地図帳', $caller);
 	$seigen = output_radio('seigen', $items['seigen'], '該当しない', '悲惨（閲覧注意）', $caller);
 	//
+	$ndl_button = ($caller == _INPUT_) ? "<input type='button' value='国会図書館問い合わせ' onClick='ndl_check();'>" : '';
+	//
 	$class_hissu1= 'opthissu opthissu_図書 opthissu_記事 opthissu_新聞・雑誌 opthissu_音声・映像 opthissu_文書・楽譜 opthissu_地図・地図帳 opthissu_チラシ opthissu_会議録・含資料 opthissu_博物資料 opthissu_オンライン資料opthissu_語り opthissu_絵画・絵はがき opthissu_プログラム（スマホアプリ・ゲーム等）';
 	$class_option2= 'optional optional_図書 optional_記事  optional_映像・音声  optional_文書・楽譜 optional_地図・地図帳';
 	$class_option3='optional optional_図書 optional_記事 optional_雑誌・新聞 optional_映像・音声 optional_文書・楽譜 optional_地図・地図帳 optional_チラシ optional_会議録・含資料 optional_博物資料 optional_絵画・絵はがき'; //目次
 	$class_option4='optional optional_音声・映像 optional_地図・地図帳 optional_写真 optional_語り optional_絵画・絵はがき';
+	
 	return <<< EOS
-	<tr><th>標準番号(ISBN等)<br><input type='button' value='NDLチェック'></th><td>$standard_id</td></tr>	
-	<tr><th class='$class_hissu1'>タイトル<br><input type='button' value='NDLチェック'></th><td>$title</td></tr>		
-	<tr class='series_flag_option'><th class='$class_hissu1'>タイトルのヨミ<br>$title_button</th><td>$title_yomi</td></tr>
+	<tr><th>標準番号(ISBN等)<br>$ndl_button</th><td>$standard_id</td></tr>	
+	<tr><th class='$class_hissu1'>タイトル</th><td>$title</td></tr>		
+	<tr><th class='$class_hissu1'>タイトルのヨミ<br>$title_button</th><td>$title_yomi</td></tr>
 	<tr class='series_flag_option'><th class='$class_hissu1'>シリーズタイトル</th><td>$series_title</td></tr>
 	<tr class='series_flag_option'><th class='$class_hissu1'>シリーズタイトルのヨミ<br>$series_title_button</th><td>$series_title_yomi</td></tr>	 
 	<tr class='betu_title_flag_option'><th>別タイトル</th><td>$betu_title</td></tr>
@@ -116,6 +119,7 @@ function output_items_last($items, $caller){
 	<tr class='$class_option2'><th>巻次・部編番号</th><td>$makiji_bango</td></tr>	
 	<tr class='$class_option2'><th>巻次・部編番号のヨミ<br>$makiji_bango_button</th><td>$makiji_bango_yomi</td></tr>	
 	<tr><th class='hissu'>作成者・著者名</th><td>$creator</td></tr>
+	<tr><th class='hissu'>作成者・著者名のヨミ</th><td>$creator_yomi</td></tr>
 	<tr class='kiyo_flag_option'><th>寄与者（寄贈者）</th><td>$contributor</td></tr>	
 	<tr class='kiyo_flag_option'><th>寄与者（寄贈者）のヨミ<br>$contributor_button</th><td>$contributor_yomi</td></tr>
 	<tr class='iban_flag_option'><th>異版名(第x版）</th><td>$iban</td></tr>
