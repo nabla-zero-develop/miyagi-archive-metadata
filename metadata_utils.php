@@ -1,5 +1,6 @@
 <?php
-define('DEBUG_NO_DB', TRUE);
+require_once(dirname(__FILE__) . '/include/config.php');
+
 define('_INPUT_', '_INPUT_');
 define('_CONFIRM_', '_CONFIRM_');
 

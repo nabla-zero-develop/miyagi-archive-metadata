@@ -1,7 +1,7 @@
 <?php
 
 // 大域
-$jquery = './js/jquery-1.11.1.min.js';
+$jquery = './js/jquery/jquery-1.8.0.min.js';
 
 function output_header(){
 	global $jquery;

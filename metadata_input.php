@@ -1,9 +1,82 @@
 <?php
-include_once(dirname(__FILE__) . "/NDL/NDL.php");
-include_once(dirname(__FILE__) . "/NDL/utils.php");
-include_once(dirname(__FILE__) . "/metadata_utils.php");
-include_once(dirname(__FILE__) . "/metadata_header.php");
-include_once(dirname(__FILE__) . "/metadata_items.php");
+require_once(dirname(__FILE__) . '/include/config.php');
+require_once(dirname(__FILE__) . "/NDL/NDL.php");
+require_once(dirname(__FILE__) . "/NDL/utils.php");
+require_once(dirname(__FILE__) . "/metadata_utils.php");
+require_once(dirname(__FILE__) . "/metadata_header.php");
+require_once(dirname(__FILE__) . "/metadata_items.php");
+ini_set('error_reporting', E_ALL & ~E_NOTICE & ~E_STRICT);
+
+$items = array();
+if(isset($_GET['uniqid'])){
+	// uniqidが渡された場合(データベースからの情報取得)
+	$lotid = intval($_GET['lotid']);
+	$resume = isset($_GET['resume'])?$_GET['resume']:false;
+	$uniqid = isset($_GET['uniqid'])?$_GET['uniqid']:0;
+	if(!is_numeric($uniqid))die('uniqidが不正です');
+	if(DEBUG_NO_DB) die('実行環境か引数の渡し方が間違っています'); 
+	
+	//編集対象を確定
+	if($uniqid){
+		$res = mysql_query("select * from lotfile where uniqid=$uniqid");
+		$row = mysql_fetch_assoc($res);
+		if(!$row)die("No data for uniqid $uniqid.");
+	}else{
+		if($resume){
+			$res = mysql_query("select * from lotfile where finish = 0 and lotid=$lotid order by ord");
+		}else{
+			$res = mysql_query("select * from lotfile where lotid=$lotid order by ord");
+		}
+		$row = mysql_fetch_assoc($res);
+		if(!$row) die("No data");
+		$uniqid = $row['uniqid'];
+	}
+	//ロット内のデータ数
+	$res = mysql_query("select uniqid from lotfile where lotid=$lotid order by ord");
+	$num_in_lot = mysql_num_rows($res);
+	$actualord = 1;
+	while($row2 = mysql_fetch_assoc($res)){
+		if($row2['uniqid'] == $uniqid)break;
+		$actualord++;
+	}
+
+	$filedir = $file_basepath.mb_convert_encoding($row['filepath'],'SJIS','UTF-8');
+	$files = glob($filedir.'/*');
+
+	$res = mysql_query("select * from content where uniqid=$uniqid");
+	$data = mysql_fetch_assoc($res);
+	if(!$data){
+		$data = array(
+	'md_type' => '','md_title' => '','md_copywriter' => '','md_copywriter_other' => '','md_copyrigher_uri' => '','md_copyrighter_yomi' => '','md_content_year' => '-1','md_content_month' => '-1','md_content_day' => '-1','md_content_hour' => '-1','md_content_min' => '-1','md_content_sec' => '-1','md_publish_year' => '-1','md_publish_month' => '-1','md_publish_day' => '-1','md_setting_year' => '-1','md_setting_month' => '-1','md_seting_day' => '-1','md_setting_place' => '','md_issue_for' => '','md_issue_year' => '-1','md_issue_month' => '-1','md_issue_day' => '-1','md_narrator' => '','md_content_restriction' => ''
+		);
+	}
+
+	$res = mysql_query("select * from baseinfo where uniqid=$uniqid");
+	$items = mysql_fetch_assoc($res);
+} else {
+	// 基本情報整理表からのデータ引き受け
+	if(isset($_REQUEST['row_no'])){
+		$row_no = $_REQUEST['row_no'];
+		$ken_or_shi = $_REQUEST['ken_or_shi']; 
+		$lot_id = intval($_REQUEST['lot']);
+		$id = isset($_REQUEST['id'])?intval($_REQUEST['id']):1;
+	} else {
+		// ダミー情報によりテストできるようにする
+		$row_no = 1;
+		$ken_or_shi = 0; 
+		$lot_id = '003';
+		$id = 1;
+	}
+	// DB取得
+	list($data, $num_in_lot, $uniqid, $files) = get_data_from_db($lot_id, $id);
+}
+$show_image_flag = TRUE;
+
+
+//基本情報整理表に書かれたデータ（行・列）を変数に格納
+//県版と市町村県版で列が同じ項目
+
+//A列：課室コード（県版）、市町村コード（市町村版）
 
 function get_item($row_no, $col_num){
 	if(isset($_REQUEST["r".$row_no."c".$col_num])){
@@ -12,27 +85,6 @@ function get_item($row_no, $col_num){
 		return '[整理表データ無し]';
 	}
 }
-
-if(isset($_REQUEST['row_no'])){
-	$row_no = $_REQUEST['row_no'];
-	$ken_or_shi = $_REQUEST['ken_or_shi']; 
-	$lot_id = intval($_REQUEST['lot']);
-	$id = isset($_REQUEST['id'])?intval($_REQUEST['id']):1;
-} else {
-	$row_no = 1;
-	$ken_or_shi = 0; 
-	$lot_id = '003';
-	$id = 1;
-}
-$show_image_flag = TRUE;
-
-// DB取得
-list($data, $num_in_lot, $uniqid, $files) = get_data_from_db($lot_id, $id);
-
-//基本情報整理表に書かれたデータ（行・列）を変数に格納
-//県版と市町村県版で列が同じ項目
-
-//A列：課室コード（県版）、市町村コード（市町村版）
 
 $common_items = array(
 	array('local_code', 0),
@@ -81,7 +133,6 @@ $shi_items = array(
 	array('horyu_reason', 28),	//保留理由
 	array('media_code', 32));	//媒体コード
 
-$items = array();
 foreach(array($common_items, $ken_items,  $shi_items) as $is){
 	foreach($is as $i){
 		$$i[0] = get_item($row_no, $i[1]);
@@ -90,7 +141,7 @@ foreach(array($common_items, $ken_items,  $shi_items) as $is){
 }
 
 // 種別
-$md_type = '';
+if(!isset($md_type)){$md_type = '';}
 if ($shubetu=="v"){$md_type="映像"; } //映像
 if ($shubetu=="p"){$md_type="チラシ"; } //チラシ
 if ($shubetu=="d"){$md_type="文書"; } //文書
@@ -124,9 +175,9 @@ if($ken_or_shi==0){ //県版
 $items += array('open_level' => $open_level);
 
 // 図書情報
-$koukai_nen = '';
-$koukai_tsuki = '';
-$koukai_hi = '';
+if(!isset($koukai_nen)){$koukai_nen = '';}
+if(!isset($koukai_tsuki)){$koukai_tsuki = '';}
+if(!isset($koukai_hi)){$koukai_hi = '';}
 if($md_type=="図書"){
 	$pubDate = get_info('pubDate');
 	if($pubDate <>''){
