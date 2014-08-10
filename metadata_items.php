@@ -223,7 +223,7 @@ function  output_handover_items($items){
                 'renraku_saki_zip','renraku_saki_address','renraku_saki_tel','renraku_saki_other',
                 'kenri_shori','horyu_reason','open_level','media_code',
                 //
-                'lot', 'lot_id', 'lotid', 'id'); // lot, lotid, lot_idが混在
+                'lot', 'lot_id', 'lotid', 'id', 'uniqid'); // lot, lotid, lot_idが混在
 	foreach($hidden_fields as $f){
 		$$f = output_hidden_input($f, $items[$f]);
 	}

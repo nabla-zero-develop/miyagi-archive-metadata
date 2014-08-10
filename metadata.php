@@ -311,8 +311,8 @@ echo output_image_script($files);
 
 	<div id='formDiv'>
 		<p>
-		<h4>ロットNo.<?php printf("%03d", $lot_id); ?></h4>
-		<?php echo "$id/$num_in_lot"; ?><br>
+		<h4>ロットNo.<?php printf("%03d", $lotid); ?></h4>
+		<?php echo "$actualord/$num_in_lot"; ?><br>
 		<!-- form name="input_form" method ="post" action="./metadata_confirm.php" onSubmit="return check()" -->
 		<!-- form name="input_form" -->
 		<form name="input_form" method ="post" action="write.php" onSubmit="return check()">
@@ -322,6 +322,9 @@ echo output_image_script($files);
 				<?php echo output_items_last($items, _INPUT_); ?>
 			</table>
 			<?php echo output_handover_items($items, _INPUT_); ?>
+
+			<input type="hidden" name="lotid" value="<?php echo $lotid; ?>">
+			<input type="hidden" name="uniqid" value="<?php echo $uniqid; ?>">
 			<input type="submit" name='next' value="登録して次へ" onClick="setQuit(false);">
 			<input type="submit" name='quit' value="中断" onClick="setQuit(true);">
 			<!--  <input type="submit" value="確認画面へ"> -->

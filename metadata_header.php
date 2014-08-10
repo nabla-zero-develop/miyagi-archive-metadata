@@ -182,7 +182,7 @@ function setQuit(tf){
 
 function check(){
  var flag=0;
- if (document.input_form.md_type.value ==""){
+ if (document.input_form.md_type.value =="" && !quit){
  	 flag=1;
   }
   if (flag){
