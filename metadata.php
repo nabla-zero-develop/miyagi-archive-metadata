@@ -16,12 +16,12 @@ $show_image_flag = $is_input;
 $items = array();
 if(isset($_GET['lotid'])){
 	// lotidが渡された場合(データベースからの情報取得)
-	if(DEBUG_NO_DB) die('実行環境か引数の渡し方が間違っています'); 
+	if(DEBUG_NO_DB) die('実行環境か引数の渡し方が間違っています');
 	$lotid = intval($_GET['lotid']);
 	$resume = isset($_GET['resume'])?$_GET['resume'] : false;
 	$uniqid = isset($_GET['uniqid'])?$_GET['uniqid'] : 0;
 	if(!is_numeric($uniqid)) die('uniqidが不正です');
-	
+
 	//編集対象を確定
 	if($uniqid){
 		$res = mysql_query("select * from lotfile where uniqid=$uniqid");
@@ -63,13 +63,13 @@ if(isset($_GET['lotid'])){
 	// 基本情報整理表からのデータ引き受け
 	if(isset($_REQUEST['row_no'])){
 		$row_no = $_REQUEST['row_no'];
-		$ken_or_shi = $_REQUEST['ken_or_shi']; 
+		$ken_or_shi = $_REQUEST['ken_or_shi'];
 		$lot_id = intval($_REQUEST['lot']);
 		$id = isset($_REQUEST['id'])?intval($_REQUEST['id']):1;
 	} else {
 		// ダミー情報によりテストできるようにする
 		$row_no = 1;
-		$ken_or_shi = 0; 
+		$ken_or_shi = 0;
 		$lot_id = '003';
 		$id = 1;
 	}
@@ -107,7 +107,7 @@ $common_items = array(
 	array('sakusei_tuki', 12),//M列：作成日(月)
 	array('sakusei_bi', 13),//N列：作成日(日)
 	array('satuei_basho_zip', 14));//O列：撮影場所（〒番号)
-	
+
 $ken_items = array(
 	array('satuei_basho_address', 15),	//撮影場所住所
 	array('satuei_basho_address_yomi', 16),	//撮影場所住所のヨミ
@@ -286,6 +286,7 @@ echo output_header();
 echo output_css($show_image_flag);
 echo output_item_script();
 echo output_image_script($files);
+echo output_map_script();
 ?>
 
 </header>
@@ -329,6 +330,16 @@ echo output_image_script($files);
 			<input type="submit" name='quit' value="中断" onClick="setQuit(true);">
 			<!--  <input type="submit" value="確認画面へ"> -->
 		</form>
+	</div>
+
+	<div id='mapDialog'>
+		<div id="mapDiv" style="width:750px; height:600px; margin-left:5px; margin-right:5px;">&nbsp;</div>
+		<button onClick="doRevGeoCode();">マーカー位置の住所取得</button>
+			<span id="addressKen"></span> <span id="addressShi"></span> <span id="addressBanchi"></span>
+			<span style="display:none;">(<span id="addressKeido"></span>,<span id="addressIdo"></span>)</span>
+	</div>
+</body>
+
 	</div>
 </body>
 </html>

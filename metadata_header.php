@@ -191,7 +191,7 @@ function check(){
   } else {
   	  return true;
   }
-}	    
+}
 
 // Enterサブミット防止
 $(function() {
@@ -236,7 +236,7 @@ function ndl_check(){
 				$("input[name='publisher']").val(fields[19]);
 				//s = fields[21] + "";
 				//alert(s.length() );
-				//if(s.length() == 7){					
+				//if(s.length() == 7){
 				//	dt = Date.parse(fields[21]+"-01");
 				//	$("input[name='koukai_nen'").val(dt.getYear());
 				//	$("input[name='koukai_tsuki'").val(dt.getMonth());
@@ -255,5 +255,129 @@ function ndl_check(){
 	};
 }
 </script>
+EOS;
+}
+
+function output_map_script(){
+	return <<< EOS
+<script src="https://maps.googleapis.com/maps/api/js?sensor=false&language=ja"></script>
+<script src="js/jquery-ui-1.11.0.custom/jquery-ui.min.js"></script>
+<link rel="stylesheet" type="text/css" href="js/jquery-ui-1.11.0.custom/jquery-ui.min.css" />
+<script>
+	$(document).ready(function(){
+		$('#mapDialog').dialog({
+			autoOpen: false,
+			buttons: {    // ボタンを設定
+				"保存": function(event) {
+					$('input[name='+addressPrefix+'basho_ken]').val($('#addressKen').text());
+					$('input[name='+addressPrefix+'basho_shi]').val($('#addressShi').text());
+					$('input[name='+addressPrefix+'basho_banchi]').val($('#addressBanchi').text());
+					$('input[name='+addressPrefix+'basho_ido]').val($('#addressIdo').text());
+					$('input[name='+addressPrefix+'basho_keido]').val($('#addressKeido').text());
+					$(this).dialog("close");
+        		},
+        		"キャンセル": function() { $(this).dialog("close"); }
+    		},
+			width: 800,
+			height: 800
+		});
+	})
+
+	var addressPrefix = '';
+	function getAddress(prefix){
+		if(!mapInitialized){
+			mapInitialized = true;
+			init_google_map();
+		}
+		addressPrefix = prefix;
+		$('#mapDialog').dialog("open");
+	}
+
+	var map;
+	var marker;
+	var initlat = 38.268839;
+	var initlng = 140.872103;
+	var mapInitialized = false;
+	function init_google_map(){
+		var map_div = document.getElementById('mapDiv');
+		var initCenter = new google.maps.LatLng(initlat, initlng);
+		var map_opts = {
+			zoom: 14,
+			center: initCenter,
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			scaleControl: true
+		};
+
+		map = new google.maps.Map( map_div, map_opts );
+
+		marker = new google.maps.Marker({map:map, position:initCenter, draggable:true });
+
+		google.maps.event.addListener(map, 'click', function(e) {
+			marker.setPosition(e.latLng);
+		});
+
+	}
+	function doRevGeoCode(){
+		var markpos = marker.getPosition();
+		$('#addressKen').text('取得中');
+		$('#addressShi').text('');
+		$('#addressBanchi').text('');
+		$('#addressIdo').text(markpos.lat());
+		$('#addressKeido').text(markpos.lng());
+		//逆ジオコーディング
+		var geocoder = new google.maps.Geocoder();
+		geocoder.geocode(
+		{ latLng: markpos, region: 'jp' },
+		function( results, status ){
+			var addressKen='';var addressShi='';var addressBanchi='';
+			var addressStr='';
+			if (status == google.maps.GeocoderStatus.OK) {
+				if(results && results.length > 0){
+					//typesに"political"が含まれるものを探す
+					for(var i in results){
+						//console.log(results[i].formatted_address);
+						var types = results[i].types;
+						for(var j in types){
+							//console.log(types[j]);
+							if(types[j] == 'political'){
+								addressStr = results[i].formatted_address;
+								//break;
+								components = results[i].address_components;
+								for(var k in components){
+									types2 = components[k].types;
+									for(var l in types2){
+										if(types2[l] == 'sublocality_level_1'||
+										types2[l] == 'sublocality_level_2'||
+										types2[l] == 'sublocality_level_3'||
+										types2[l] == 'sublocality_level_4'){
+											var postfix='';
+											if(types2[l] == 'sublocality_level_3'){prefix='-'}
+											addressBanchi = components[k].long_name+addressBanchi+postfix;
+										}else if(types2[l] == 'locality'){
+											addressShi = components[k].long_name;
+										}else if(
+										types2[l] == 'administrative_area_level_1'){
+											addressKen = components[k].long_name;
+										}
+									}
+								}
+								break;
+							}
+							if(addressStr.length > 0) break;
+						}
+					}
+				}
+			}
+			if(addressKen.length>0){
+				$('#addressKen').text(addressKen);
+				$('#addressShi').text(addressShi);
+				$('#addressBanchi').text(addressBanchi);
+			}else{
+				$('#addressKen').text('');
+			}
+		}
+		);
+	}
+	</script>
 EOS;
 }

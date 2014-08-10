@@ -6,29 +6,29 @@ include_once(dirname(__FILE__) . "/metadata_options.php");
 function metadata_items_first($items, $caller){
 	$_uniqid = $items['uniqid'];
 	$_md_type = output_md_type_selection($items['md_type'], $caller);
-    $_series_flag = output_radio('series_flag', $items['series_flag'], '該当しない', '該当する', $caller); 
-	$_betu_title_flag = output_radio('betu_title_flag', $items['betu_title_flag'], '無', '有', $caller); 
-	$_kiyo_flag = output_radio('kiyo_flag', $items['kiyo_flag'], '無', '有', $caller); 
+    $_series_flag = output_radio('series_flag', $items['series_flag'], '該当しない', '該当する', $caller);
+	$_betu_title_flag = output_radio('betu_title_flag', $items['betu_title_flag'], '無', '有', $caller);
+	$_kiyo_flag = output_radio('kiyo_flag', $items['kiyo_flag'], '無', '有', $caller);
 	$_iban_flag = output_radio('iban_flag', $items['iban_flag'], '該当しない', '該当する', $caller);
 	$_license_flag = output_radio('license_flag', $items['license_flag'], '無', '有', $caller);
-	$_inyou_flag = output_radio('inyou_flag', $items['inyou_flag'], '該当しない', '該当する', $caller); 
+	$_inyou_flag = output_radio('inyou_flag', $items['inyou_flag'], '該当しない', '該当する', $caller);
 	$_gov_issue = output_gov_issue_selection($items['gov_issue'], $caller);
 	$_gov_issue_2 = output_text_input('gov_issue_2', $items['gov_issue_2'], $caller);
 	$_gov_issue_chihou = output_text_input('gov_issue_chihou', $items['gov_issue_chihou'], $caller);
-	$_gov_issue_miyagi = output_gov_issue_miyagi_selection($items['gov_issue_miyagi'], $caller); 
+	$_gov_issue_miyagi = output_gov_issue_miyagi_selection($items['gov_issue_miyagi'], $caller);
 	$_for_handicapped = output_for_handicapped_selection($items['for_handicapped'], $caller);
 	// 整理表の段階でカセットテープが指定されていたら、入力時のみカセットテープ選択に自動設定する
 	$_original_shiryo_keitai = output_original_shiryo_keitai_selection((($items['media_code'] == "32") && ($caller == _INPUT_)) ? "32" : $items['original_shiryo_keitai'], $caller);
-	$_rippou_flag = output_radio('rippou_flag', $items['rippou_flag'], '該当しない', '該当する', $caller); 
-	$_doctor_flag = output_radio('doctor_flag', $items['doctor_flag'], '該当しない', '該当する', $caller); 
+	$_rippou_flag = output_radio('rippou_flag', $items['rippou_flag'], '該当しない', '該当する', $caller);
+	$_doctor_flag = output_radio('doctor_flag', $items['doctor_flag'], '該当しない', '該当する', $caller);
 
 	return <<< EOS
 	<tr><th>ユニークID</th><td>$_uniqid </td></tr>
 	<tr><th class='hissu'>資料種別</th><td>$_md_type</td></tr>
-	<tr><th class='hissu'>シリーズ（継続資料）</th><td>$_series_flag</td></tr>	
-	<tr><th>別タイトルの有無</th><td>$_betu_title_flag</td></tr>	
+	<tr><th class='hissu'>シリーズ（継続資料）</th><td>$_series_flag</td></tr>
+	<tr><th>別タイトルの有無</th><td>$_betu_title_flag</td></tr>
 	<tr><th>寄与者（寄贈者）の有無</th><td>$_kiyo_flag</td></tr>
-	<tr class='optional optional_図書 optional_雑誌・新聞'><th>異版<font size='-1'>（第x版、改訂版等）</font></th><td>$_iban_flag</td></tr>	
+	<tr class='optional optional_図書 optional_雑誌・新聞'><th>異版<font size='-1'>（第x版、改訂版等）</font></th><td>$_iban_flag</td></tr>
 	<tr><th>ライセンス(CC等)の有無</th><td>$_license_flag</td></tr>
 	<tr><th>引用資料<br><font size='-1'>親となる資料からの引用</font></th><td>$_inyou_flag</td></tr>
 	<tr><th>政府刊行物・刊行元<br><font size='-1'>x省等が発行元</font></th><td>$_gov_issue</td></tr>
@@ -38,22 +38,22 @@ function metadata_items_first($items, $caller){
 	<tr><th>視聴覚者向け資料</th><td>$_for_handicapped</td></tr>
 	<tr><th>オリジナル資料の形態</th><td>$_original_shiryo_keitai</td></tr>
     <tr><th>立法資料</th><td>$_rippou_flag</td></tr>
-    <tr class='optional optional_図書'><th>博士論文</th><td>$_doctor_flag</td></tr>	
+    <tr class='optional optional_図書'><th>博士論文</th><td>$_doctor_flag</td></tr>
 EOS;
 }
 
 function output_items_last($items, $caller){
 	$text_fields = array('standard_id', 'title', 'series_title',  'betu_title',  'betu_series', 'betu_series_title','naiyo_saimoku_title',
-			'naiyo_saimoku_chosha', 'buhenmei',  'makiji_bango', 
+			'naiyo_saimoku_chosha', 'buhenmei',  'makiji_bango',
 		'creator', 'contributor','iban', 'iban_chosha','publisher',
 		'keyword', 'chuuki', 'youyaku', 'mokuji', 'is_bubun', 'ioya_uri', 'shigen_mei', 'has_bubun', 'ko_uri',
-		'taisho_basho_uri', 'taisho_basho_keni', 'taisho_basho_shi', 'taisho_basho_banchii', 'taisho_basho_ido', 'taisho_basho_keido',
+		'taisho_basho_uri', 'taisho_basho_ken', 'taisho_basho_shi', 'taisho_basho_banchi', 'taisho_basho_ido', 'taisho_basho_keido',
 		'satusei_ido','satuei_keido','satuei_basho_address','satuei_shi','satuei_banch','kanko_hindo', 'kanko_kanji',
-		'doctor','doctor_bango', // 'doctor_nen', 'doctor_tuki', 'doctor_bi', 
-		'doctor_daigaku',  
+		'doctor','doctor_bango', // 'doctor_nen', 'doctor_tuki', 'doctor_bi',
+		'doctor_daigaku',
 		'keisai_go1', 'keisai_go2', 'keisa_shimei', 'keisai_kan', 'keisai_page', 'license_info','license_uri','license_holder','license_chuki','shiryo_keitai',
-		'teller',  'haifu_taisho', 'haifu_basho', // 'haifu_nen', 'haifu_tuki', 'haifu_bi', 
-		'keiji_basho', 
+		'teller',  'haifu_taisho', 'haifu_basho', // 'haifu_nen', 'haifu_tuki', 'haifu_bi',
+		'keiji_basho',
 		'title_yomi', 'series_title_yomi','betu_title_yomi', 'betu_series_yomi', 'betu_series_title_yomi','naiyo_saimoku_title_yomi','buhenmei_yomi','makiji_bango_yomi', 'contributor_yomi', 'doctor_daigaku_yomi','teller_yomi','haifu_basho_yomi', 'keiji_basho_yomi');
 		// 'keiji_nen', 'keiji_tuki', 'keiji_bi');
 	foreach($text_fields as $f){
@@ -86,7 +86,7 @@ function output_items_last($items, $caller){
 	$shiryo_keitai = output_shiryo_keitai_selection($items['shiryo_keitai'], $caller);
 	$language = output_for_handicapped_selection($items['language'], $caller);
 	$kanko_status = output_kanko_status_selection($items['kanko_status'], $caller);
-	$open_level = output_open_level_selection($items['open_level'], $caller);	
+	$open_level = output_open_level_selection($items['open_level'], $caller);
 	$hakubutu_kubun = output_radio('hakubutu_kubun', $items['hakubutu_kubun'], '人工物', '自然物', $caller);
 	$shosha_flag = output_radio('shosha_flag', $items['shosha_flag'], '該当しない', '該当する', $caller);
 	$online_flag = output_radio('online_flag', $items['online_flag'], '該当しない', '該当する', $caller);
@@ -100,27 +100,27 @@ function output_items_last($items, $caller){
 	$class_option2= 'optional optional_図書 optional_記事  optional_映像・音声  optional_文書・楽譜 optional_地図・地図帳';
 	$class_option3='optional optional_図書 optional_記事 optional_雑誌・新聞 optional_映像・音声 optional_文書・楽譜 optional_地図・地図帳 optional_チラシ optional_会議録・含資料 optional_博物資料 optional_絵画・絵はがき'; //目次
 	$class_option4='optional optional_音声・映像 optional_地図・地図帳 optional_写真 optional_語り optional_絵画・絵はがき';
-	
+
 	return <<< EOS
-	<tr><th>標準番号(ISBN等)<br>$ndl_button</th><td>$standard_id</td></tr>	
-	<tr><th class='$class_hissu1'>タイトル</th><td>$title</td></tr>		
+	<tr><th>標準番号(ISBN等)<br>$ndl_button</th><td>$standard_id</td></tr>
+	<tr><th class='$class_hissu1'>タイトル</th><td>$title</td></tr>
 	<tr><th class='$class_hissu1'>タイトルのヨミ<br>$title_button</th><td>$title_yomi</td></tr>
 	<tr class='series_flag_option'><th class='$class_hissu1'>シリーズタイトル</th><td>$series_title</td></tr>
-	<tr class='series_flag_option'><th class='$class_hissu1'>シリーズタイトルのヨミ<br>$series_title_button</th><td>$series_title_yomi</td></tr>	 
+	<tr class='series_flag_option'><th class='$class_hissu1'>シリーズタイトルのヨミ<br>$series_title_button</th><td>$series_title_yomi</td></tr>
 	<tr class='betu_title_flag_option'><th>別タイトル</th><td>$betu_title</td></tr>
 	<tr class='betu_title_flag_option'><th>別タイトルのヨミ<br>$betu_title_button</th><td>$betu_title_yomi</td></tr>
 	<tr class='betu_title_flag_option'><th>別シリーズタイトル</th><td>$betu_series_title</td></tr>
-	<tr class='betu_title_flag_option'><th>別シリーズタイトルのヨミ<br>$betu_series_title_button</th><td>$betu_series_title_yomi</td></tr>	
-	<tr class='$class_option2'><th>内容細目タイトル</th><td>$naiyo_saimoku_title</td></tr>	
-	<tr class='$class_option2'><th>内容細目タイトルのヨミ<br>$naiyo_saimoku_title_button</th><td>$naiyo_saimoku_title_yomi</td></tr>	
-	<tr class='$class_option2'><th>内容細目著者</th><td>$naiyo_saimoku_chosha</td></tr>	
-	<tr class='$class_option2'><th>部編名</th><td>$buhenmei</td></tr>	
-	<tr class='$class_option2'><th>部編名のヨミ<br>$buhenmei_button</th><td>$buhenmei_yomi</td></tr>	
-	<tr class='$class_option2'><th>巻次・部編番号</th><td>$makiji_bango</td></tr>	
-	<tr class='$class_option2'><th>巻次・部編番号のヨミ<br>$makiji_bango_button</th><td>$makiji_bango_yomi</td></tr>	
+	<tr class='betu_title_flag_option'><th>別シリーズタイトルのヨミ<br>$betu_series_title_button</th><td>$betu_series_title_yomi</td></tr>
+	<tr class='$class_option2'><th>内容細目タイトル</th><td>$naiyo_saimoku_title</td></tr>
+	<tr class='$class_option2'><th>内容細目タイトルのヨミ<br>$naiyo_saimoku_title_button</th><td>$naiyo_saimoku_title_yomi</td></tr>
+	<tr class='$class_option2'><th>内容細目著者</th><td>$naiyo_saimoku_chosha</td></tr>
+	<tr class='$class_option2'><th>部編名</th><td>$buhenmei</td></tr>
+	<tr class='$class_option2'><th>部編名のヨミ<br>$buhenmei_button</th><td>$buhenmei_yomi</td></tr>
+	<tr class='$class_option2'><th>巻次・部編番号</th><td>$makiji_bango</td></tr>
+	<tr class='$class_option2'><th>巻次・部編番号のヨミ<br>$makiji_bango_button</th><td>$makiji_bango_yomi</td></tr>
 	<tr><th class='hissu'>作成者・著者名</th><td>$creator</td></tr>
 	<tr><th class='hissu'>作成者・著者名のヨミ</th><td>$creator_yomi</td></tr>
-	<tr class='kiyo_flag_option'><th>寄与者（寄贈者）</th><td>$contributor</td></tr>	
+	<tr class='kiyo_flag_option'><th>寄与者（寄贈者）</th><td>$contributor</td></tr>
 	<tr class='kiyo_flag_option'><th>寄与者（寄贈者）のヨミ<br>$contributor_button</th><td>$contributor_yomi</td></tr>
 	<tr class='iban_flag_option'><th>異版名(第x版）</th><td>$iban</td></tr>
 	<tr class='iban_flag_option'><th>異版の著者名</th><td>$iban_chosha</td></tr>
@@ -149,13 +149,13 @@ function output_items_last($items, $caller){
 	<tr class='inyou_flag_option'><th>～を一部分として持つ</th><td>$has_bubun</td></tr>
 	<tr class='inyou_flag_option'><th>子URIへの参照</th><td>$ko_uri</td></tr>
     <!--情報資源が対象とする場所-->
-	<tr><th>情報資源が対象とする場所(URI)<br><input type='button' value='地図から取得'></th><td>$taisho_basho_uri</td></tr>
-	<tr><th>情報資源が対象とする場所（県名）</th><td>$taisho_basho_keni</td></tr>
+	<tr><th>情報資源が対象とする場所(URI)<br><input type='button' value='地図から取得' onClick="getAddress('taisho_');return false;"></th><td>$taisho_basho_uri</td></tr>
+	<tr><th>情報資源が対象とする場所（県名）</th><td>$taisho_basho_ken</td></tr>
 	<tr><th>情報資源が対象とする場所（市町村）</th><td>$taisho_basho_shi</td></tr>
-	<tr><th>情報資源が対象とする場所（街路番地）</th><td>$taisho_basho_banchii</td></tr>
+	<tr><th>情報資源が対象とする場所（街路番地）</th><td>$taisho_basho_banchi</td></tr>
 	<tr><th>情報資源が対象とする場所（緯度）</th><td>$taisho_basho_ido</td></tr>
 	<tr><th>情報資源が対象とする場所（経度）</th><td>$taisho_basho_keido</td></tr>
-	<tr class='$class_option4'><th>撮影場所（緯度）<br><input type='button' value='地図から取得'></th><td>$satusei_ido</td></tr>
+	<tr class='$class_option4'><th>撮影場所（緯度）<br><input type='button' value='地図から取得' onClick="getAddress('satuei_');return false;"></th><td>$satusei_ido</td></tr>
 	<tr class='$class_option4'><th>撮影場所（経度）</th><td>$satuei_keido</td></tr>
 	<tr class='$class_option4'><th>撮影場所（県名）
 		<!--とりあえず、撮影場所の住所を県のところに表示させておく。基本情報整理表には、複数が入力されている場合あり-->
@@ -164,11 +164,11 @@ function output_items_last($items, $caller){
 	<tr class='$class_option4'><th>撮影場所（街路番地）</th><td>$satuei_banch</td></tr>
 	<!--刊行頻度・状態・巻次（雑誌の場合のみ）-->
 	<tr class='optional optional_雑誌・新聞'><th>刊行頻度</th><td>$kanko_hindo</td></tr>
-	<tr class='series_flag_option'><th>刊行状態</th><td>$kanko_status</td></tr>	
-	<tr class='optional optional_雑誌・新聞'><th>刊行巻次</th><td>$kanko_kanji</td></tr>	
+	<tr class='series_flag_option'><th>刊行状態</th><td>$kanko_status</td></tr>
+	<tr class='optional optional_雑誌・新聞'><th>刊行巻次</th><td>$kanko_kanji</td></tr>
 	<!--博士論文-->
 	<tr class="doctor_flag_option"><th>学位</th><td>$doctor</td></tr>
-	<tr class="doctor_flag_option"><th>報告番号</th><td>$doctor_bango</td></tr> 
+	<tr class="doctor_flag_option"><th>報告番号</th><td>$doctor_bango</td></tr>
 	<tr class="doctor_flag_option"><th>授与年月日</th><td>（西暦）
 		<input type='text' name='doctor_nen' value='$doctor_nen' size='4'>年
 		<input type='text' name='doctor_tuki' value='$doctor_tuki' size='2'>月　
