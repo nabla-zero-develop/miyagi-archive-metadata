@@ -8,19 +8,19 @@ require_once(dirname(__FILE__) . "/metadata_items.php");
 ini_set('error_reporting', E_ALL & ~E_NOTICE & ~E_STRICT);
 
 $items = array();
-if(isset($_GET['uniqid'])){
-	// uniqidが渡された場合(データベースからの情報取得)
+if(isset($_GET['lotid'])){
+	// lotidが渡された場合(データベースからの情報取得)
 	$lotid = intval($_GET['lotid']);
-	$resume = isset($_GET['resume'])?$_GET['resume']:false;
-	$uniqid = isset($_GET['uniqid'])?$_GET['uniqid']:0;
-	if(!is_numeric($uniqid))die('uniqidが不正です');
+	$resume = isset($_GET['resume'])?$_GET['resume'] : false;
+	$uniqid = isset($_GET['uniqid'])?$_GET['uniqid'] : 0;
+	if(!is_numeric($uniqid)) die('uniqidが不正です');
 	if(DEBUG_NO_DB) die('実行環境か引数の渡し方が間違っています'); 
 	
 	//編集対象を確定
 	if($uniqid){
 		$res = mysql_query("select * from lotfile where uniqid=$uniqid");
 		$row = mysql_fetch_assoc($res);
-		if(!$row)die("No data for uniqid $uniqid.");
+		if(!$row) die("No data for uniqid $uniqid.");
 	}else{
 		if($resume){
 			$res = mysql_query("select * from lotfile where finish = 0 and lotid=$lotid order by ord");
