@@ -132,7 +132,7 @@ function output_language_selection($language, $caller){
 }
 
 function output_original_shiryo_keitai_selection($original_shiryo_keitai, $caller){
-	$shiryos = array(array('31','ＣＤ'),array('32','カセット'),array('33','レコード'),array('34','リールテープ'),
+	$shiryos = array(array('',''),array('31','ＣＤ'),array('32','カセット'),array('33','レコード'),array('34','リールテープ'),
             array('35','ＭＤ'),array('36','録音図書'),array('39','録音その他'),array('41','ビデオテープ'),
             array('42','ＬＤ'),array('43','ＤＶＤ'),array('44','ＥＬＩＢ'),array('45','ブルーレイディスク'),
             array('46','映像フィルム'),array('49','映像その他'),array('51','磁気テープ'),array('52','ＦＤ'),
