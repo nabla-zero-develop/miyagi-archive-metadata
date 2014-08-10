@@ -129,7 +129,6 @@ EOS;
 }
 
 function output_item_script(){
-	global $jquery;
 	return <<< EOS
 <script>
 //資料種別による項目変更
@@ -163,6 +162,7 @@ function showOptCtrl(name){
 	}
 }
 
+// 遷移
 var quit = false;
 function setQuit(tf){
 	quit = tf;
@@ -180,6 +180,13 @@ function check(){
   	  return true;
   }
 }	    
+
+// Enterサブミット防止
+$(function() {
+  $(document).on("keypress", "input:not(.allow_submit)", function(event) {
+    return event.which !== 13;
+  });
+});
 
 
 // 読み
@@ -201,13 +208,6 @@ function yomi(field, yomi_field, init_value) {
 		} );
 	};
 };
-
-// Enterサブミット防止
-$(function() {
-  $(document).on("keypress", "input:not(.allow_submit)", function(event) {
-    return event.which !== 13;
-  });
-});
 
 
 </script>

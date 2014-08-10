@@ -53,14 +53,13 @@ function ndl_creator_yomi($item){
 // 国会図書館による書名からの情報取得(文字列を返す)
 $book_info = '';
 function ndl_title_info($item){
-	return NDL::ndl_title_info($item, 'array');
+	$book_info =  NDL::ndl_title_info($item, 'array');
+	return $book_info;
 }
 
-function get_info($key){
-	global $book_info;
-	//echo $book_info[0][$key]."\n";
-	if(isset($book_info[0][$key])){
-		$r = $book_info[0][$key];
+function get_info($bi, $key){
+	if(isset($bi[0][$key])){
+		$r = $bi[0][$key];
 	}	else {
 		$r = '';
 	}
