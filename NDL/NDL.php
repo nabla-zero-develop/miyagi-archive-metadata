@@ -1,8 +1,9 @@
 <?php
-include_once(dirname(__FILE__) . "/ndl_creator_yomi.php");
-include_once(dirname(__FILE__) . "/mecab.php");
-include_once(dirname(__FILE__) . "/ndl_title.php");
-include_once(dirname(__FILE__) . "/utils.php");
+require_once(dirname(__FILE__) . "/ndl_creator_yomi.php");
+require_once(dirname(__FILE__) . "/mecab.php");
+require_once(dirname(__FILE__) . "/ndl_title.php");
+require_once(dirname(__FILE__) . "/ndl_isbn.php");
+require_once(dirname(__FILE__) . "/utils.php");
 
 class NDL {
 	// 汎用呼び出し用)
@@ -19,6 +20,11 @@ class NDL {
 	// MeCabによる汎用の読みの取得(文字列を返す)
 	public static function mecab_yomi($s){
 		return NDL::caller('mecab', $s);
+	}
+
+	// 国会図書館によるISBNからの情報取得
+	public static function ndl_isbn_info($s, $return_type='string'){
+		return NDL::caller('ndl_isbn', $s, $return_type);
 	}
 
 	// 国会図書館による著者名の読みの取得(文字列を返す)

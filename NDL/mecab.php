@@ -1,5 +1,5 @@
 <?php
-include_once(dirname(__FILE__) . "/utils.php");
+require_once(dirname(__FILE__) . "/utils.php");
 define('MECAB1',  '/usr/local/bin/mecab');
 define('MECAB2',  '/usr/bin/mecab');
 

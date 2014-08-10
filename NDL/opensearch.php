@@ -1,5 +1,5 @@
 <?php
-include_once(dirname(__FILE__) . "/xml.php");
+require_once(dirname(__FILE__) . "/xml.php");
 
 function identity($r, $dummy=NULL){
 	return $r;
@@ -36,6 +36,7 @@ function get_info_as_string($info_array){
 }
 
 function ndl_request($tag, $value, $return_type = 'string'){
+	echo "$tag$value\n";
 	$parsed = fetch_xml_as_array('http://iss.ndl.go.jp/api/opensearch?', array($tag => $value), 'GET');
 	$num_items = $parsed{"channel"}{"openSearch_totalResults"};
 	if($return_type == 'string'){

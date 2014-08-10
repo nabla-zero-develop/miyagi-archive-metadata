@@ -44,6 +44,7 @@ function conv_date($s){
 
 // 著者名表記の標準化
 function clean_author($s){
+	$s = preg_replace('/\/*著\s*$/','',$s);
 	$s = preg_replace('/\s+\［*共*著\］*,*\s*$/','',$s);
 	$s = preg_replace('/\s+\［*共*編\］*,*\s*$/','',$s);
 	$s = preg_replace('/\s+\［*共*訳\］*,*\s*$/','',$s);

@@ -7,14 +7,20 @@ require_once(dirname(__FILE__) . "/metadata_header.php");
 require_once(dirname(__FILE__) . "/metadata_items.php");
 ini_set('error_reporting', E_ALL & ~E_NOTICE & ~E_STRICT);
 
+//
+define('SELF', '_INPUT_'); // 確認画面のコードを統合するときには呼び出され方で自動判別させる
+$is_input = (SELF == _INPUT_);
+$show_image_flag = $is_input;
+
+//
 $items = array();
 if(isset($_GET['lotid'])){
 	// lotidが渡された場合(データベースからの情報取得)
+	if(DEBUG_NO_DB) die('実行環境か引数の渡し方が間違っています'); 
 	$lotid = intval($_GET['lotid']);
 	$resume = isset($_GET['resume'])?$_GET['resume'] : false;
 	$uniqid = isset($_GET['uniqid'])?$_GET['uniqid'] : 0;
 	if(!is_numeric($uniqid)) die('uniqidが不正です');
-	if(DEBUG_NO_DB) die('実行環境か引数の渡し方が間違っています'); 
 	
 	//編集対象を確定
 	if($uniqid){
@@ -70,7 +76,6 @@ if(isset($_GET['lotid'])){
 	// DB取得
 	list($data, $num_in_lot, $uniqid, $files) = get_data_from_db($lot_id, $id);
 }
-$show_image_flag = TRUE;
 
 
 //基本情報整理表に書かれたデータ（行・列）を変数に格納
@@ -145,54 +150,103 @@ foreach(array($common_items, $ken_items,  $shi_items) as $is){
 }
 
 // 種別
-if(!isset($md_type)){$md_type = '';}
-if ($shubetu=="v"){$md_type="映像"; } //映像
-if ($shubetu=="p"){$md_type="チラシ"; } //チラシ
-if ($shubetu=="d"){$md_type="文書"; } //文書
-if ($shubetu=="b"){$md_type="図書・雑誌"; } //図書・雑誌
-if ($shubetu=="s"){$md_type="音声"; } //音声
+if(!isset($md_type) && $is_input){
+	$md_type = '';
+	if ($shubetu=="v"){$md_type="映像"; } //映像
+	if ($shubetu=="p"){$md_type="チラシ"; } //チラシ
+	if ($shubetu=="d"){$md_type="文書"; } //文書
+	if ($shubetu=="b"){$md_type="図書・雑誌"; } //図書・雑誌
+	if ($shubetu=="s"){$md_type="音声"; } //音声
+}
 $items += array('md_type' => $md_type);
 
 //権利処理（県版と市町村版で値制約が異なる。県版は「済」「未」、市町村版は9で済）
 //なので、県版の「済」を9に書き換える
-if($ken_or_shi==0){ //県版
-   if ($kenri_shori=="済"){
-   	   $kenri_shori=="9";
-   }else{
-   	   $kenri_shori=="0";
-   }
-}else{ //市町村版
-   if ($kenri_shori != "9"){
-       $kenri_shori = "0"; //未処理の場合は明示的に0を代入
-   }
+if($is_input){
+	if($ken_or_shi==0){ //県版
+		if ($kenri_shori=="済"){
+		   $kenri_shori=="9";
+		}else{
+		   $kenri_shori=="0";
+		}
+		}else{ //市町村版
+		if ($kenri_shori != "9"){
+		   $kenri_shori = "0"; //未処理の場合は明示的に0を代入
+		}
+	}
 }
 $items += array('kenri_shori' => $kenri_shori);
 
 //公開レベル　県版と市町村版で値制約が異なる。県版は、公開の場合、「公開」で、
 //市町村版の場合は１が公開、2が限定公開、3が公開保留なので市町村側に合わせて
 //公開は1とする。県版のxは、扱いがわからないのでそのままとしておく。
-if($ken_or_shi==0){ //県版
-   if ($open_level =="公開"){
-   	   $open_level ="1";
-   }
+if($is_input){
+	if($ken_or_shi==0){ //県版
+		if ($open_level =="公開"){
+		$open_level ="1";
+		}
+	}
 }
 $items += array('open_level' => $open_level);
 
 // 図書情報
-if(!isset($koukai_nen)){$koukai_nen = '';}
-if(!isset($koukai_tsuki)){$koukai_tsuki = '';}
-if(!isset($koukai_hi)){$koukai_hi = '';}
-if($md_type=="図書" && $koukai_nen == '' && $koukai_tsuki == '' && $koukai_hi == ''){
-	$pubDate = get_info('pubDate');
-	if($pubDate <>''){
-		list($koukai_nen, $koukai_tsuki, $koukai_hi) = explode("-", date("Y-m-d", strtotime($pubDate)));
-	}
-	// 図書の場合はNDLに問い合わせ、情報がなければMecabを使う
-	$creator_yomi = yomi($creator_yomi, ndl_creator_yomi($creator)) ;
+if(FALSE){
+	$is_input = TRUE;
+	$md_type = '図書';
+	$creator = '沢野伸浩';
+	$creator_yomi = '';
+	$title = '幻影の明治';
+	$title = '日本語の技術';
+	$standard_id  = '9784582836547';
+}
+if($is_input && $md_type=="図書"){
+	// 著者名の読み
+	$creator_yomi = yomi($creator_yomi, ndl_creator_yomi($creator)) ; // クラス名付けると動かない！？
 	$creator_yomi = yomi($creator_yomi, mecab($creator)) ;
-	$publisher = get_info('dc_publisher');
-} else {
-	$publisher = '';
+	// 公開日
+	if(!isset($koukai_nen)){$koukai_nen = '';}
+	if(!isset($koukai_tsuki)){$koukai_tsuki = '';}
+	if(!isset($koukai_hi)){$koukai_hi = '';}
+	if(!isset($publisher)){$publisher = '';}
+	// NDLに問い合わせ
+	if($title != ''){
+		$bi = ndl_title_info($title); // クラス名付けると動かない！？
+		if($koukai_nen == '' && $koukai_tsuki == '' && $koukai_hi == ''){
+			$pubDate = get_info($bi, 'pubDate');
+			if($pubDate != ''){
+				list($koukai_nen, $koukai_tsuki, $koukai_hi) = explode("-", date("Y-m-d", strtotime($pubDate)));
+			}
+		}
+		if($publisher == ''){
+			$publisher = get_info($bi, 'dc_publisher');
+		}
+	}
+	if($standard_id != ''){
+		$bi = NDL::ndl_isbn_info($standard_id, 'array'); // クラス名必須
+		// NDL情報を優先し強制的書き換え
+		$title = get_info($bi, 'dc_title');
+		$title_yomi = get_info($bi, 'dcndl_titleTranscription');
+		$creator = clean_author(get_info($bi, 'dc_creator'));
+		$creator_yomi = ndl_creator_yomi($creator); // クラス名付けると動かない！？
+		$creator_yomi = yomi($creator_yomi, mecab($creator)) ;
+		$pubDate = get_info($bi, 'pubDate');
+		if($pubDate != ''){
+			list($koukai_nen, $koukai_tsuki, $koukai_hi) = explode("-", date("Y-m-d", strtotime($pubDate)));
+		}
+		$publisher = get_info($bi, 'dc_publisher');
+	}
+}
+//
+if(FALSE){
+	echo $creator."\n";
+	echo $creator_yomi."\n";
+	echo $koukai_nen."-".$koukai_tsuki."-".$koukai_hi."\n";
+	echo $publisher."\n";
+	echo $title."\n";
+	echo $title_yomi."\n";
+	echo $creator."\n";
+	echo $creator_yomi."\n";
+	die;
 }
 $items += array('koukai_nen' => $koukai_nen);
 $items += array('koukai_tsuki' => $koukai_tsuki);
