@@ -232,7 +232,7 @@ function ndl_check(){
 			success: function(data) {
 				fields = data.split("\t");
 				$("input[name='title']").val(fields[1]);
-				$("input[name='title_yomi']").val(fields[17]); 
+				$("input[name='title_yomi']").val(fields[17]);
 				$("input[name='creator']").val(fields[7]);
 				$("input[name='publisher']").val(fields[25]);
 				//s = fields[21] + "";
@@ -355,7 +355,7 @@ function output_map_script(){
 											if(types2[l] == 'sublocality_level_3'){prefix='-'}
 											addressBanchi = components[k].long_name+addressBanchi+postfix;
 										}else if(types2[l] == 'locality'){
-											addressShi = components[k].long_name;
+											addressShi = components[k].long_name+addressShi;
 										}else if(
 										types2[l] == 'administrative_area_level_1'){
 											addressKen = components[k].long_name;

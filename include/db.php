@@ -42,7 +42,7 @@ function mysql_get_value($query,$die_in_error = true){
 
 function mysql_die_in_error(){
 	if(mysql_error()){
-		die(mysql_erro());
+		die(mysql_error());
 	}
 }
 ?>
