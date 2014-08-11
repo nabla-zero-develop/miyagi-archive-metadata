@@ -45,7 +45,7 @@ EOS;
 function output_items_last($items, $caller){
 	$text_fields = array('standard_id', 'title', 'series_title',  'betu_title',  'betu_series', 'betu_series_title','naiyo_saimoku_title',
 			'naiyo_saimoku_chosha', 'buhenmei',  'makiji_bango',
-		'creator', 'contributor','iban', 'iban_chosha','publisher',
+		'creator', 'creator_yomi', 'contributor','iban', 'iban_chosha','publisher',
 		'keyword', 'chuuki', 'youyaku', 'mokuji', 'is_bubun', 'ioya_uri', 'shigen_mei', 'has_bubun', 'ko_uri',
 		'taisho_basho_uri', 'taisho_basho_ken', 'taisho_basho_shi', 'taisho_basho_banchi', 'taisho_basho_ido', 'taisho_basho_keido',
 		'satusei_ido','satuei_keido','satuei_basho_address','satuei_shi','satuei_banch','kanko_hindo', 'kanko_kanji',
@@ -59,7 +59,7 @@ function output_items_last($items, $caller){
 	foreach($text_fields as $f){
 		$$f = output_text_input($f, $items[$f], $caller);
 	}
-	$yomi_fields = array('title', 'series_title','betu_title', 'betu_series', 'betu_series_title','naiyo_saimoku_title','buhenmei','makiji_bango', 'contributor', 'doctor_daigaku','teller','haifu_basho', 'keiji_basho');
+	$yomi_fields = array('title', 'creator', 'series_title','betu_title', 'betu_series', 'betu_series_title','naiyo_saimoku_title','buhenmei','makiji_bango', 'contributor', 'doctor_daigaku','teller','haifu_basho', 'keiji_basho');
 	if($caller == _INPUT_){
 		foreach($yomi_fields as $f){
 			${$f.'_button'} = output_yomi_button($f, $f."_yomi", $items[$f]);
@@ -119,7 +119,7 @@ function output_items_last($items, $caller){
 	<tr class='$class_option2'><th>巻次・部編番号</th><td>$makiji_bango</td></tr>
 	<tr class='$class_option2'><th>巻次・部編番号のヨミ<br>$makiji_bango_button</th><td>$makiji_bango_yomi</td></tr>
 	<tr><th class='hissu'>作成者・著者名</th><td>$creator</td></tr>
-	<tr><th class='hissu'>作成者・著者名のヨミ</th><td>$creator_yomi</td></tr>
+	<tr><th class='hissu'>作成者・著者名のヨミ$creator_button</th><td>$creator_yomi</td></tr>
 	<tr class='kiyo_flag_option'><th>寄与者（寄贈者）</th><td>$contributor</td></tr>
 	<tr class='kiyo_flag_option'><th>寄与者（寄贈者）のヨミ<br>$contributor_button</th><td>$contributor_yomi</td></tr>
 	<tr class='iban_flag_option'><th>異版名(第x版）</th><td>$iban</td></tr>
