@@ -87,7 +87,8 @@ function get_item($row_no, $col_num){
 	if(isset($_REQUEST["r".$row_no."c".$col_num])){
 		return $_REQUEST["r".$row_no."c".$col_num];
 	} else {
-		return '[整理表データ無し]';
+		//return '[整理表データ無し]';
+		return '';
 	}
 }
 
@@ -326,8 +327,10 @@ echo output_map_script();
 
 			<input type="hidden" name="lotid" value="<?php echo $lotid; ?>">
 			<input type="hidden" name="uniqid" value="<?php echo $uniqid; ?>">
-			<input type="submit" name='next' value="登録して次へ" onClick="setQuit(false);">
-			<input type="submit" name='quit' value="中断" onClick="setQuit(true);">
+			<input type="submit" name='next' value="登録して次へ" onClick="setSkipCheck(0);">
+			<input type="submit" name='quit' value="中断" onClick="setSkipCheck(1);">
+			&nbsp;&nbsp;&nbsp;<input type="submit" name='next' value="入力スキップ" onClick="setSkipCheck(2);">
+			理由：<input type="text" name="skip_reason">
 			<!--  <input type="submit" value="確認画面へ"> -->
 		</form>
 	</div>

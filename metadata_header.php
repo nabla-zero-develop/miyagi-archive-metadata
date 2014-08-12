@@ -31,7 +31,7 @@ function output_css($show_image_flag){
 	float: right;
 }
 #imageDiv{
-	width: 1350px;
+	width: 1300px;
 	float: left;
 	text-align: center;
 }
@@ -42,7 +42,7 @@ function output_css($show_image_flag){
 	position: absolute;
 }
 #imageWrap{
-	width: 1350px;
+	width: 1300px;
 	height: 1000px;
 }
 th{
@@ -135,7 +135,72 @@ $(document).ready(function(){
 			zoom = true;
 		}
 	});
+	//IEのみ有効
+	document.onhelp = function(){return false;};//F1キーでヘルプを抑止
+	document.onkeydown = key_event;
 });
+
+function key_event(){
+    // 発生したイベントのキーコードを取得
+	var code = event.keyCode;
+
+	//F1-F12キーであれば、無効化する(F1キー：112,... F12キー:123)
+	if(event.keyCode >= 112 && event.keyCode <= 123)
+	{
+		event.keyCode = null;
+		event.returnValue = false;
+	}
+	//該当するキーコードで分岐。それぞれのcase内に、実行したい独自の処理を記述する。
+	switch(code){
+		// F1キー
+		case 112:
+			chgImage(0);
+			break;
+		// F2キー
+		case 113:
+			prevImage();
+			break;
+		// F3キー
+		case 114:
+			nextImage();
+			break;
+		// F4キー
+		case 115:
+			lastImage();
+			break;
+		// F5キー
+		case 116:
+			rotate(-90);
+			break;
+		// F6キー
+		case 117:
+			rotate(0);
+			break;
+		// F7キー
+		case 118:
+			break;
+		// F8キー
+		case 119:
+			rotate(90);
+			break;
+		// F9キー
+		case 120:
+			break;
+		// F10キー
+		case 121:
+			break;
+		// F11キー
+		case 122:
+			break;
+		// F12キー
+		case 123:
+			break;
+		default:
+			break;
+	}
+	return false;
+}
+
 </script>
 EOS;
 }
@@ -175,28 +240,42 @@ function showOptCtrl(name){
 }
 
 // 遷移
-var quit = false;
-function setQuit(tf){
-	quit = tf;
+var skipCheck = 0;
+function setSkipCheck(val){
+	skipCheck = val;
 }
 
 function check(){
- var flag=0;
- if (document.input_form.md_type.value =="" && !quit){
- 	 flag=1;
-  }
-  if (flag){
-  	  window.alert('資料種別を選択して下さい');
-  	  return false;
-  } else {
-  	  return true;
-  }
+	if(skipCheck == 1){
+		return true;
+	}else if(skipCheck == 2){
+		if(document.input_form.skip_reason.value == ""){
+			window.alert('スキップする理由を入力してください');
+			return false;
+		}else{
+			return true;
+		}
+	}
+
+	var message = '';
+	if(document.input_form.skip_reason.value != ""){
+		message += "入力スキップの理由欄に記入されています\\n";
+	}
+	if (document.input_form.md_type.value ==""){
+	 	 message += "資料種別を選択して下さい\\n";
+	}
+	if (message.length > 0){
+		  window.alert(message);
+		  return false;
+	} else {
+		  return true;
+	}
 }
 
 // Enterサブミット防止
 $(function() {
   $(document).on("keypress", "input:not(.allow_submit)", function(event) {
-    return event.which !== 13;
+	return event.which !== 13;
   });
 });
 
@@ -348,12 +427,15 @@ function output_map_script(){
 									types2 = components[k].types;
 									for(var l in types2){
 										if(types2[l] == 'sublocality_level_1'||
-										types2[l] == 'sublocality_level_2'||
-										types2[l] == 'sublocality_level_3'||
-										types2[l] == 'sublocality_level_4'){
+												types2[l] == 'sublocality_level_2'||
+												types2[l] == 'sublocality_level_3'||
+												types2[l] == 'sublocality_level_4'||
+												types2[l] == 'sublocality_level_5'){
 											var postfix='';
-											if(types2[l] == 'sublocality_level_3'){prefix='-'}
-											addressBanchi = components[k].long_name+addressBanchi+postfix;
+											if((types2[l] == 'sublocality_level_3'||types2[l] == 'sublocality_level_4')&&addressBanchi.length>0){
+												addressBanchi = '-'+addressBanchi;
+												}
+											addressBanchi = components[k].long_name+addressBanchi;
 										}else if(types2[l] == 'locality'){
 											addressShi = components[k].long_name+addressShi;
 										}else if(
