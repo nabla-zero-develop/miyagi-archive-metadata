@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   </head>
   <body>
-    <form action="./item_list.php" method="post" enctype="multipart/form-data">
+    <form action="./baseinfo_write.php" method="post" enctype="multipart/form-data">
         <input type="file" name="upfile"  size="100" /><br />
         <table>
             <tr>

@@ -6,8 +6,8 @@
   </head>
   <body>
 	<ul>
-	<item><a href='lot.php'>ロット管理</a>
-	<item><a href='baseinfo_upload.php'>基本情報整理表アップロード</a>
+	<li><a href='lot.php'>ロット管理</a>
+	<li><a href='baseinfo_upload.php'>基本情報整理表アップロード</a>
 	</ul>
   </body>
 </html>
