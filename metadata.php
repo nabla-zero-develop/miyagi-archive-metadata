@@ -60,9 +60,12 @@ if(isset($_GET['lotid'])){
 	$res = mysql_query("select * from baseinfo where uniqid=$uniqid");
 	$items = mysql_fetch_assoc($res); // $baseinfo相当
 //県の公開レベルのコード化 xの扱いが不明だが、とりあえず非公開にしておく
+//↓
+//個人（県職員も含む。）や団体が作成・撮影した資料は「x」（半角小文字エックス）を入力願います（個人や団体が作成・撮影した資料については，図書館が本事業に係る委託業者を活用し権利処理を行った後に公開する予定です。）
+//とあるので、市町村の公開保留(3)が相当か？
 	if($items['open_level'] == '公')$items['open_level'] = 1;
-	if($items['open_level'] == 'ｘ')$items['open_level'] = 0;
-	if($items['open_level'] == 'x')$items['open_level'] = 0;
+	if($items['open_level'] == 'ｘ')$items['open_level'] = 3;
+	if($items['open_level'] == 'x')$items['open_level'] = 3;
 } else {
 	// 基本情報整理表からのデータ引き受け
 	if(isset($_REQUEST['row_no'])){
