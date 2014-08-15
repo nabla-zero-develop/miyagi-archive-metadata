@@ -78,7 +78,7 @@ foreach($lots as $lot){
 }
 ?>
 </table>
-
+<a href='lot.php'>管理画面へ</a>
 </html>
 <?php
 function format_date($str){
