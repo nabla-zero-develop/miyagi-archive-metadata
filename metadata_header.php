@@ -196,6 +196,7 @@ function key_event(){
 		case 123:
 			break;
 		default:
+			return true;
 			break;
 	}
 	return false;
@@ -261,9 +262,21 @@ function check(){
 	if(document.input_form.skip_reason.value != ""){
 		message += "入力スキップの理由欄に記入されています\\n";
 	}
-	if (document.input_form.md_type.value ==""){
-	 	 message += "資料種別を選択して下さい\\n";
-	}
+	//if (document.input_form.md_type.value ==""){
+	//	 message += "資料種別を選択して下さい\\n";
+	//}
+	$('tr').each(function(){
+		var \$tr = $(this);
+		if(\$tr.css('display') != 'none'){
+			if(\$tr.children('th').hasClass('hissu')){
+				if(\$tr.children('td').children('input').val() == '' || \$tr.children('td').children('select').val() == ''){
+					var text = \$tr.children('th').html();
+					var text = text.split('<')[0];
+					message += text+"が入力されていません\\n";
+				}
+			}
+		}
+	});
 	if (message.length > 0){
 		  window.alert(message);
 		  return false;

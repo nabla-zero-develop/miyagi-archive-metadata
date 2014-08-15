@@ -59,6 +59,10 @@ if(isset($_GET['lotid'])){
 
 	$res = mysql_query("select * from baseinfo where uniqid=$uniqid");
 	$items = mysql_fetch_assoc($res); // $baseinfo相当
+//県の公開レベルのコード化 xの扱いが不明だが、とりあえず非公開にしておく
+	if($items['open_level'] == '公')$items['open_level'] = 1;
+	if($items['open_level'] == 'ｘ')$items['open_level'] = 0;
+	if($items['open_level'] == 'x')$items['open_level'] = 0;
 } else {
 	// 基本情報整理表からのデータ引き受け
 	if(isset($_REQUEST['row_no'])){
@@ -320,8 +324,6 @@ echo output_map_script();
 		<form name="input_form" method ="post" action="write.php" onSubmit="return check()">
 			<table>
 				<?php echo metadata_items_first($items, _INPUT_); ?>
-				<tr><td></td></tr>
-				<?php echo output_items_last($items, _INPUT_); ?>
 			</table>
 			<?php echo output_handover_items($items, _INPUT_); ?>
 

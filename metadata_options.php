@@ -11,8 +11,8 @@ function output_radio($name, $flag, $first, $second, $caller, $default_flag=0){
 		$d = ' disabled="disabled" ';
 	}
 	return <<< EOS
-	<input class='optctrl' type='radio' value=0 name='$name' $checked_0 $d>{$first}　
-	<input class='optctrl' type='radio' value=1 name='$name' $checked_1 $d>{$second}
+	<label><input class='optctrl' type='radio' value=0 name='$name' $checked_0 $d>{$first}</label>　
+	<label><input class='optctrl' type='radio' value=1 name='$name' $checked_1 $d>{$second}</label>
 EOS;
 }
 
@@ -148,8 +148,8 @@ function output_kanko_status_selection($kanko_status, $caller){
 }
 
 function output_open_level_selection($open_level, $caller){
-	$levels = array(array('-1','判断保留'),array('0','非公開'),array('1','公開'),array('2','限定公開'),array('3','公開保留'));
-	return selection('open_level', $levels, $open_level, $caller, 2);
+	$levels = array(array('-1','判断保留'),array('0','非公開'),array('1','公開'),array('2','限定公開')/*,array('3','公開保留')*/);
+	return selection('open_level', $levels, $open_level, $caller, 2).(is_numeric($open_level)?'':'基本情報整理表未入力');
 }
 
 ?>
