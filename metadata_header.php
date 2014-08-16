@@ -95,10 +95,12 @@ function rotate(deg){
 }
 
 function chgImage(idx){
-	rotate(0);
+	currImgIdx = idx;
+	//rotate(0);
 	$('#image').attr('src','');
 	$('#image').attr('src',images[idx]);
 	$('#filename').html(''+(idx+1)+'/'+images.length);
+	stopPreload();
 }
 
 function prevImage(){
@@ -125,6 +127,7 @@ function lastImage(){
 
 var zoom = false;
 $(document).ready(function(){
+	rotate(0);
 	chgImage(0);
 	$('#image').click(function(e){
 		if(zoom){
@@ -134,7 +137,7 @@ $(document).ready(function(){
 			//alert(''+(e.pageX-$(this).offset().left)+','+(e.pageY-$(this).offset().top));
 			zoom = true;
 		}
-	});
+	}).load(preload);
 	//IEのみ有効
 	document.onhelp = function(){return false;};//F1キーでヘルプを抑止
 	document.onkeydown = key_event;
@@ -202,6 +205,82 @@ function key_event(){
 	return false;
 }
 
+//画像プリロード
+var preloadImgs = [];
+var preloadNum = 1;
+var preloadSeq = 0;
+var currImgIdx;
+function preload(){
+	preloadSeq++;
+	var loadIdxs = [];//プリロードする画像のインデックス
+	var plusNum = preloadNum;//後ろの画像をいくつプリロードするか
+	var minusNum = preloadNum;//前の画像をいくつプリロードするか
+	//前後のプリロード数
+	if(currImgIdx-preloadNum<0){
+		minusNum = currImgIdx;
+		plusNum += preloadNum-currImgIdx;
+	}
+	if(currImgIdx+preloadNum>=images.length){
+		plusNum = images.length-currImgIdx-1;
+		minusNum += preloadNum-(images.length-currImgIdx-1);
+		if(currImgIdx-preloadNum<0){
+			minusNum = currImgIdx;
+		}
+	}
+	//プリロードするインデックスを配列に
+	for(var i=1; plusNum-i>=0 || minusNum-i>=0; i++){
+		if(plusNum-i>=0){
+			loadIdxs.push(currImgIdx+i);
+		}
+		if(minusNum-i>=0){
+			loadIdxs.push(currImgIdx-i);
+		}
+	}
+	preload2(preloadSeq,loadIdxs);
+}
+function preload2(preloadSeq2,loadIdxs){
+	if(preloadSeq2!=preloadSeq){return;}//次のプリロードが始まっていたら、やめる
+	var idx = loadIdxs.shift();
+	for(var i=0; i<preloadImgs.length; i++){
+		if(preloadImgs[i].attr('idx') == idx){
+			preload2(preloadSeq2,loadIdxs);
+			return;
+		}
+	}
+
+	var \$img;//ロードするimgオブジェクト
+	//今回のプリロード対象外のimgオブジェクトを探して再利用する
+	for(var i=0; i<preloadImgs.length; i++){
+		for(var j=0; j<loadIdxs; j++){
+			if(preloadImgs[i].attr('idx') == loadIdxs[j]){break;}
+		}
+		if(j==preloadImgs.length){
+			\$img = preloadImgs[i];
+			break;
+		}
+	}
+	//再利用されなかったので、新たに作る
+	if(i == preloadImgs.length){
+		\$img = $('<img>');
+		preloadImgs.push(\$img);
+	}
+
+	\$img.unbind();
+	\$img.attr('idx',idx)
+		.attr('src',images[idx])
+		.removeAttr('complete')
+		.load(function(){preload2(preloadSeq2,loadIdxs);})
+		.load(function(){\$(this).attr('complete','complete')});
+}
+//まだ終わってないプリロードを中止する
+function stopPreload(){
+	for(var i=0; i<preloadImgs.length; i++){
+		var \$img = preloadImgs[i];
+		if(\$img.attr('complete')!='complete'){
+			\$img.attr('src','');
+		}
+	}
+}
 </script>
 EOS;
 }
