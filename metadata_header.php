@@ -144,6 +144,8 @@ $(document).ready(function(){
 });
 
 function key_event(){
+	// IE以外のブラウザではeventがundefinedになるので終了
+	if(typeof event == "undefined")return;
     // 発生したイベントのキーコードを取得
 	var code = event.keyCode;
 
