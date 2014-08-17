@@ -4,6 +4,7 @@ include_once(dirname(__FILE__) . "/Classes/PHPExcel/IOFactory.php");
 
 ignore_user_abort(1);
 set_time_limit(86400);
+ini_set('memory_limit' ,'1024M');
 
 ////
 //// 定数
