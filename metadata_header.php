@@ -44,6 +44,8 @@ function output_css($show_image_flag){
 #imageWrap{
 	width: 1300px;
 	height: 1000px;
+	overflow: hidden;
+	position: relative;
 }
 th{
 	background-color: #9292FF;
@@ -79,18 +81,23 @@ var degree = 0;
 function rotate(deg){
 	degree = deg;
 	var \$image = $('#image');
+	var \$parent = $('#imageWrap');
 	\$image.css('transform','rotate('+deg+'deg)')
-		.css('width','').css('height','').css('left',0).css('right',0);
+		.css('width','').css('height','').css('left',0).css('top',0);
 	if(deg == 0){
 		\$image
-			.css('max-width',$('#imageWrap').css('width'))
-			.css('max-height',$('#imageWrap').css('height'));
+			.css('max-width',\$parent.css('width'))
+			.css('max-height',\$parent.css('height'));
 		\$image.css('top',0);
+//		\$image.css('top',\$image.height()<\$parent.height()? (\$parent.height()-\$image.height())/2:0)
+//			.css('left',\$image.width()<\$parent.width()? (\$parent.width()-\$image.width())/2:0);
 	}else{
 		\$image
-			.css('max-width',$('#imageWrap').css('height'))
-			.css('max-height',$('#imageWrap').css('width'));
+			.css('max-width',\$parent.css('height'))
+			.css('max-height',\$parent.css('width'));
 		\$image.css('top',(\$image.width()-\$image.height())/2);
+//		\$image.css('top',\$image.width()<\$parent.height()? (\$parent.height()-\$image.width())/2:0)
+//			.css('left',\$image.height()<\$parent.width()? (\$parent.width()-\$image.height())/2:0);
 	}
 }
 
@@ -127,14 +134,37 @@ function lastImage(){
 
 var zoom = false;
 $(document).ready(function(){
-	rotate(0);
 	chgImage(0);
+	//クリックでズーム
 	$('#image').click(function(e){
 		if(zoom){
 			rotate(degree);
 			zoom = false;
 		}else{
-			//alert(''+(e.pageX-$(this).offset().left)+','+(e.pageY-$(this).offset().top));
+			\$img = $('#image');
+			var x = e.pageX-\$img.offset().left;
+			var y = e.pageY-\$img.offset().top;
+			var img = new Image();
+			img.src = \$img.attr('src');
+			var width = img.width;
+			var height = img.height;
+			var oldWidth = \$img.width();
+			var oldHeight = \$img.height();
+			var parentWidth = \$img.parent().width();
+			var parentHeight = \$img.parent().height();
+			if(degree%180==0){
+				centerX = (x/oldWidth) * width;
+				centerY = (y/oldHeight) * height;
+				\$img.css('width',width).css('max-width',width+'px')
+					.css('height',height).css('max-height',height+'px')
+					.offset({left:-(parentWidth/2-x)/2-centerX+parentWidth/2, top:-(parentHeight/2-y)/2-centerY+parentHeight/2});
+			}else{
+				centerX = (x/oldHeight) * height;
+				centerY = (y/oldWidth) * width;
+				\$img.css('width',width).css('max-width',width+'px')
+					.css('height',height).css('max-height',height+'px')
+					.offset({left:-(parentWidth/2-x)/2-centerX+parentWidth/2, top:-(parentHeight/2-y)/2-centerY+parentHeight/2});
+			}
 			zoom = true;
 		}
 	}).load(preload);
