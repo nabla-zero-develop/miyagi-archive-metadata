@@ -325,6 +325,8 @@ echo output_map_script();
 		<!-- form name="input_form" method ="post" action="./metadata_confirm.php" onSubmit="return check()" -->
 		<!-- form name="input_form" -->
 		<form name="input_form" method ="post" action="write.php" onSubmit="return check()">
+			<input type="submit" name='next' value="入力スキップ" onClick="setSkipCheck(2);">
+			理由：<input type="text" name="skip_reason" size='60'>
 			<table>
 				<?php echo metadata_items_first($items, _INPUT_); ?>
 			</table>
@@ -334,8 +336,6 @@ echo output_map_script();
 			<input type="hidden" name="uniqid" value="<?php echo $uniqid; ?>">
 			<input type="submit" name='next' value="登録して次へ" onClick="setSkipCheck(0);">
 			<input type="submit" name='quit' value="中断" onClick="setSkipCheck(1);">
-			&nbsp;&nbsp;&nbsp;<input type="submit" name='next' value="入力スキップ" onClick="setSkipCheck(2);">
-			理由：<input type="text" name="skip_reason">
 			<!--  <input type="submit" value="確認画面へ"> -->
 		</form>
 	</div>
