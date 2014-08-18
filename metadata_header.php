@@ -411,7 +411,7 @@ function yomi(field, yomi_field, init_value) {
 	if(s.length == 0){s = init_value};
 	if(s != ""){
 		$.ajax({
-			url: './mecab.php',
+			url: './mecab_proxy.php',
 			dataType: 'text',
 			data: {"s": s },
 			success: function(data) {
