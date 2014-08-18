@@ -25,7 +25,7 @@ function output_css($show_image_flag){
 	return <<< EOS
 <style>
 #formDiv{
-	width: 500px;
+	width: 550px;
 	height: 100%;
 	overflow: scroll;
 	float: right;
@@ -51,6 +51,7 @@ th{
 	background-color: #9292FF;
 	border: 2px solid #ffffff;
 	font-weight: normal;
+	text-align: left;
 }
 td{
 	border: 2px solid #ffffff;
@@ -157,13 +158,13 @@ $(document).ready(function(){
 				centerY = (y/oldHeight) * height;
 				\$img.css('width',width).css('max-width',width+'px')
 					.css('height',height).css('max-height',height+'px')
-					.offset({left:-(parentWidth/2-x)/2-centerX+parentWidth/2, top:-(parentHeight/2-y)/2-centerY+parentHeight/2});
+					.offset({left:-(parentWidth/2-x)-centerX+parentWidth/2, top:-(parentHeight/2-y)-centerY+parentHeight/2});
 			}else{
 				centerX = (x/oldHeight) * height;
 				centerY = (y/oldWidth) * width;
 				\$img.css('width',width).css('max-width',width+'px')
 					.css('height',height).css('max-height',height+'px')
-					.offset({left:-(parentWidth/2-x)/2-centerX+parentWidth/2, top:-(parentHeight/2-y)/2-centerY+parentHeight/2});
+					.offset({left:-(parentWidth/2-x)-centerX+parentWidth/2, top:-(parentHeight/2-y)-centerY+parentHeight/2});
 			}
 			zoom = true;
 		}
