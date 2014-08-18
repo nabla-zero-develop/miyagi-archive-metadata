@@ -209,8 +209,12 @@ function is_valid_seirihyo($data, $ken_or_shi){
 		if ((trim($data[FIRST_DATA_ROW-4][0]) <> "＊市町村ｺｰﾄﾞ")) return SHI_LEFT_END_ERR;
 	}
 	//右端
-	if((trim($data[FIRST_DATA_ROW-4][LAST_COLUMN]) <> "＊作業管理No.")) return RIGHT_END_ERR;
-	//見出し最下部
+	if($ken_or_shi == 0){
+		if((trim($data[FIRST_DATA_ROW-4][LAST_COLUMN]) <> "＊作業管理No.")) return RIGHT_END_ERR;
+	}else{
+		if((trim($data[FIRST_DATA_ROW-4][LAST_COLUMN+1]) <> "＊作業管理No.")) return RIGHT_END_ERR;
+	}
+		//見出し最下部
 	if((trim($data[FIRST_DATA_ROW-1][6]) <> "複数可")) return HEADER_BOTTOM_ERR;
 	//大域宣言との整合性確認
 	if(FIRST_DATA_ROW != 9) return SHEET_DEF_ERR;
@@ -333,15 +337,19 @@ function write_table($data, $ken_or_shi, $lot){
 
 	//市町村コード・件部局コードを取得
 	require_once('include/config.php');
-	$local_name = $data[DIVISION_NAME_ROW][DIVISION_NAME_COLUMN];
+	if($ken_or_shi == 0){
+		$local_name = $data[DIVISION_NAME_ROW][DIVISION_NAME_COLUMN];
+	}else{
+		$local_name = $data[DIVISION_NAME_ROW][DIVISION_NAME_COLUMN-2];
+	}
 	$table = ($ken_or_shi == 0? 'divisioncode': 'citycode');
-	$res = mysql_query("select * from $table where name='".mysql_real_escape_string($local_name)."'");
+	$res = mysql_query("select * from $table where name like '%".mysql_real_escape_string($local_name)."'");
 	$row = mysql_fetch_assoc($res);
 	if($row){
 		$local_code = $row['code'];
 	}else{
 		echo mysql_error();;
-		echo ("select * from divisioncode where name='".mysql_real_escape_string($local_name)."'");
+		echo ("select * from $table where name like '%".mysql_real_escape_string($local_name)."'");
 		die("$local_name:部局コード又は市町村コードがマッチしません");
 	}
 
@@ -599,7 +607,7 @@ if($uploaded == EXCEL_FILE_NOT_PREPARED){
 		// エクセルファイル情報出力
 		echo output_file_info($original_file_path, $uploaded_file_path, $ken_or_shi, $data[DIVISION_NAME_ROW][DIVISION_NAME_COLUMN]);
 		// 整理表フォーマットチェック
-		$err = is_valid_seirihyo($data);
+		$err = is_valid_seirihyo($data,$ken_or_shi);
 		if ($err<0){
 			echo "整理表のフォーマットが不適切です。";
 			switch ($err){
