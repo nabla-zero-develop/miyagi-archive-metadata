@@ -88,6 +88,7 @@ function metadata_items_first($items, $caller){
 	return <<< EOS
 	<tr><th>ユニークID</th><td>$_uniqid </td></tr>
 	<tr><th class='hissu'>1.資料種別</th><td>$_md_type</td></tr>
+	<tr><th>24.標準番号(ISBN等)<br>$ndl_button</th><td>$standard_id</td></tr>
 	<tr><th class='$class_hissu1'>2.タイトル</th><td>$title</td></tr>
 	<tr><th class='$class_hissu1'>3.タイトルのヨミ<br>$title_button</th><td>$title_yomi</td></tr>
 	<tr><th class='hissu'>4.作成者・著者名</th><td>$creator</td></tr>
@@ -111,7 +112,6 @@ function metadata_items_first($items, $caller){
     <tr><th>22.立法資料</th><td>$_rippou_flag</td></tr>
     <tr class='optional optional_図書'><th>23.博士論文</th><td>$_doctor_flag</td></tr>
 	<tr><td></td></tr>
-	<tr><th>24.標準番号(ISBN等)<br>$ndl_button</th><td>$standard_id</td></tr>
 	<tr class='betu_title_flag_option'><th>25.別タイトル</th><td>$betu_title</td></tr>
 	<tr class='betu_title_flag_option'><th>26.別タイトルのヨミ<br>$betu_title_button</th><td>$betu_title_yomi</td></tr>
 	<tr class='betu_title_flag_option'><th>27.別シリーズタイトル</th><td>$betu_series_title</td></tr>

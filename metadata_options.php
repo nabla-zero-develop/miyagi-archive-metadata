@@ -52,11 +52,11 @@ EOS;
 function output_text_area($var_name, $value, $caller){
 	if($caller == _INPUT_){
 		return <<< EOS
-	<textarea name='$var_name' rows="3" cols="40">$value</textarea>
+	<textarea name='$var_name' rows="3" cols="30">$value</textarea>
 EOS;
 	} else {
 	return <<< EOS
-	<textarea name='$var_name' rows="3" cols="40" readonly="readonly">$value</textarea>
+	<textarea name='$var_name' rows="3" cols="30" readonly="readonly">$value</textarea>
 EOS;
 	}
 }
@@ -74,8 +74,14 @@ EOS;
 }
 
 function output_md_type_selection($md_type, $caller){
-	$md_types = array('', '図書', '記事','雑誌・新聞','音声・映像','文書・楽譜','地図・地図帳','ポスター','写真','チラシ','会議録・含資料','博物資料','オンライン資料','語り','絵画・絵はがき','プログラム（スマホアプリ・ゲーム等）');
-	return selection('md_type', $md_types, $md_type, $caller, 1);
+	$md_types = array(array('',''), array('図書','a:図書'), array('記事','b:記事'), array('雑誌・新聞','c:雑誌・新聞'),
+					array('音声・映像','d:音声・映像'),array('文書・楽譜','e:文書・楽譜'),
+					array('地図・地図帳','f:地図・地図帳'),array('ポスター','g:ポスター'),array('写真','h:写真'),
+					array('チラシ','i:チラシ'),array('会議録・含資料','j:会議録・含資料'),
+					array('博物資料','k:博物資料'),array('オンライン資料','l:オンライン資料'),array('語り','m:語り'),
+					array('絵画・絵はがき','n:絵画・絵はがき'),
+					array('プログラム（スマホアプリ・ゲーム等）','o:プログラム（スマホアプリ・ゲーム等）'));
+	return selection('md_type', $md_types, $md_type, $caller, 2);
 }
 
 function output_gov_issue_selection($gov_issue, $caller){

@@ -65,7 +65,10 @@ table{
 	ime-mode: disabled;
 }
 th.hissu{
-    background-color: #ff0000;
+    background-color: #ff8080;
+}
+input, select, textarea{
+	font-size: 100%;
 }
 </style>
 EOS;
@@ -135,6 +138,9 @@ function lastImage(){
 
 var zoom = false;
 $(document).ready(function(){
+	if(images.length>1){
+		$('#filename').css('color','#f00').css('font-size','130%');
+	}
 	chgImage(0);
 	//クリックでズーム
 	$('#image').click(function(e){
@@ -327,6 +333,16 @@ function output_item_script(){
 $(document).ready(function(){
 	$('select[name=md_type]').change(showOptional);
 	showOptional();
+	$('textarea').bind('change keyup',function(){
+		var s = $(this).val();
+		s = s.split("\\n").join("").split("\\r").join("");
+		if($(this).attr('name').match(/_yomi$/)){
+			s = s.replace(/[ぁ-ん]/g, function(ss) {
+	   			return String.fromCharCode(ss.charCodeAt(0) + 0x60);
+			});
+		}
+		$(this).val(s);
+	});
 });
 
 function showOptional(){
@@ -381,7 +397,7 @@ function check(){
 		var \$tr = $(this);
 		if(\$tr.css('display') != 'none'){
 			if(\$tr.children('th').hasClass('hissu')){
-				if(\$tr.children('td').children('input').val() == '' || \$tr.children('td').children('select').val() == ''){
+				if(\$tr.children('td').children('input').val() == '' || \$tr.children('td').children('select').val() == '' || \$tr.children('td').children('textarea').val() == ''){
 					var text = \$tr.children('th').html();
 					var text = text.split('<')[0];
 					message += text+"が入力されていません\\n";
@@ -407,16 +423,24 @@ $(function() {
 
 // 読み
 function yomi(field, yomi_field, init_value) {
-	s = $.trim($("input[name='" + field + "']").val());
+	s = $("input[name='" + field + "']").val();
+	if(s == undefined){s = $("textarea[name='" + field + "']").val();}
+	s = $.trim(s);
 	if(s.length == 0){s = init_value};
-	if(s != ""){
+	if(s == "@" || s == "＠" ){
+			$("input[name='" + yomi_field + "']").val(s);
+	}else if(s != ""){
 		$.ajax({
 			url: './mecab_proxy.php',
 			dataType: 'text',
 			data: {"s": s },
 			success: function(data) {
 				//alert(data);
-				$("input[name='" + yomi_field + "']").val(data);
+				if($("input[name='" + yomi_field + "']").length > 0){
+					$("input[name='" + yomi_field + "']").val(data);
+				}else{
+					$("textarea[name='" + yomi_field + "']").val(data);
+				}
 				return data;
 			},
 			error: function(data) {
