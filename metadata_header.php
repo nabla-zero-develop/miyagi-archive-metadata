@@ -449,7 +449,7 @@ function ndl_check(){
 				//	dt = Date.parse(fields[21]);
 				//	$("input[name='koukai_nen'").val(dt.getYear());
 				//	$("input[name='koukai_tsuki'").val(dt.getMonth());
-				//	$("input[name='koukai_hi'").val(dt.getDay());
+				//	$("input[name='koukai_bi'").val(dt.getDay());
 				//}
 				$("input[name='creator_yomi'").val(yomi('creator', 'creator_yomi', ''));
 			},

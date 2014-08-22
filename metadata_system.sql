@@ -135,7 +135,7 @@ renraku_saki_other text COMMENT 'その他の作成者連絡先',
 kenri_shori text COMMENT '権利処理（県版と市町村版で値制約が異なる。県版は「済」「未」、市町村版は9で済）なので、県版の「済」を9に書き換える 未処理は0',
 open_level char COMMENT '公開レベル　県版と市町村版で値制約が異なる。県版は、公開の場合、「公開」で、市町村版の場合は１が公開、2が限定公開、3が公開保留なので市町村側に合わせて公開は1とする。県版のxは、扱いがわからないのでそのままとしておく。',
 horyu_reason text COMMENT '保留理由',
-media_code text COMMENT '媒体コード',
+original_shiryo_keitai text COMMENT '媒体コード',
 PRIMARY KEY (uniqid)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

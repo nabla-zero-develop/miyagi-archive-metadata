@@ -214,15 +214,15 @@ if($is_input && $md_type=="図書"){
 	// 公開日
 	if(!isset($koukai_nen)){$koukai_nen = '';}
 	if(!isset($koukai_tsuki)){$koukai_tsuki = '';}
-	if(!isset($koukai_hi)){$koukai_hi = '';}
+	if(!isset($koukai_bi)){$koukai_bi = '';}
 	if(!isset($publisher)){$publisher = '';}
 	// NDLに問い合わせ
 	if($title != ''){
 		$bi = ndl_title_info($title); // クラス名付けると動かない！？
-		if($koukai_nen == '' && $koukai_tsuki == '' && $koukai_hi == ''){
+		if($koukai_nen == '' && $koukai_tsuki == '' && $koukai_bi == ''){
 			$pubDate = get_info($bi, 'pubDate');
 			if($pubDate != ''){
-				list($koukai_nen, $koukai_tsuki, $koukai_hi) = explode("-", date("Y-m-d", strtotime($pubDate)));
+				list($koukai_nen, $koukai_tsuki, $koukai_bi) = explode("-", date("Y-m-d", strtotime($pubDate)));
 			}
 		}
 		if($publisher == ''){
@@ -239,7 +239,7 @@ if($is_input && $md_type=="図書"){
 		$creator_yomi = yomi($creator_yomi, mecab($creator)) ;
 		$pubDate = get_info($bi, 'pubDate');
 		if($pubDate != ''){
-			list($koukai_nen, $koukai_tsuki, $koukai_hi) = explode("-", date("Y-m-d", strtotime($pubDate)));
+			list($koukai_nen, $koukai_tsuki, $koukai_bi) = explode("-", date("Y-m-d", strtotime($pubDate)));
 		}
 		$publisher = get_info($bi, 'dc_publisher');
 	}
@@ -248,7 +248,7 @@ if($is_input && $md_type=="図書"){
 if(FALSE){
 	echo $creator."\n";
 	echo $creator_yomi."\n";
-	echo $koukai_nen."-".$koukai_tsuki."-".$koukai_hi."\n";
+	echo $koukai_nen."-".$koukai_tsuki."-".$koukai_bi."\n";
 	echo $publisher."\n";
 	echo $title."\n";
 	echo $title_yomi."\n";
@@ -258,14 +258,14 @@ if(FALSE){
 }
 $items['koukai_nen'] = $koukai_nen;
 $items['koukai_tsuki'] = $koukai_tsuki;
-$items['koukai_hi'] = $koukai_hi;
+$items['koukai_bi'] = $koukai_bi;
 $items['creator_yomi'] = $creator_yomi;
 $items['publisher'] = $publisher;
 
 // 整理表では提供されない情報
 $new_items = array('series_flag', 'betu_title_flag', 'kiyo_flag', 'iban_flag', 'license_flag', 'inyou_flag',
 		'gov_issue', 'gov_issue_2', 'gov_issue_chihou', 'gov_issue_miyagi', 'for_handicapped',
-		'original_shiryo_keitai', 'rippou_flag', 'doctor_flag', 'standard_id', 'title_yomi', 'series_title', 'series_title_yomi', 'betu_title', 'betu_title_yomi', 'betu_series', 'betu_series_yomi', 'betu_series_title', 'betu_series_title_yomi', 'naiyo_saimoku_title', 'naiyo_saimoku_title_yomi', 'naiyo_saimoku_title_yomi', 'naiyo_saimoku_chosha', 'buhenmei', 'buhenmei_yomi', 'makiji_bango', 'makiji_bango_yomi', 'iban', 'iban_chosha', 'chuuki', 'youyaku', 'mokuji', 'is_bubun', 'ioya_uri', 'shigen_mei', 'has_bubun', 'ko_uri', 'taisho_basho_uri', 'taisho_basho_keni', 'taisho_basho_shi', 'taisho_basho_banchii', 'taisho_basho_ido', 'taisho_basho_keido', 'satusei_ido', 'satuei_keido', 'satuei_shi', 'satuei_banch', 'kanko_hindo', 'kanko_kanji', 'doctor', 'doctor_bango', 'doctor_nen', 'doctor_tuki', 'doctor_bi', 'doctor_daigaku', 'doctor_daigaku_yomi', 'keisai_go1', 'keisai_go2', 'keisa_shimei', 'keisai_kan', 'keisai_page', 'license_info', 'license_uri', 'license_holder', 'license_chuki', 'shiryo_keitai', 'teller', 'teller_yomi', 'haifu_taisho', 'haifu_nen', 'haifu_tuki', 'haifu_bi', 'keiji_basho', 'keiji_basho_yomi', 'keiji_nen', 'keiji_tuki', 'keiji_bi', 'sakusei_bi', 'online_nen', 'online_tuki', 'online_bi', 'koukai_tuki', 'shiryo_keitai', 'language', 'kanko_status', 'hakubutu_kubun', 'shosha_flag', 'online_flag', 'shoshi_flag', 'chizu_kubun', 'seigen');
+		'original_shiryo_keitai', 'rippou_flag', 'doctor_flag', 'standard_id', 'title_yomi', 'series_title', 'series_title_yomi', 'betu_title', 'betu_title_yomi', 'betu_series', 'betu_series_yomi', 'betu_series_title', 'betu_series_title_yomi', 'naiyo_saimoku_title', 'naiyo_saimoku_title_yomi', 'naiyo_saimoku_title_yomi', 'naiyo_saimoku_chosha', 'buhenmei', 'buhenmei_yomi', 'makiji_bango', 'makiji_bango_yomi', 'iban', 'iban_chosha', 'chuuki', 'youyaku', 'mokuji', 'is_bubun', 'oya_uri', 'shigen_mei', 'has_bubun', 'ko_uri', 'taisho_basho_uri', 'taisho_basho_keni', 'taisho_basho_shi', 'taisho_basho_banchii', 'taisho_basho_ido', 'taisho_basho_keido', 'satusei_ido', 'satuei_keido', 'satuei_shi', 'satuei_banchi', 'kanko_hindo', 'kanko_kanji', 'doctor', 'doctor_bango', 'doctor_nen', 'doctor_tuki', 'doctor_bi', 'doctor_daigaku', 'doctor_daigaku_yomi', 'keisai_go1', 'keisai_go2', 'keisa_shimei', 'keisai_kan', 'keisai_page', 'license_info', 'license_uri', 'license_holder', 'license_chuki', 'shiryo_keitai', 'teller', 'teller_yomi', 'haifu_taisho', 'haifu_nen', 'haifu_tuki', 'haifu_bi', 'keiji_basho', 'keiji_basho_yomi', 'keiji_nen', 'keiji_tuki', 'keiji_bi', 'sakusei_bi', 'online_nen', 'online_tuki', 'online_bi', 'koukai_tuki', 'shiryo_keitai', 'language', 'kanko_status', 'hakubutu_kubun', 'shosha_flag', 'online_flag', 'shoshi_flag', 'chizu_kubun', 'seigen');
 
 foreach($new_items as $i){
 	if(isset($items[$i])){

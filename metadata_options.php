@@ -49,6 +49,18 @@ EOS;
 	}
 }
 
+function output_text_area($var_name, $value, $caller){
+	if($caller == _INPUT_){
+		return <<< EOS
+	<textarea name='$var_name' rows="3" cols="40">$value</textarea>
+EOS;
+	} else {
+	return <<< EOS
+	<textarea name='$var_name' rows="3" cols="40" readonly="readonly">$value</textarea>
+EOS;
+	}
+}
+
 function output_hidden_input($var_name, $value){
 	return <<< EOS
 	<input type='hidden' name='$var_name' size='40' value='$value'>
@@ -149,7 +161,7 @@ function output_kanko_status_selection($kanko_status, $caller){
 
 function output_open_level_selection($open_level, $caller){
 	$levels = array(array('-1','判断保留'),/*array('0','非公開'),*/array('1','公開'),array('2','限定公開'),array('3','公開保留'));
-	if($open_level == 0)$open_level = 3;
+	if($open_level === 0||$open_level === '0')$open_level = 3;
 	return selection('open_level', $levels, $open_level, $caller, 2).(is_numeric($open_level)?'':'基本情報整理表未入力');
 }
 

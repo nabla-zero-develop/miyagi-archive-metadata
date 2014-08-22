@@ -643,7 +643,7 @@ CREATE TABLE IF NOT EXISTS `metadata` (
   `gov_issue_chihou` text COMMENT '地方公共団体刊行物',
   `gov_issue_miyagi` text COMMENT '宮城県内地方公共団体刊行物',
   `for_handicapped` text COMMENT '視聴覚者向け資料',
-  `media_code` text COMMENT 'オリジナル資料の形態',
+  `original_shiryo_keitai` text COMMENT 'オリジナル資料の形態',
   `rippou_flag` tinyint(4) DEFAULT NULL COMMENT '立法資料',
   `doctor_flag` tinyint(4) DEFAULT NULL COMMENT '博士論文',
   `standard_id` text COMMENT '原資料の標準番号',
@@ -669,7 +669,7 @@ CREATE TABLE IF NOT EXISTS `metadata` (
   `iban` text COMMENT '異版名(第x版）',
   `iban_chosha` text COMMENT '異版の著者名',
   `publisher` text COMMENT '出版社・公開者',
-  `subject` text COMMENT 'サブジェクト（キーワード）',
+  `keyword` text COMMENT 'サブジェクト（キーワード）',
   `chuuki` text COMMENT '注記等',
   `youyaku` text COMMENT '要約',
   `mokuji` text COMMENT '目次',
@@ -746,7 +746,7 @@ CREATE TABLE IF NOT EXISTS `metadata` (
 -- テーブルのデータのダンプ `metadata`
 --
 
-INSERT INTO `metadata` (`uniqid`, `md_type`, `series_flag`, `betu_title_flag`, `kiyo_flag`, `iban_flag`, `license_flag`, `inyou_flag`, `gov_issue`, `gov_issue_2`, `gov_issue_chihou`, `gov_issue_miyagi`, `for_handicapped`, `media_code`, `rippou_flag`, `doctor_flag`, `standard_id`, `title`, `title_yomi`, `series_title`, `series_title_yomi`, `betu_series_title`, `betu_series_title_yomi`, `betu_title`, `betu_title_yomi`, `naiyo_saimoku_chosha`, `naiyo_saimoku_title`, `naiyo_saimoku_title_yomi`, `buhenmei`, `buhenmei_yomi`, `makiji_bango`, `makiji_bango_yomi`, `contributor`, `contributor_yomi`, `creator`, `creator_yomi`, `iban`, `iban_chosha`, `publisher`, `subject`, `chuuki`, `youyaku`, `mokuji`, `sakusei_nen`, `sakusei_tuki`, `sakusei_bi`, `online_nen`, `online_tuki`, `online_bi`, `koukai_nen`, `koukai_tuki`, `koukai_bi`, `language`, `is_bubun`, `oya_uri`, `shigen_mei`, `has_bubun`, `ko_uri`, `taisho_basho_uri`, `taisho_basho_ken`, `taisho_basho_shi`, `taisho_basho_banchi`, `taisho_basho_ido`, `taisho_basho_keido`, `satuei_ken`, `satuei_shi`, `satuei_banchi`, `satuei_keido`, `satusei_ido`, `kanko_hindo`, `kanko_status`, `kanko_kanji`, `doctor`, `doctor_bango`, `doctor_nen`, `doctor_tuki`, `doctor_bi`, `doctor_daigaku`, `doctor_daigaku_yomi`, `keisai_go1`, `keisai_go2`, `keisai_shimei`, `keisai_kan`, `keisai_page`, `open_level`, `license_info`, `license_uri`, `license_holder`, `license_chuki`, `origina_shiryo_keitai`, `hakubutu_kubun`, `shosha_flag`, `online_flag`, `teller`, `teller_yomi`, `haifu_basho`, `haifu_basho_yomi`, `haifu_nen`, `haifu_tuki`, `haifu_bi`, `haifu_taisho`, `keiji_basho`, `keiji_basho_yomi`, `keiji_nen`, `keiji_tuki`, `keiji_bi`, `shoshi_flag`, `chizu_kubun`, `seigen`) VALUES
+INSERT INTO `metadata` (`uniqid`, `md_type`, `series_flag`, `betu_title_flag`, `kiyo_flag`, `iban_flag`, `license_flag`, `inyou_flag`, `gov_issue`, `gov_issue_2`, `gov_issue_chihou`, `gov_issue_miyagi`, `for_handicapped`, `original_shiryo_keitai`, `rippou_flag`, `doctor_flag`, `standard_id`, `title`, `title_yomi`, `series_title`, `series_title_yomi`, `betu_series_title`, `betu_series_title_yomi`, `betu_title`, `betu_title_yomi`, `naiyo_saimoku_chosha`, `naiyo_saimoku_title`, `naiyo_saimoku_title_yomi`, `buhenmei`, `buhenmei_yomi`, `makiji_bango`, `makiji_bango_yomi`, `contributor`, `contributor_yomi`, `creator`, `creator_yomi`, `iban`, `iban_chosha`, `publisher`, `subject`, `chuuki`, `youyaku`, `mokuji`, `sakusei_nen`, `sakusei_tuki`, `sakusei_bi`, `online_nen`, `online_tuki`, `online_bi`, `koukai_nen`, `koukai_tuki`, `koukai_bi`, `language`, `is_bubun`, `oya_uri`, `shigen_mei`, `has_bubun`, `ko_uri`, `taisho_basho_uri`, `taisho_basho_ken`, `taisho_basho_shi`, `taisho_basho_banchi`, `taisho_basho_ido`, `taisho_basho_keido`, `satuei_ken`, `satuei_shi`, `satuei_banchi`, `satuei_keido`, `satusei_ido`, `kanko_hindo`, `kanko_status`, `kanko_kanji`, `doctor`, `doctor_bango`, `doctor_nen`, `doctor_tuki`, `doctor_bi`, `doctor_daigaku`, `doctor_daigaku_yomi`, `keisai_go1`, `keisai_go2`, `keisai_shimei`, `keisai_kan`, `keisai_page`, `open_level`, `license_info`, `license_uri`, `license_holder`, `license_chuki`, `origina_shiryo_keitai`, `hakubutu_kubun`, `shosha_flag`, `online_flag`, `teller`, `teller_yomi`, `haifu_basho`, `haifu_basho_yomi`, `haifu_nen`, `haifu_tuki`, `haifu_bi`, `haifu_taisho`, `keiji_basho`, `keiji_basho_yomi`, `keiji_nen`, `keiji_tuki`, `keiji_bi`, `shoshi_flag`, `chizu_kubun`, `seigen`) VALUES
 (520501000001, '図書', 0, 0, 0, 0, 0, 0, '', '該当しない', '該当しない', '', '', '', 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', NULL, NULL, '', '', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 'JPN', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'u', '', '', '', 0, 0, 0, '', '', '', '', '', '', '', '0', '', '', '', '', '', '', 0, 0, '', '', '', '', 0, 0, 0, '', '', '', 0, 0, 0, 0, '1', 0),
 (520501000002, '', 0, 0, 0, 0, 0, 0, '', '該当しない', '該当しない', '', '', '', 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', NULL, NULL, '', '', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 'JPN', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 'u', '', '', '', 0, 0, 0, '', '', '', '', '', '', '', '0', '', '', '', '', '', '', 0, 0, '', '', '', '', 0, 0, 0, '', '', '', 0, 0, 0, 0, '1', 0);
 

@@ -21,22 +21,27 @@ function metadata_items_first($items, $caller){
 	$_original_shiryo_keitai = output_original_shiryo_keitai_selection((($items['media_code'] == "32") && ($caller == _INPUT_)) ? "32" : $items['original_shiryo_keitai'], $caller);
 	$_rippou_flag = output_radio('rippou_flag', $items['rippou_flag'], '該当しない', '該当する', $caller);
 	$_doctor_flag = output_radio('doctor_flag', $items['doctor_flag'], '該当しない', '該当する', $caller);
+	$_satuei_ken = output_text_input('satuei_ken',(isset($items['satuei_ken'])?$items['satuei_ken']:$items['satuei_basho_address']),$caller);
 
-	$text_fields = array('standard_id', 'title', 'series_title',  'betu_title',  'betu_series', 'betu_series_title','naiyo_saimoku_title',
+	$text_fields = array('standard_id', 'series_title',  'betu_title',  'betu_series', 'betu_series_title','naiyo_saimoku_title',
 			'naiyo_saimoku_chosha', 'buhenmei',  'makiji_bango',
-		'creator', 'creator_yomi', 'contributor','iban', 'iban_chosha','publisher',
-		'keyword', 'chuuki', 'youyaku', 'mokuji', 'is_bubun', 'ioya_uri', 'shigen_mei', 'has_bubun', 'ko_uri',
+		'contributor','iban', 'iban_chosha','publisher',
+		'keyword', 'chuuki', 'youyaku', 'mokuji', 'is_bubun', 'oya_uri', 'shigen_mei', 'has_bubun', 'ko_uri',
 		'taisho_basho_uri', 'taisho_basho_ken', 'taisho_basho_shi', 'taisho_basho_banchi', 'taisho_basho_ido', 'taisho_basho_keido',
-		'satusei_ido','satuei_keido','satuei_basho_address','satuei_shi','satuei_banch','kanko_hindo', 'kanko_kanji',
+		'satusei_ido','satuei_keido','satuei_shi','satuei_banchi','kanko_hindo', 'kanko_kanji',
 		'doctor','doctor_bango', // 'doctor_nen', 'doctor_tuki', 'doctor_bi',
 		'doctor_daigaku',
-		'keisai_go1', 'keisai_go2', 'keisa_shimei', 'keisai_kan', 'keisai_page', 'license_info','license_uri','license_holder','license_chuki','shiryo_keitai',
+		'keisai_go1', 'keisai_go2', 'keisai_shimei', 'keisai_kan', 'keisai_page', 'license_info','license_uri','license_holder','license_chuki','shiryo_keitai',
 		'teller',  'haifu_taisho', 'haifu_basho', // 'haifu_nen', 'haifu_tuki', 'haifu_bi',
 		'keiji_basho',
-		'title_yomi', 'series_title_yomi','betu_title_yomi', 'betu_series_yomi', 'betu_series_title_yomi','naiyo_saimoku_title_yomi','buhenmei_yomi','makiji_bango_yomi', 'contributor_yomi', 'doctor_daigaku_yomi','teller_yomi','haifu_basho_yomi', 'keiji_basho_yomi');
+		'series_title_yomi','betu_title_yomi', 'betu_series_yomi', 'betu_series_title_yomi','naiyo_saimoku_title_yomi','buhenmei_yomi','makiji_bango_yomi', 'contributor_yomi', 'doctor_daigaku_yomi','teller_yomi','haifu_basho_yomi', 'keiji_basho_yomi');
 		// 'keiji_nen', 'keiji_tuki', 'keiji_bi');
 	foreach($text_fields as $f){
 		$$f = output_text_input($f, $items[$f], $caller);
+	}
+	$text_area_fields = array('title', 'title_yomi', 'creator', 'creator_yomi');
+	foreach($text_area_fields as $f){
+		$$f = output_text_area($f, $items[$f], $caller);
 	}
 	$yomi_fields = array('title', 'creator', 'series_title','betu_title', 'betu_series', 'betu_series_title','naiyo_saimoku_title','buhenmei','makiji_bango', 'contributor', 'doctor_daigaku','teller','haifu_basho', 'keiji_basho');
 	if($caller == _INPUT_){
@@ -52,7 +57,7 @@ function metadata_items_first($items, $caller){
 	$online_bi = $items['online_bi'];
 	$koukai_nen = $items['koukai_nen'];
 	$koukai_tuki = $items['koukai_tuki'];
-	$koukai_hi = $items['koukai_hi'];
+	$koukai_bi = $items['koukai_bi'];
 	$doctor_nen = $items['doctor_nen'];
 	$doctor_tuki = $items['doctor_tuki'];
 	$doctor_bi = $items['doctor_bi'];
@@ -63,7 +68,7 @@ function metadata_items_first($items, $caller){
 	$keiji_tuki = $items['keiji_tuki'];
 	$keiji_bi = $items['keiji_bi'];
 	$shiryo_keitai = output_shiryo_keitai_selection($items['shiryo_keitai'], $caller);
-	$language = output_for_handicapped_selection($items['language'], $caller);
+	$language = output_language_selection($items['language'], $caller);
 	$kanko_status = output_kanko_status_selection($items['kanko_status'], $caller);
 	$open_level = output_open_level_selection($items['open_level'], $caller);
 	$hakubutu_kubun = output_radio('hakubutu_kubun', $items['hakubutu_kubun'], '人工物', '自然物', $caller);
@@ -133,15 +138,15 @@ function metadata_items_first($items, $caller){
 	<tr class='optional optional_オンライン資料'><th>45.オンライン資料採取日</th><td>（西暦）
 		<input type='text' class='imeDisable' name='online_nen' value='$online_nen' size='4'>年
 		<input type='text' class='imeDisable' name='online_tuki' value='$online_tuki' size='2'>月
-		<input type='text' class='imeDisable' name='onlilne_bi' value='$online_bi' size='2'>日</td></tr>
+		<input type='text' class='imeDisable' name='online_bi' value='$online_bi' size='2'>日</td></tr>
 	<tr><th>46.公開日</th><td>（西暦）
 		<input type='text' class='imeDisable' name='koukai_nen' size='4' value='$koukai_nen'>年
 		<input type='text' class='imeDisable' name='koukai_tuki' size='2' value='$koukai_tuki'>月
-        <input type='text' class='imeDisable' name='koukai_hi' size='2' value='$koukai_hi'>日</td></tr>
+        <input type='text' class='imeDisable' name='koukai_bi' size='2' value='$koukai_bi'>日</td></tr>
 	<tr><th>47.言語</th><td>$language</td></tr>
 	<!--引用資料-->
 	<tr class='inyou_flag_option'><th>48.～の一部分である</th><td>$is_bubun</td></tr>
-	<tr class='inyou_flag_option'><th>49.親URIへの参照</th><td>$ioya_uri</td></tr>
+	<tr class='inyou_flag_option'><th>49.親URIへの参照</th><td>$oya_uri</td></tr>
 	<tr class='inyou_flag_option'><th>50.参照する情報資源の名称</th><td>$shigen_mei</td></tr>
 	<tr class='inyou_flag_option'><th>51.～を一部分として持つ</th><td>$has_bubun</td></tr>
 	<tr class='inyou_flag_option'><th>52.子URIへの参照</th><td>$ko_uri</td></tr>
@@ -156,9 +161,9 @@ function metadata_items_first($items, $caller){
 	<tr class='$class_option4'><th>60.撮影場所（経度）</th><td>$satuei_keido</td></tr>
 	<tr class='$class_option4'><th>61.撮影場所（県名）
 		<!--とりあえず、撮影場所の住所を県のところに表示させておく。基本情報整理表には、複数が入力されている場合あり-->
-		</th><td>$satuei_basho_address</td></tr>
+		</th><td>$_satuei_ken</td></tr>
 	<tr class='$class_option4'><th>62.撮影場所（市町村）</th><td>$satuei_shi</td></tr>
-	<tr class='$class_option4'><th>63.撮影場所（街路番地）</th><td>$satuei_banch</td></tr>
+	<tr class='$class_option4'><th>63.撮影場所（街路番地）</th><td>$satuei_banchi</td></tr>
 	<!--刊行頻度・状態・巻次（雑誌の場合のみ）-->
 	<tr class='optional optional_雑誌・新聞'><th>64.刊行頻度</th><td>$kanko_hindo</td></tr>
 	<tr class='series_flag_option'><th>65.刊行状態</th><td>$kanko_status</td></tr>
@@ -176,7 +181,7 @@ function metadata_items_first($items, $caller){
 	<!--通巻番号等-->
 	<tr class='optional optional_記事 optional_会議録・含資料'><th>72.掲載通号</th><td>$keisai_go1</td></tr>
 	<tr class='optional optional_記事 optional_会議録・含資料'><th>73.掲載号</th><td>$keisai_go2</td></tr>
-	<tr class='optional optional_記事 optional_会議録・含資料'><th>74.掲載誌名</th><td>$keisa_shimei</td></tr>
+	<tr class='optional optional_記事 optional_会議録・含資料'><th>74.掲載誌名</th><td>$keisai_shimei</td></tr>
 	<tr class='optional optional_記事 optional_会議録・含資料'><th>75.掲載巻（論文の場合）</th><td>$keisai_kan</td></tr>
 	<tr class='optional optional_記事 optional_会議録・含資料'><th>76.掲載ページ</th><td>$keisai_page</td></tr>
 	<tr class='license_flag_option'><th>77.ライセンス情報</th><td>$license_info</td></tr>
