@@ -110,7 +110,7 @@ function chgImage(idx){
 	//rotate(0);
 	$('#image').attr('src','');
 	$('#image').attr('src',images[idx]);
-	$('#filename').html(''+(idx+1)+'/'+images.length);
+	$('#imageIdx').val(idx+1);
 	stopPreload();
 }
 
@@ -138,8 +138,19 @@ function lastImage(){
 
 var zoom = false;
 $(document).ready(function(){
-	if(images.length>1){
-		$('#filename').css('color','#f00').css('font-size','130%');
+	if(images.length==1){
+		$('#filename').html('1/1');
+	}else{
+		var size = (images.length<10?1:(images.length<100?2:3));
+		$('#filename').css('color','#f00').css('font-size','130%')
+			.html("<input type='text' size="+size+" id='imageIdx' class='imeDisable'>"+'/'+images.length+"<span id='aaa'></span>");
+		$('#imageIdx').bind('change keyup',function(){
+			var idx = $(this).val();
+			if(idx>=1 && idx<=images.length){
+				chgImage($(this).val()-1);
+			}
+		});
+
 	}
 	chgImage(0);
 	//クリックでズーム
