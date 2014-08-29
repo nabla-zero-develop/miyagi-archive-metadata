@@ -29,13 +29,14 @@ function output_css($show_image_flag){
 	return <<< EOS
 <style>
 #formDiv{
-	width: 550px;
+	width: 750px;
 	height: 100%;
 	overflow: scroll;
 	float: right;
+	font-size: 20px;
 }
 #imageDiv{
-	width: 1300px;
+	width: 1100px;
 	float: left;
 	text-align: center;
 }
@@ -46,8 +47,8 @@ function output_css($show_image_flag){
 	position: absolute;
 }
 #imageWrap{
-	width: 1300px;
-	height: 1000px;
+	width: 1100px;
+	height: 950px;
 	overflow: hidden;
 	position: relative;
 }

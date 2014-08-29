@@ -52,11 +52,11 @@ EOS;
 function output_text_area($var_name, $value, $caller){
 	if($caller == _INPUT_){
 		return <<< EOS
-	<textarea name='$var_name' rows="3" cols="30">$value</textarea>
+	<textarea name='$var_name' rows="3" cols="33">$value</textarea>
 EOS;
 	} else {
 	return <<< EOS
-	<textarea name='$var_name' rows="3" cols="30" readonly="readonly">$value</textarea>
+	<textarea name='$var_name' rows="3" cols="33" readonly="readonly">$value</textarea>
 EOS;
 	}
 }

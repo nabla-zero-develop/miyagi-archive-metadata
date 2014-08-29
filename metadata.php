@@ -326,7 +326,7 @@ echo output_map_script();
 		<!-- form name="input_form" -->
 		<form name="input_form" method ="post" action="write.php" onSubmit="return check()">
 			<input type="submit" name='next' value="入力スキップ" onClick="setSkipCheck(2);">
-			理由：<input type="text" name="skip_reason" size='60'>
+			理由：<input type="text" name="skip_reason" size='55'>
 			<table>
 				<?php echo metadata_items_first($items, _INPUT_); ?>
 			</table>
