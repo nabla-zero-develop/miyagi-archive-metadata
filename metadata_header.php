@@ -11,6 +11,10 @@ function output_header(){
 	<!-- header -->
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<script type="text/javascript" src="{$jquery}"></script>
+		<script src="js/jquery-ui-1.11.0.custom/jquery-ui.min.js"></script>
+		<script src="js/jquery.mousewheel.min.js"></script>
+		<script src="js/jquery.iviewer/jquery.iviewer.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="js/jquery.iviewer/jquery.iviewer.css" />
 EOS;
 }
 
@@ -82,58 +86,51 @@ function output_image_script($files){
 <script>
 var images = [$f];
 var degree = 0;
+var currImgIdx;
+var zoom = null;
 function rotate(deg){
 	degree = deg;
-	var \$image = $('#image');
-	var \$parent = $('#imageWrap');
-	\$image.css('transform','rotate('+deg+'deg)')
-		.css('width','').css('height','').css('left',0).css('top',0);
-	if(deg == 0){
-		\$image
-			.css('max-width',\$parent.css('width'))
-			.css('max-height',\$parent.css('height'));
-		\$image.css('top',0);
-//		\$image.css('top',\$image.height()<\$parent.height()? (\$parent.height()-\$image.height())/2:0)
-//			.css('left',\$image.width()<\$parent.width()? (\$parent.width()-\$image.width())/2:0);
-	}else{
-		\$image
-			.css('max-width',\$parent.css('height'))
-			.css('max-height',\$parent.css('width'));
-		\$image.css('top',(\$image.width()-\$image.height())/2);
-//		\$image.css('top',\$image.width()<\$parent.height()? (\$parent.height()-\$image.width())/2:0)
-//			.css('left',\$image.height()<\$parent.width()? (\$parent.width()-\$image.height())/2:0);
-	}
+	$('#imageWrap').iviewer('angle',deg,true);
 }
-
 function chgImage(idx){
 	currImgIdx = idx;
-	//rotate(0);
-	$('#image').attr('src','');
-	$('#image').attr('src',images[idx]);
+	var \$div = $("#imageWrap");
+	if(\$div.iviewer('info','src')){
+		zoom = \$div.iviewer('info','zoom');
+	}
+	\$div.iviewer('loadImage', images[idx]);
 	$('#imageIdx').val(idx+1);
-	stopPreload();
 }
 
 function prevImage(){
-	var src = $('#image').attr('src');
-	var i = 0;
-	for(i=0;i<images.length;i++){
-		if(src == images[i])break;
+	if(currImgIdx>0){
+		chgImage(currImgIdx-1);
 	}
-	chgImage(i==0?0:i-1);
 }
 
 function nextImage(){
-	var src = $('#image').attr('src');
-	var i = 0;
-	for(i=0;i<images.length;i++){
-		if(src == images[i])break;
+	if(currImgIdx<images.length-1){
+		chgImage(currImgIdx+1);
 	}
-	chgImage(i==images.length-1?images.length-1:i+1);
 }
 
 function lastImage(){
 	chgImage(images.length-1);
+}
+function iviewerFinishLoad(){
+	var \$div = $("#imageWrap");
+	if(zoom){
+		\$div.iviewer('set_zoom',zoom);
+	}
+	var ow = \$div.iviewer('info','orig_width');
+	var oh = \$div.iviewer('info','orig_height');
+	var options = \$div.iviewer('info','options');
+	var divw = \$div.width();
+	var divh = \$div.height();
+	var zoom_min = Math.min(divw/ow,divh/oh)*100;
+	if(zoom_min > 100){zoom_min = 100;}
+	options.zoom_min = zoom_min;
+	rotate(degree);
 }
 
 var zoom = false;
@@ -152,40 +149,9 @@ $(document).ready(function(){
 		});
 
 	}
+	$('#imageWrap').iviewer({zoom_max: 100,zoom_min: 10,onFinishLoad: iviewerFinishLoad});
 	chgImage(0);
-	//クリックでズーム
-	$('#image').click(function(e){
-		if(zoom){
-			rotate(degree);
-			zoom = false;
-		}else{
-			\$img = $('#image');
-			var x = e.pageX-\$img.offset().left;
-			var y = e.pageY-\$img.offset().top;
-			var img = new Image();
-			img.src = \$img.attr('src');
-			var width = img.width;
-			var height = img.height;
-			var oldWidth = \$img.width();
-			var oldHeight = \$img.height();
-			var parentWidth = \$img.parent().width();
-			var parentHeight = \$img.parent().height();
-			if(degree%180==0){
-				centerX = (x/oldWidth) * width;
-				centerY = (y/oldHeight) * height;
-				\$img.css('width',width).css('max-width',width+'px')
-					.css('height',height).css('max-height',height+'px')
-					.offset({left:-(parentWidth/2-x)-centerX+parentWidth/2, top:-(parentHeight/2-y)-centerY+parentHeight/2});
-			}else{
-				centerX = (x/oldHeight) * height;
-				centerY = (y/oldWidth) * width;
-				\$img.css('width',width).css('max-width',width+'px')
-					.css('height',height).css('max-height',height+'px')
-					.offset({left:-(parentWidth/2-x)-centerX+parentWidth/2, top:-(parentHeight/2-y)-centerY+parentHeight/2});
-			}
-			zoom = true;
-		}
-	}).load(preload);
+
 	//IEのみ有効
 	document.onhelp = function(){return false;};//F1キーでヘルプを抑止
 	document.onkeydown = key_event;
@@ -255,82 +221,6 @@ function key_event(){
 	return false;
 }
 
-//画像プリロード
-var preloadImgs = [];
-var preloadNum = 1;
-var preloadSeq = 0;
-var currImgIdx;
-function preload(){
-	preloadSeq++;
-	var loadIdxs = [];//プリロードする画像のインデックス
-	var plusNum = preloadNum;//後ろの画像をいくつプリロードするか
-	var minusNum = preloadNum;//前の画像をいくつプリロードするか
-	//前後のプリロード数
-	if(currImgIdx-preloadNum<0){
-		minusNum = currImgIdx;
-		plusNum += preloadNum-currImgIdx;
-	}
-	if(currImgIdx+preloadNum>=images.length){
-		plusNum = images.length-currImgIdx-1;
-		minusNum += preloadNum-(images.length-currImgIdx-1);
-		if(currImgIdx-preloadNum<0){
-			minusNum = currImgIdx;
-		}
-	}
-	//プリロードするインデックスを配列に
-	for(var i=1; plusNum-i>=0 || minusNum-i>=0; i++){
-		if(plusNum-i>=0){
-			loadIdxs.push(currImgIdx+i);
-		}
-		if(minusNum-i>=0){
-			loadIdxs.push(currImgIdx-i);
-		}
-	}
-	preload2(preloadSeq,loadIdxs);
-}
-function preload2(preloadSeq2,loadIdxs){
-	if(preloadSeq2!=preloadSeq){return;}//次のプリロードが始まっていたら、やめる
-	var idx = loadIdxs.shift();
-	for(var i=0; i<preloadImgs.length; i++){
-		if(preloadImgs[i].attr('idx') == idx){
-			preload2(preloadSeq2,loadIdxs);
-			return;
-		}
-	}
-
-	var \$img;//ロードするimgオブジェクト
-	//今回のプリロード対象外のimgオブジェクトを探して再利用する
-	for(var i=0; i<preloadImgs.length; i++){
-		for(var j=0; j<loadIdxs; j++){
-			if(preloadImgs[i].attr('idx') == loadIdxs[j]){break;}
-		}
-		if(j==preloadImgs.length){
-			\$img = preloadImgs[i];
-			break;
-		}
-	}
-	//再利用されなかったので、新たに作る
-	if(i == preloadImgs.length){
-		\$img = $('<img>');
-		preloadImgs.push(\$img);
-	}
-
-	\$img.unbind();
-	\$img.attr('idx',idx)
-		.attr('src',images[idx])
-		.removeAttr('complete')
-		.load(function(){preload2(preloadSeq2,loadIdxs);})
-		.load(function(){\$(this).attr('complete','complete')});
-}
-//まだ終わってないプリロードを中止する
-function stopPreload(){
-	for(var i=0; i<preloadImgs.length; i++){
-		var \$img = preloadImgs[i];
-		if(\$img.attr('complete')!='complete'){
-			\$img.attr('src','');
-		}
-	}
-}
 </script>
 EOS;
 }

@@ -301,7 +301,7 @@ echo output_map_script();
 <body>
 	<div id='imageDiv'>
 		<div id='imageWrap'>
-			<img src='' id='image'>
+			<!-- <img src='' id='image'>  -->
 		</div>
 		<br>
 		<span>
