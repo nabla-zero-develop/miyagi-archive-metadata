@@ -98,6 +98,11 @@ function metadata_items_first($items, $caller){
 	<tr><th class='hissu'>8.シリーズ（継続資料）</th><td>$_series_flag</td></tr>
 	<tr class='series_flag_option'><th class='$class_hissu1'>9.シリーズタイトル</th><td>$series_title</td></tr>
 	<tr class='series_flag_option'><th class='$class_hissu1'>10.シリーズタイトルのヨミ<br>$series_title_button</th><td>$series_title_yomi</td></tr>
+	<tr><td colspan='2'>
+			<input type="submit" name='next' value="登録して次へ" onClick="setSkipCheck(0);">
+			<input type="submit" name='quit' value="中断" onClick="setSkipCheck(1);">
+	</td></tr>
+	<tr><td></td></tr>
 	<tr><th>11.別タイトルの有無</th><td>$_betu_title_flag</td></tr>
 	<tr><th>12.寄与者（寄贈者）の有無</th><td>$_kiyo_flag</td></tr>
 	<tr class='optional optional_図書 optional_雑誌・新聞'><th>13.異版<font size='-1'>（第x版、改訂版等）</font></th><td>$_iban_flag</td></tr>
