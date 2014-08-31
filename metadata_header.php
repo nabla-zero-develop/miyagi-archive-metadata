@@ -50,7 +50,7 @@ function output_css($show_image_flag){
 	width: 1100px;
 	height: 950px;
 	overflow: hidden;
-	position: relative;
+	background: #ffffff url(loading.gif) no-repeat fixed 490px 365px;
 }
 th{
 	background-color: #9292FF;
@@ -74,6 +74,10 @@ th.hissu{
 }
 input, select, textarea{
 	font-size: 100%;
+}
+.iviewer_loading img{
+        opacity: 0.5;
+        -ms-filter: "alpha(opacity=50)";
 }
 </style>
 EOS;
