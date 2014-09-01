@@ -239,13 +239,18 @@ function output_item_script(){
 $(document).ready(function(){
 	$('select[name=md_type]').change(showOptional);
 	showOptional();
-	$('textarea').bind('change keyup',function(){
+	//$('textarea').bind('change keyup',function(){
+	$('textarea').bind('change',function(){
 		var s = $(this).val();
-		s = s.split("\\n").join("").split("\\r").join("");
+		if(s.indexOf("\\n")>-1 || s.indexOf("\\r")>-1 ){
+			s = s.split("\\n").join("").split("\\r").join("");
+		}
 		if($(this).attr('name').match(/_yomi$/)){
-			s = s.replace(/[ぁ-ん]/g, function(ss) {
-	   			return String.fromCharCode(ss.charCodeAt(0) + 0x60);
-			});
+			if(s.match(/[ぁ-ん]/)){
+				s = s.replace(/[ぁ-ん]/g, function(ss) {
+		   			return String.fromCharCode(ss.charCodeAt(0) + 0x60);
+				});
+			}
 		}
 		$(this).val(s);
 	});
@@ -322,6 +327,9 @@ function check(){
 // Enterサブミット防止
 $(function() {
   $(document).on("keypress", "input:not(.allow_submit)", function(event) {
+	return event.which !== 13;
+  });
+  $(document).on("keypress", "textarea:not(.allow_submit)", function(event) {
 	return event.which !== 13;
   });
 });
