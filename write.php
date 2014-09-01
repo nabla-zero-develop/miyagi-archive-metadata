@@ -21,7 +21,7 @@ $res = mysql_query($query);
 if(!$res)die($query.mysql_error());
 
 if(!$_REQUEST['skip_reason']){
-	mysql_query("update lotfile set finish=1 where uniqid=$uniqid");
+	mysql_query("update lotfile set finish=1,finish_date=now() where uniqid=$uniqid");
 }
 
 $res = mysql_query("select * from lot where lotid=$lotid");

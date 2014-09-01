@@ -76,6 +76,8 @@ CREATE TABLE `lotfile` (
   `ord` int(11) NOT NULL,
   `filepath` text,
   `finish` tinyint(4) DEFAULT '0',
+  `cdcode` int(11),
+  `finish_date` datetime,
   PRIMARY KEY (`uniqid`),
   KEY (`lotid`),
   FOREIGN KEY (`lotid`) REFERENCES lot(`lotid`)
@@ -102,7 +104,7 @@ CREATE TABLE `users` (
   `username` text NOT NULL,
   `password` text NOT NULL,
   `user_memo` text,
-  PRIMARY KEY (`userid`) 
+  PRIMARY KEY (`userid`)
 );
 
 DROP TABLE IF EXISTS `baseinfo`

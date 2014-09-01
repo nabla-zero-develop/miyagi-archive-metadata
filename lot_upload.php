@@ -142,9 +142,10 @@ if(isset($_REQUEST['update_insert'])){
 					//TODO echo "ユニークID:{$uniqid}に対応するレコードがありません。<br>\n";
 				}
 			}elseif($_REQUEST['update_insert']=='insert'){
+				$cdcode = intval($uniqid/1000000);
 				$sql = "insert into lotfile".
-						"(uniqid,lotid,ord,filepath,finish) values".
-						"($uniqid,$lotid,$ord,'$filepath',$finish)";
+						"(uniqid,lotid,ord,filepath,finish,cdcode) values".
+						"($uniqid,$lotid,$ord,'$filepath',$finish,$cdcode)";
 				$res = mysql_query($sql);
 				if(!$res){
 					$error++;
