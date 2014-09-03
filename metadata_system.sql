@@ -54,16 +54,6 @@ CREATE TABLE `content` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `content`
---
-
-LOCK TABLES `content` WRITE;
-/*!40000 ALTER TABLE `content` DISABLE KEYS */;
-INSERT INTO `content` VALUES (520501000001,0,'','','','','',0,0,0,0,0,0,0,0,0,0,0,0,'','',0,0,0,'',''),(520501000002,0,'','','','','',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,'','',0,0,0,'',''),(520501000003,0,'','','','','',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,'','',0,0,0,'',''),(520501000004,0,'','','','','',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,'','',0,0,0,'',''),(520501000005,0,'','','','','',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,'','',0,0,0,'',''),(520501000006,0,'','','','','',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,'','',0,0,0,'',''),(520501000007,0,'','','','','',-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,'','',0,0,0,'','');
-/*!40000 ALTER TABLE `content` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `lotfiles`
 --
 
@@ -110,6 +100,7 @@ CREATE TABLE `users` (
 DROP TABLE IF EXISTS `baseinfo`
 CREATE TABLE baseinfo(
 uniqid bigint,
+file_id int NOT NULL,
 local_code int COMMENT '課室コード（県版）、市町村コード（市町村版）',
 shubetu char COMMENT '資料種別',
 kanri_bango int COMMENT '課室（県版）、市町村（市町村版）管理番号',
@@ -141,11 +132,16 @@ original_shiryo_keitai text COMMENT '媒体コード',
 PRIMARY KEY (uniqid)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `baseinfo_file`
+CREATE TABLE baseinfo_file(
+id int auto_increment,
+filename text,
+cdcode int,
+PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `lotfiles`
---
+
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

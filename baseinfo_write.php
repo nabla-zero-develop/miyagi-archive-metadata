@@ -321,7 +321,7 @@ function get_visible_column_header($c){
 
 
 // テーブルの出力
-function write_table($data, $ken_or_shi, $lot){
+function write_table($data, $ken_or_shi, $lot, $filename){
 	$num_rows = count($data);
 	$s = "<table class='table_1'>\n";
 	$s .= "<caption>基本情報整理表主要内容一覧</caption>\n";
@@ -337,6 +337,7 @@ function write_table($data, $ken_or_shi, $lot){
 
 	//市町村コード・件部局コードを取得
 	require_once('include/config.php');
+	require_once('include/db.php');
 	if($ken_or_shi == 0){
 		$local_name = $data[DIVISION_NAME_ROW][DIVISION_NAME_COLUMN];
 	}else{
@@ -352,6 +353,20 @@ function write_table($data, $ken_or_shi, $lot){
 		echo ("select * from $table where name like '%".mysql_real_escape_string($local_name)."'");
 		die("$local_name:部局コード又は市町村コードがマッチしません");
 	}
+
+	//baseinfo_fileテーブルに既に同名のファイルがあれば、そのIDを取得　なければインサート
+	$baseinfo_file = mysql_get_single_row(sprintf("select * from baseinfo_file where filename = '%s' and cdcode = %d",
+			mysql_real_escape_string($filename),$local_code));
+	echo mysql_error();
+	if($baseinfo_file){
+		$file_id = $baseinfo_file['id'];
+	}else{
+		mysql_query(sprintf("insert into baseinfo_file (filename,cdcode) values ('%s',%d)",
+			mysql_real_escape_string($filename),$local_code));
+		echo mysql_error();
+		$file_id = mysql_insert_id();
+	}
+
 
 	// データ内容
 	for ($r=FIRST_DATA_ROW ; $r<=$num_rows; $r++){
@@ -563,7 +578,7 @@ function write_table($data, $ken_or_shi, $lot){
 			$values = substr($values,0,-1);
 
 			mysql_query("delete from baseinfo where uniqid='{$data2['uniqid']}'");
-			mysql_query( "insert into baseinfo ($fields) values ($values)" );
+			mysql_query( "insert into baseinfo ($fields,file_id) values ($values,$file_id)" );
 			echo mysql_error();
 
 //END DBへ格納
@@ -633,7 +648,7 @@ if($uploaded == EXCEL_FILE_NOT_PREPARED){
 		} else {
 			// 整理表内容出力
 			$lot ="003";
-			echo write_table($data,$ken_or_shi, $lot);
+			echo write_table($data,$ken_or_shi, $lot, basename($original_file_path));
 		}
 	}
 	// テンポラリファイル削除
