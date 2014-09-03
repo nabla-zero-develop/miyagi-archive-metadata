@@ -10,6 +10,10 @@
 	<li><a href='lot.php'>ロット管理</a>
 	<li><a href='baseinfo_upload.php'>基本情報整理表アップロード</a>
 	</ul>
+	<h2>資料一覧</h2>
+	<ul>
+	<li><a href='baseinfo_list.php'>基本情報整理表登録済み資料</a>
+	</ul>
 	<h2>集計</h2>
 	<ul>
 	<li><a href='progress_date.php'>日付別</a>
