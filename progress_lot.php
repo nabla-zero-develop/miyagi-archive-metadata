@@ -28,6 +28,8 @@ $(document).ready(function(){
 $lotlaws = mysql_get_multi_rows("select lotid,count(*) as num from lotfile group by lotid order by lotid");
 $lots = array();
 foreach($lotlaws as $lotlaw){
+	$lotlaw['finish'] = 0;
+	$lotlaw['unfinish'] = $lotlaw['num'];
 	$lots[$lotlaw['lotid']] = $lotlaw;
 }
 $finishes = mysql_get_multi_rows("select lotid,count(*) as c from lotfile where finish = 1 group by cdcode");
