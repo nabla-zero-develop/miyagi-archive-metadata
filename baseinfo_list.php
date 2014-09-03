@@ -4,6 +4,8 @@ require_once('include/db.php');
 
 $start = isset($_REQUEST['start'])?intval($_REQUEST['start']):0;
 $limit = isset($_REQUEST['limit'])?intval($_REQUEST['limit']):100;
+
+$finish_text = array(-1=>'保留',0=>'未入力',1=>'入力済');
 ?>
 <?php
 if(isset($_REQUEST['download'])){
@@ -17,7 +19,7 @@ __SQL__;
 	$lists = mysql_get_multi_rows($sql);
 
 	foreach($lists as $item){
-		$rows[] = array($item['uniqid'],$item['cdname'],$item['lotid'],$item['finish']);
+		$rows[] = array($item['uniqid'],$item['cdname'],$item['lotid'],$finish_text[intval($item['finish'])]);
 	}
 
 	mb_convert_variables('SJIS','UTF-8',$rows);
@@ -86,8 +88,8 @@ __SQL__;
 $lists = mysql_get_multi_rows($sql);
 
 foreach($lists as $item){
-	printf("<tr><th>%d</th><td>%s</td><td>%03d</td><td>%d</td></tr>\n",
-		$item['uniqid'],$item['cdname'],$item['lotid'],$item['finish']);
+	printf("<tr><th>%d</th><td>%s</td><td>%03d</td><td>%s</td></tr>\n",
+		$item['uniqid'],$item['cdname'],$item['lotid'],$finish_text[intval($item['finish'])]);
 }
 ?>
 </table>

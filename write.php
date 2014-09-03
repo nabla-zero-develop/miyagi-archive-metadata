@@ -22,7 +22,9 @@ $res = mysql_query($query);
 if(!$res)die($query.mysql_error());
 
 //入力スキップ
-if(!$_REQUEST['skip_reason']){
+if($_REQUEST['skip_reason']){
+	mysql_query("update lotfile set finish=-1,finish_date=null where uniqid=$uniqid");
+}else{
 	mysql_query("update lotfile set finish=1,finish_date=now() where uniqid=$uniqid");
 }
 
@@ -41,6 +43,7 @@ while($row2 = mysql_fetch_assoc($res)){
 	if($row2['uniqid'] == $uniqid)break;
 }
 if($resume){
+	//未入力のものを探す
 	while($row2 = mysql_fetch_assoc($res)){
 		var_dump($row2);
 		if($row2['finish'] == 0)break;
