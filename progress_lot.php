@@ -41,11 +41,6 @@ if(isset($_REQUEST['download'])){
 <html>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <script type="text/javascript" src="js/jquery/jquery-1.8.0.min.js"></script>
-<?php
-require_once('include/config.php');
-require_once('include/db.php');
-
-?>
 <html>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <script type="text/javascript" src="js/jquery/jquery-1.8.0.min.js"></script>
