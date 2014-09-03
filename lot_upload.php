@@ -98,6 +98,16 @@ if(isset($_REQUEST['update_insert'])){
 				$error++;
 			}
 
+			//指定されたロットがなければ作成
+			$sql = "select * from lot where lotid = $lotid";
+			$res = mysql_query($sql);
+			if(!$res)die(mysql_error());
+			if(mysql_num_rows($res) == 0){
+				$sql = "insert into lot (lotid,regist_date) values ($lotid,now())";
+				$res = mysql_query($sql);
+				if(!$res)die(mysql_error());
+			}
+
 			//新ロットの追加
 			if(!$lotid){
 				if(!$newlotid){
@@ -177,7 +187,7 @@ if(isset($_REQUEST['update_insert'])){
 	<li>順序はロット内での順序です。基本的に空欄にしてください。空欄にした場合は、CSVファイル内に出現する順番になります。指定する場合は、他のデータとの重複が起こらないよう注意してください。</li>
 </ul>
 
-<form action='downlot.php'>
+<form action='lot_download.php'>
 ロットNo.<select name='lotid'><option value='0'>全て</option>
 <?php
 $sql = "select * from lot order by lotid";
