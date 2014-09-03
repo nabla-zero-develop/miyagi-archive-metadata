@@ -248,7 +248,7 @@ function output_item_script(){
 $(document).ready(function(){
 	$('select[name=md_type]').change(showOptional);
 	showOptional();
-	$('textarea input').bind('change',function(){
+	$('textarea,input').bind('change',function(){
 		var s = $(this).val();
 		if($(this).attr('name').match(/_yomi$/)){
 			if(s.match(/[ぁ-ん]/)){
