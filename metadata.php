@@ -18,7 +18,7 @@ if(isset($_GET['lotid'])){
 	// lotidが渡された場合(データベースからの情報取得)
 	if(DEBUG_NO_DB) die('実行環境か引数の渡し方が間違っています');
 	$lotid = intval($_GET['lotid']);
-	$resume = isset($_GET['resume'])?$_GET['resume'] : false;
+	$resume = isset($_GET['resume'])?$_GET['resume'] : 0;
 	$uniqid = isset($_GET['uniqid'])?$_GET['uniqid'] : 0;
 	if(!is_numeric($uniqid)) die('uniqidが不正です');
 
@@ -334,6 +334,7 @@ echo output_map_script();
 
 			<input type="hidden" name="lotid" value="<?php echo $lotid; ?>">
 			<input type="hidden" name="uniqid" value="<?php echo $uniqid; ?>">
+			<input type="hidden" name="resume" value="<?php echo $resume ?>">
 			<input type="submit" name='next' value="登録して次へ" onClick="setSkipCheck(0);">
 			<input type="submit" name='quit' value="中断" onClick="setSkipCheck(1);">
 			<!--  <input type="submit" value="確認画面へ"> -->

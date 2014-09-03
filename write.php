@@ -3,6 +3,7 @@ require_once('include/config.php');
 
 $lotid = intval($_REQUEST['lotid']);
 $uniqid = isset($_REQUEST['uniqid'])?$_REQUEST['uniqid']:0;
+$resume = isset($_REQUEST['resume'])?$_REQUEST['resume']:0;
 if(!is_numeric($uniqid))die('uniqidが不正です');
 
 if(isset($_REQUEST['quit'])){
@@ -20,6 +21,7 @@ $query = sprintf("insert into metadata (%s) values (%s)", implode(',',$items), i
 $res = mysql_query($query);
 if(!$res)die($query.mysql_error());
 
+//入力スキップ
 if(!$_REQUEST['skip_reason']){
 	mysql_query("update lotfile set finish=1,finish_date=now() where uniqid=$uniqid");
 }
@@ -32,17 +34,23 @@ if(!$lot['start_date']){
 mysql_query("update lot set status = 1 where lotid = $lotid");
 
 //ロット内のデータ数
-$res = mysql_query("select uniqid from lotfile where lotid=$lotid order by ord");
+$res = mysql_query("select uniqid,finish from lotfile where lotid=$lotid order by ord");
 $num_in_lot = mysql_num_rows($res);
-$actualord = 1;
 while($row2 = mysql_fetch_assoc($res)){
 	var_dump($row2);
 	if($row2['uniqid'] == $uniqid)break;
-	$actualord++;
+}
+if($resume){
+	while($row2 = mysql_fetch_assoc($res)){
+		var_dump($row2);
+		if($row2['finish'] == 0)break;
+	}
+}else{
+	$row2 = mysql_fetch_assoc($res);
 }
 
-if($row2 = mysql_fetch_assoc($res)){
-	header("Location: metadata.php?lotid=$lotid&uniqid={$row2['uniqid']}");
+if($row2){
+	header("Location: metadata.php?lotid=$lotid&uniqid={$row2['uniqid']}&resume={$resume}");
 }else{
 	mysql_query("update lot set status = 2, finish_date = now() where lotid = $lotid");
 	header('Location: index.php');
