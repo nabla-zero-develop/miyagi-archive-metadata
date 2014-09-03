@@ -38,19 +38,13 @@ function output_css($show_image_flag){
 #imageDiv{
 	width: 1100px;
 	float: left;
-	text-align: center;
-}
-#image{
-	max-width: $width%;
-	max-height: $height%;
-	display: block;
-	position: absolute;
+	position:relative;
 }
 #imageWrap{
 	width: 1100px;
 	height: 950px;
-	overflow: hidden;
 	background: #ffffff url(loading.gif) no-repeat fixed 490px 365px;
+	position: relative;
 }
 th{
 	background-color: #9292FF;
@@ -122,6 +116,19 @@ function nextImage(){
 function lastImage(){
 	chgImage(images.length-1);
 }
+
+function zoom_in(){
+	$('#imageWrap').iviewer('zoom_by',Math.sqrt(2));
+}
+
+function zoom_out(){
+	$("#imageWrap").iviewer('zoom_by',-Math.sqrt(2));
+}
+
+function zoom_fit(){
+	$("#imageWrap").iviewer('fit');
+}
+
 function iviewerFinishLoad(){
 	var \$div = $("#imageWrap");
 	if(zoom){
@@ -209,12 +216,15 @@ function key_event(){
 			break;
 		// F9キー
 		case 120:
+			zoom_in();
 			break;
 		// F10キー
 		case 121:
+			zoom_out();
 			break;
 		// F11キー
 		case 122:
+			zoom_fit();
 			break;
 		// F12キー
 		case 123:
@@ -225,7 +235,6 @@ function key_event(){
 	}
 	return false;
 }
-
 </script>
 EOS;
 }
@@ -239,20 +248,16 @@ function output_item_script(){
 $(document).ready(function(){
 	$('select[name=md_type]').change(showOptional);
 	showOptional();
-	//$('textarea').bind('change keyup',function(){
-	$('textarea').bind('change',function(){
+	$('textarea input').bind('change',function(){
 		var s = $(this).val();
-		if(s.indexOf("\\n")>-1 || s.indexOf("\\r")>-1 ){
-			s = s.split("\\n").join("").split("\\r").join("");
-		}
 		if($(this).attr('name').match(/_yomi$/)){
 			if(s.match(/[ぁ-ん]/)){
 				s = s.replace(/[ぁ-ん]/g, function(ss) {
 		   			return String.fromCharCode(ss.charCodeAt(0) + 0x60);
 				});
+				$(this).val(s);
 			}
 		}
-		$(this).val(s);
 	});
 });
 
@@ -332,6 +337,18 @@ $(function() {
   $(document).on("keypress", "textarea:not(.allow_submit)", function(event) {
 	return event.which !== 13;
   });
+});
+
+
+//Ctrl+Enterでサブミットさせる
+$(document).keydown(function(ev){
+	if(ev.keyCode == 13){
+		if(ev.ctrlKey){
+			setSkipCheck(0);
+			$('form[name=input_form]').submit();
+			return false;
+		}
+	}
 });
 
 
