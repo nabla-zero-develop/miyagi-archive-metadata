@@ -94,7 +94,7 @@ if(isset($_REQUEST['update_insert'])){
 			$filepath = mysql_real_escape_string($row[3]);
 			$finish = intval($row[4]);
 			if(!file_exists($file_basepath.$filepath)){//ファイルがあるかチェック
-				echo "指定されたディレクトリがありません<br>\n";
+				echo htmlspecialchars($filepath).":指定されたディレクトリがありません<br>\n";
 				$error++;
 			}
 

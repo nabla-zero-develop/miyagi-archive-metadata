@@ -21,8 +21,10 @@ function selection($name, $is, $default_selection, $caller, $type=1){
 		$s = "<select name = '$name'>";
 		foreach($is as $i){
 			if($type == 1){
+				$i = htmlspecialchars($i);
 				$s .= "<option value='" .$i. "'". (($i==$default_selection) ? ' selected' : '').">".$i."</option>\n";
 			} else {
+				$i[0] = htmlspecialchars($i[0]);
 				$s .= "<option value='" .$i[0]. "'". (($i[0]==$default_selection) ? ' selected' : '') .">".$i[1]."</option>\n";
 			}
 		}
@@ -32,12 +34,14 @@ function selection($name, $is, $default_selection, $caller, $type=1){
 		foreach($is as $i){
 			if($i==$default_selection){$v = $i;}
 		}
+		$v = htmlspecialchars($v);
 		$s = "<input type='text' name='{$var_name}' size='40' value='{$v}' readonly='readonly'>";
 	}
 	return $s;
 }
 
 function output_text_input($var_name, $value, $caller){
+	$value = htmlspecialchars($value);
 	if($caller == _INPUT_){
 		return <<< EOS
 	<input type='text' name='$var_name' size='40' value='$value'>
@@ -50,6 +54,7 @@ EOS;
 }
 
 function output_text_area($var_name, $value, $caller){
+	$value = htmlspecialchars($value);
 	if($caller == _INPUT_){
 		return <<< EOS
 	<textarea name='$var_name' rows="3" cols="33">$value</textarea>
@@ -62,6 +67,7 @@ EOS;
 }
 
 function output_hidden_input($var_name, $value){
+	$value = htmlspecialchars($value);
 	return <<< EOS
 	<input type='hidden' name='$var_name' size='40' value='$value'>
 EOS;
