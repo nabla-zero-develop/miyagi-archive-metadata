@@ -1,5 +1,6 @@
 <?php
 require_once(dirname(__FILE__) . '/include/config.php');
+require_once(dirname(__FILE__) . '/include/db.php');
 require_once(dirname(__FILE__) . "/NDL/NDL.php");
 require_once(dirname(__FILE__) . "/NDL/utils.php");
 require_once(dirname(__FILE__) . "/metadata_utils.php");
@@ -274,6 +275,12 @@ foreach($new_items as $i){
 		$items += array($i => '');
 		$$i = '';
 	}
+}
+
+//DBにメタデータ格納済みなら取得
+$items_ = mysql_get_single_row("select * from metadata where uniqid = $uniqid");
+if($items_){
+	$items = $items_;
 }
 
 // 引数での上書き
