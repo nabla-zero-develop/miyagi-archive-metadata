@@ -6,12 +6,12 @@ include_once(dirname(__FILE__) . "/metadata_options.php");
 function metadata_items_first($items, $caller){
 	$_uniqid = $items['uniqid'];
 	$_md_type = output_md_type_selection($items['md_type'], $caller);
-    $_series_flag = output_radio('series_flag', $items['series_flag'], '該当しない', '該当する', $caller);
-	$_betu_title_flag = output_radio('betu_title_flag', $items['betu_title_flag'], '無', '有', $caller);
-	$_kiyo_flag = output_radio('kiyo_flag', $items['kiyo_flag'], '無', '有', $caller);
-	$_iban_flag = output_radio('iban_flag', $items['iban_flag'], '該当しない', '該当する', $caller);
-	$_license_flag = output_radio('license_flag', $items['license_flag'], '無', '有', $caller);
-	$_inyou_flag = output_radio('inyou_flag', $items['inyou_flag'], '該当しない', '該当する', $caller);
+    $_series_flag = output_radio('series_flag', $items['series_flag'], '該当しない', '該当する', $caller, $items['series_flag']);
+	$_betu_title_flag = output_radio('betu_title_flag', $items['betu_title_flag'], '無', '有', $caller, $items['betu_title_flag']);
+	$_kiyo_flag = output_radio('kiyo_flag', $items['kiyo_flag'], '無', '有', $caller, $items['kiyo_flag']);
+	$_iban_flag = output_radio('iban_flag', $items['iban_flag'], '該当しない', '該当する', $caller, $items['iban_flag']);
+	$_license_flag = output_radio('license_flag', $items['license_flag'], '無', '有', $caller, $items['license_flag']);
+	$_inyou_flag = output_radio('inyou_flag', $items['inyou_flag'], '該当しない', '該当する', $caller, $items['inyou_flag']);
 	$_gov_issue = output_gov_issue_selection($items['gov_issue'], $caller);
 	$_gov_issue_2 = output_text_input('gov_issue_2', $items['gov_issue_2'], $caller);
 	$_gov_issue_chihou = output_text_input('gov_issue_chihou', $items['gov_issue_chihou'], $caller);
@@ -19,8 +19,8 @@ function metadata_items_first($items, $caller){
 	$_for_handicapped = output_for_handicapped_selection($items['for_handicapped'], $caller);
 	// 整理表の段階でカセットテープが指定されていたら、入力時のみカセットテープ選択に自動設定する
 	$_original_shiryo_keitai = output_original_shiryo_keitai_selection((($items['media_code'] == "32") && ($caller == _INPUT_)) ? "32" : $items['original_shiryo_keitai'], $caller);
-	$_rippou_flag = output_radio('rippou_flag', $items['rippou_flag'], '該当しない', '該当する', $caller);
-	$_doctor_flag = output_radio('doctor_flag', $items['doctor_flag'], '該当しない', '該当する', $caller);
+	$_rippou_flag = output_radio('rippou_flag', $items['rippou_flag'], '該当しない', '該当する', $caller, $items['rippou_flag']);
+	$_doctor_flag = output_radio('doctor_flag', $items['doctor_flag'], '該当しない', '該当する', $caller, $items['doctor_flag']);
 	$_satuei_ken = output_text_input('satuei_ken',(isset($items['satuei_ken'])?$items['satuei_ken']:$items['satuei_basho_address']),$caller);
 
 	$text_fields = array('standard_id', 'series_title',  'betu_title',  'betu_series', 'betu_series_title','naiyo_saimoku_title',
@@ -71,12 +71,12 @@ function metadata_items_first($items, $caller){
 	$language = output_language_selection($items['language'], $caller);
 	$kanko_status = output_kanko_status_selection($items['kanko_status'], $caller);
 	$open_level = output_open_level_selection($items['open_level'], $caller);
-	$hakubutu_kubun = output_radio('hakubutu_kubun', $items['hakubutu_kubun'], '人工物', '自然物', $caller);
-	$shosha_flag = output_radio('shosha_flag', $items['shosha_flag'], '該当しない', '該当する', $caller);
-	$online_flag = output_radio('online_flag', $items['online_flag'], '該当しない', '該当する', $caller);
-	$shoshi_flag = output_radio('shoshi_flag', $items['shoshi_flag'], '該当しない', '該当する', $caller);
-	$chizu_kubun = output_radio('chizu_kubun', $items['chizu_kubun'], '地図', '地図帳', $caller);
-	$seigen = output_radio('seigen', $items['seigen'], '該当しない', '悲惨（閲覧注意）', $caller);
+	$hakubutu_kubun = output_radio('hakubutu_kubun', $items['hakubutu_kubun'], '人工物', '自然物', $caller, $items['hakubutu_kubun']);
+	$shosha_flag = output_radio('shosha_flag', $items['shosha_flag'], '該当しない', '該当する', $caller, $items['shosha_flag']);
+	$online_flag = output_radio('online_flag', $items['online_flag'], '該当しない', '該当する', $caller, $items['online_flag']);
+	$shoshi_flag = output_radio('shoshi_flag', $items['shoshi_flag'], '該当しない', '該当する', $caller, $items['shoshi_flag']);
+	$chizu_kubun = output_radio('chizu_kubun', $items['chizu_kubun'], '地図', '地図帳', $caller, $items['chizu_kubun']);
+	$seigen = output_radio('seigen', $items['seigen'], '該当しない', '悲惨（閲覧注意）', $caller, $items['seigen']);
 	//
 	$ndl_button = ($caller == _INPUT_) ? "<input type='button' value='国会図書館問い合わせ' onClick='ndl_check(); return false;'>" : '';
 	//

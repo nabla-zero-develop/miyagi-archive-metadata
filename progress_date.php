@@ -7,7 +7,7 @@ require_once('include/db.php');
 if(isset($_REQUEST['download'])){
 	$rows[] = array('入力日','入力件数');
 
-	$dates = mysql_get_multi_rows("select DATE_FORMAT(finish_date,'%c/%e') as finish_date_date,count(*) as num from lotfile where finish = 1 group by finish_date order by finish_date_date");
+	$dates = mysql_get_multi_rows("select DATE_FORMAT(finish_date,'%c/%e') as finish_date_date,count(*) as num from lotfile where finish = 1 group by finish_date_date order by finish_date_date");
 	foreach($dates as $date){
 		$rows[] = array($date['finish_date_date'],$date['num']);
 	}
@@ -52,7 +52,7 @@ $(document).ready(function(){
 <table  border="3" cellpadding="3">
 <tr><th>入力日</th><th>入力件数</th></tr>
 <?php
-$dates = mysql_get_multi_rows("select DATE_FORMAT(finish_date,'%c/%e') as finish_date_date,count(*) as num from lotfile where finish = 1 group by finish_date order by finish_date_date");
+$dates = mysql_get_multi_rows("select DATE_FORMAT(finish_date,'%c/%e') as finish_date_date,count(*) as num from lotfile where finish = 1 group by finish_date_date order by finish_date_date");
 foreach($dates as $date){
 	printf("<tr><th>%s</th><td>%s</td></tr>\n",
 		$date['finish_date_date'],$date['num']);

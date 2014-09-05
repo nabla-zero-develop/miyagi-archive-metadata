@@ -38,12 +38,10 @@ function output_css($show_image_flag){
 #imageDiv{
 	width: 1100px;
 	float: left;
-	position:relative;
 }
 #imageWrap{
 	width: 1100px;
 	height: 950px;
-	background: #ffffff url(loading.gif) no-repeat fixed 490px 365px;
 	position: relative;
 }
 th{
@@ -72,6 +70,9 @@ input, select, textarea{
 .iviewer_loading img{
         opacity: 0.5;
         -ms-filter: "alpha(opacity=50)";
+}
+.iviewer_loading {
+	background: #ffffff url(loading.gif) no-repeat fixed 490px 365px;
 }
 </style>
 EOS;
@@ -250,6 +251,10 @@ $(document).ready(function(){
 	showOptional();
 	$('textarea,input').bind('change',function(){
 		var s = $(this).val();
+		if(s.indexOf("\\n")>-1 || s.indexOf("\\r")>-1 ){
+			s = s.split("\\n").join("").split("\\r").join("");
+			$(this).val(s);
+		}
 		if($(this).attr('name').match(/_yomi$/)){
 			if(s.match(/[ぁ-ん]/)){
 				s = s.replace(/[ぁ-ん]/g, function(ss) {

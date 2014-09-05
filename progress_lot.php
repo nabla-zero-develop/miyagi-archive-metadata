@@ -14,7 +14,7 @@ if(isset($_REQUEST['download'])){
 		$lotlaw['unfinish'] = $lotlaw['num'];
 		$lots[$lotlaw['lotid']] = $lotlaw;
 	}
-	$finishes = mysql_get_multi_rows("select lotid,count(*) as c from lotfile where finish = 1 group by cdcode");
+	$finishes = mysql_get_multi_rows("select lotid,count(*) as c from lotfile where finish = 1 group by lotid");
 	foreach($finishes as $f){
 		$lotid = $f['lotid'];
 		$lot = &$lots[$lotid];
@@ -70,7 +70,7 @@ foreach($lotlaws as $lotlaw){
 	$lotlaw['unfinish'] = $lotlaw['num'];
 	$lots[$lotlaw['lotid']] = $lotlaw;
 }
-$finishes = mysql_get_multi_rows("select lotid,count(*) as c from lotfile where finish = 1 group by cdcode");
+$finishes = mysql_get_multi_rows("select lotid,count(*) as c from lotfile where finish = 1 group by lotid");
 foreach($finishes as $f){
 	$lotid = $f['lotid'];
 	$lot = &$lots[$lotid];
