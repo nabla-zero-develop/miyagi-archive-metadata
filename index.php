@@ -19,6 +19,9 @@ table{
 	margin-left:auto;
 	margin-right:auto;
 }
+td.skipped{
+	text-align: right;
+}
 </style>
 
 <script>
@@ -35,6 +38,10 @@ $(document).ready(function(){
 		var lotid = $(this).attr('lotid');
 		location.href = "metadata.php?resume=1&lotid="+lotid;
 	});
+	$('input[value=入力]').click(function(){
+		var lotid = $(this).attr('lotid');
+		location.href = "metadata.php?skipped=1&lotid="+lotid;
+	});
 });
 </script>
 
@@ -50,13 +57,15 @@ echo "<div style='text-align:right;'>{$_SESSION['username']}</div>";
 
 <hr>
 <table  border="3" cellpadding="3">
-<tr><th>ロットNo.</th><th>進捗</th><th>作業</th></tr>
+<tr><th>ロットNo.</th><th>進捗</th><th>作業</th><th>保留データ</th></tr>
 
 <?php
 
 $lots = mysql_get_multi_rows( "select * from lot where userid = {$_SESSION['userid']}");
 foreach($lots as $lot){
 	$button = "";
+	$skipped_num = '';
+	$skipped_button = '';
 	if($lot['status'] == 0){
 		$shinchoku = '未着手';
 		$button .= "<input type='button' value='開始' lotid={$lot['lotid']}>";
@@ -69,18 +78,27 @@ foreach($lots as $lot){
 			$total += $c['count(*)'];
 		}
 		$shinchoku = "$counts[1]/$total";
-		if(isset($counts[1])){
-			$button .= "<input type='button' value='再開' lotid={$lot['lotid']}>";
+		if(isset($counts['1'])){
+			if(!isset($counts['0'])){
+				$button .= "<input type='button' value='再開' lotid={$lot['lotid']}>";
+			}
 			$button .= "<input type='button' value='修正' lotid={$lot['lotid']}>";
 		}else{
 			$button .= "<input type='button' value='開始' lotid={$lot['lotid']}>";
+		}
+		if(isset($counts['-1'])){
+			$skipped_num = $counts['-1'].'件';
+			$skipped_button = "<input type='button' value='入力' lotid={$lot['lotid']}>";
+		}else{
+			$skipped_num = 'なし';
+			$skipped_button = '';
 		}
 	}else{
 		$shinchoku = '完了';
 		$button .= "<input type='button' value='修正' lotid={$lot['lotid']}>";
 	}
 	$lotid = sprintf("%03d",$lot['lotid']);
-	echo "<tr><td>{$lotid}</td><td>$shinchoku</td><td>$button</td></tr>";
+	echo "<tr><td>{$lotid}</td><td>$shinchoku</td><td>$button</td><td class='skipped'>{$skipped_num}$skipped_button</td></tr>";
 }
 ?>
 

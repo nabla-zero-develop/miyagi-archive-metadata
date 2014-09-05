@@ -1,9 +1,11 @@
 <?php
 require_once('include/config.php');
+require_once('include/db.php');
 
 $lotid = intval($_REQUEST['lotid']);
 $uniqid = isset($_REQUEST['uniqid'])?$_REQUEST['uniqid']:0;
 $resume = isset($_REQUEST['resume'])?$_REQUEST['resume']:0;
+$skipped = isset($_REQUEST['skipped'])?$_REQUEST['skipped']:0;
 if(!is_numeric($uniqid))die('uniqidが不正です');
 
 if(isset($_REQUEST['quit'])){
@@ -51,14 +53,23 @@ if($resume){
 	while($row2 = mysql_fetch_assoc($res)){
 		if($row2['finish'] == 0)break;
 	}
+}elseif($skipped){
+	//スキップされたものを探す
+	while($row2 = mysql_fetch_assoc($res)){
+		if($row2['finish'] == -1)break;
+	}
 }else{
 	$row2 = mysql_fetch_assoc($res);
 }
 
 if($row2){
-	header("Location: metadata.php?lotid=$lotid&uniqid={$row2['uniqid']}&resume={$resume}");
+	header("Location: metadata.php?lotid=$lotid&uniqid={$row2['uniqid']}&resume={$resume}&skipped=${$skipped}");
 }else{
-	mysql_query("update lot set status = 2, finish_date = now() where lotid = $lotid");
+	//ロット中の全てのデータの書き込みが終わっているか
+	$unfinish_num = mysql_get_value("select count(*) from lotfile where finish <> 1 and lotid = $lotid");
+	if($unfinish_num == 0){
+		mysql_query("update lot set status = 2, finish_date = now() where lotid = $lotid");
+	}
 	header('Location: index.php');
 }
 

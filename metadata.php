@@ -20,6 +20,7 @@ if(isset($_GET['lotid'])){
 	if(DEBUG_NO_DB) die('実行環境か引数の渡し方が間違っています');
 	$lotid = intval($_GET['lotid']);
 	$resume = isset($_GET['resume'])?$_GET['resume'] : 0;
+	$skipped = isset($_GET['skipped'])?$_GET['skipped'] : 0;
 	$uniqid = isset($_GET['uniqid'])?$_GET['uniqid'] : 0;
 	if(!is_numeric($uniqid)) die('uniqidが不正です');
 
@@ -31,12 +32,21 @@ if(isset($_GET['lotid'])){
 	}else{
 		if($resume){
 			$res = mysql_query("select * from lotfile where finish = 0 and lotid=$lotid order by ord");
+		}elseif($skipped){
+			$res = mysql_query("select * from lotfile where finish = -1 and lotid=$lotid order by ord");
 		}else{
 			$res = mysql_query("select * from lotfile where lotid=$lotid order by ord");
 		}
 		$row = mysql_fetch_assoc($res);
 		if(!$row) die("No data");
 		$uniqid = $row['uniqid'];
+		$get = '';
+		foreach($_GET as $name => $value){
+			if(is_array($g)) die(basename(__FILE__).':'.__LINE__);
+			$get .= urlencode($name).'='.urlencode($value).'&';
+		}
+		$get .= 'uniqid='.$uniqid;
+		header('Location: metadata.php?'.$get);
 	}
 	//ロット内のデータ数
 	$res = mysql_query("select uniqid from lotfile where lotid=$lotid order by ord");
@@ -266,7 +276,7 @@ $items['publisher'] = $publisher;
 // 整理表では提供されない情報
 $new_items = array('series_flag', 'betu_title_flag', 'kiyo_flag', 'iban_flag', 'license_flag', 'inyou_flag',
 		'gov_issue', 'gov_issue_2', 'gov_issue_chihou', 'gov_issue_miyagi', 'for_handicapped',
-		'original_shiryo_keitai', 'rippou_flag', 'doctor_flag', 'standard_id', 'title_yomi', 'series_title', 'series_title_yomi', 'betu_title', 'betu_title_yomi', 'betu_series', 'betu_series_yomi', 'betu_series_title', 'betu_series_title_yomi', 'naiyo_saimoku_title', 'naiyo_saimoku_title_yomi', 'naiyo_saimoku_title_yomi', 'naiyo_saimoku_chosha', 'buhenmei', 'buhenmei_yomi', 'makiji_bango', 'makiji_bango_yomi', 'iban', 'iban_chosha', 'chuuki', 'youyaku', 'mokuji', 'is_bubun', 'oya_uri', 'shigen_mei', 'has_bubun', 'ko_uri', 'taisho_basho_uri', 'taisho_basho_keni', 'taisho_basho_shi', 'taisho_basho_banchii', 'taisho_basho_ido', 'taisho_basho_keido', 'satusei_ido', 'satuei_keido', 'satuei_shi', 'satuei_banchi', 'kanko_hindo', 'kanko_kanji', 'doctor', 'doctor_bango', 'doctor_nen', 'doctor_tuki', 'doctor_bi', 'doctor_daigaku', 'doctor_daigaku_yomi', 'keisai_go1', 'keisai_go2', 'keisa_shimei', 'keisai_kan', 'keisai_page', 'license_info', 'license_uri', 'license_holder', 'license_chuki', 'shiryo_keitai', 'teller', 'teller_yomi', 'haifu_taisho', 'haifu_nen', 'haifu_tuki', 'haifu_bi', 'keiji_basho', 'keiji_basho_yomi', 'keiji_nen', 'keiji_tuki', 'keiji_bi', 'sakusei_bi', 'online_nen', 'online_tuki', 'online_bi', 'koukai_tuki', 'shiryo_keitai', 'language', 'kanko_status', 'hakubutu_kubun', 'shosha_flag', 'online_flag', 'shoshi_flag', 'chizu_kubun', 'seigen');
+		'original_shiryo_keitai', 'rippou_flag', 'doctor_flag', 'standard_id', 'title_yomi', 'series_title', 'series_title_yomi', 'betu_title', 'betu_title_yomi', 'betu_series', 'betu_series_yomi', 'betu_series_title', 'betu_series_title_yomi', 'naiyo_saimoku_title', 'naiyo_saimoku_title_yomi', 'naiyo_saimoku_title_yomi', 'naiyo_saimoku_chosha', 'buhenmei', 'buhenmei_yomi', 'makiji_bango', 'makiji_bango_yomi', 'iban', 'iban_chosha', 'chuuki', 'youyaku', 'mokuji', 'is_bubun', 'oya_uri', 'shigen_mei', 'has_bubun', 'ko_uri', 'taisho_basho_uri', 'taisho_basho_keni', 'taisho_basho_shi', 'taisho_basho_banchii', 'taisho_basho_ido', 'taisho_basho_keido', 'satusei_ido', 'satuei_keido', 'satuei_shi', 'satuei_banchi', 'kanko_hindo', 'kanko_kanji', 'doctor', 'doctor_bango', 'doctor_nen', 'doctor_tuki', 'doctor_bi', 'doctor_daigaku', 'doctor_daigaku_yomi', 'keisai_go1', 'keisai_go2', 'keisa_shimei', 'keisai_kan', 'keisai_page', 'license_info', 'license_uri', 'license_holder', 'license_chuki', 'shiryo_keitai', 'teller', 'teller_yomi', 'haifu_taisho', 'haifu_nen', 'haifu_tuki', 'haifu_bi', 'keiji_basho', 'keiji_basho_yomi', 'keiji_nen', 'keiji_tuki', 'keiji_bi', 'sakusei_bi', 'online_nen', 'online_tuki', 'online_bi', 'koukai_tuki', 'shiryo_keitai', 'language', 'kanko_status', 'hakubutu_kubun', 'shosha_flag', 'online_flag', 'shoshi_flag', 'chizu_kubun', 'seigen', 'skip_reason');
 
 foreach($new_items as $i){
 	if(isset($items[$i])){
@@ -280,7 +290,9 @@ foreach($new_items as $i){
 //DBにメタデータ格納済みなら取得
 $items_ = mysql_get_single_row("select * from metadata where uniqid = $uniqid");
 if($items_){
-	$items = $items_;
+	foreach($items_ as $k => $v){
+		$items[$k] = $v;
+	}
 }
 
 // 引数での上書き
@@ -333,7 +345,7 @@ echo output_map_script();
 		<!-- form name="input_form" -->
 		<form name="input_form" method ="post" action="write.php" onSubmit="return check()">
 			<input type="submit" name='next' value="入力スキップ" onClick="setSkipCheck(2);">
-			理由：<input type="text" name="skip_reason" size='55'>
+			理由：<input type="text" name="skip_reason" size='55' value='<?php echo htmlspecialchars($items['skip_reason']); ?>'>
 			<table>
 				<?php echo metadata_items_first($items, _INPUT_); ?>
 			</table>
@@ -342,6 +354,7 @@ echo output_map_script();
 			<input type="hidden" name="lotid" value="<?php echo $lotid; ?>">
 			<input type="hidden" name="uniqid" value="<?php echo $uniqid; ?>">
 			<input type="hidden" name="resume" value="<?php echo $resume ?>">
+			<input type="hidden" name="skipped" value="<?php echo $skipped ?>">
 			<input type="submit" name='next' value="登録して次へ" onClick="setSkipCheck(0);">
 			<input type="submit" name='quit' value="中断" onClick="setSkipCheck(1);">
 			<!--  <input type="submit" value="確認画面へ"> -->
