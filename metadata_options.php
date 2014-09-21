@@ -203,9 +203,11 @@ function output_keywords_tab($keywords, $caller){
 					'観光' => array( 'ホテル', '旅館', '民宿', 'ツアー'));
 
 	if($caller == _INPUT_){
-		$readonly = 'readonly';
-	}else{
 		$readonly = '';
+		$disabled = '';
+	}else{
+		$readonly = 'readonly';
+		$disabled = 'disabled=disabled';
 	}
 	//タブ
 	$lis = '';
@@ -221,7 +223,7 @@ function output_keywords_tab($keywords, $caller){
 		$inputs = '';
 		foreach($chks as $chk){
 			$chk = htmlspecialchars($chk,ENT_QUOTES);
-			$inputs .= "<label style='word-break:keep-all;'><input type='checkbox' class='keyword' value='$chk' $readonly>$chk</label> ";
+			$inputs .= "<label style='word-break:keep-all;word-wrap:normal;white-space: nowrap; margin-right: 1em;'><input type='checkbox' class='keyword' value='$chk' $disabled>${chk}</label> ";
 		}
 		$contents .= "<div class='TabbedPanelsContent'>$inputs</div>";
 	}
@@ -270,7 +272,7 @@ function keywordClick(){
 </script>
 	選択済みキーワード：<span id='keyword_display'>なし</span><br>
     <font size="2">自由入力キーワード</font><font color="#000000" size="2">（複数入力可)</font><br>
-      &nbsp;<input type="text" class='keyword_other' size="30"  $readonly>&nbsp;<br>
+      &nbsp;<span><input type="text" class='keyword_other' size="40"  $readonly></span>&nbsp;<br>
       <input type="hidden" name="keyword" id="md_keyword" value="$keywords">
 
 __JS__;
