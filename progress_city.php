@@ -7,7 +7,8 @@ require_once('include/db.php');
 if(isset($_REQUEST['download'])){
 	$rows[] = array('自治体コード','自治体名','登録件数','入力件数');
 
-	$cdraw = mysql_get_multi_rows("select cdcode,name,count(*) as num from lotfile inner join (select name,`code` from citycode union select name,`code` from divisioncode) cd on cdcode = `code` group by cdcode order by cdcode");
+	$cdraw = mysql_get_multi_rows("select local_code as cdcode, name, count(*) as num from baseinfo inner join (select name,`code` from citycode union select name,`code` from divisioncode) cd on local_code = `code` group by cdcode order by cdcode ");
+	//$cdraw = mysql_get_multi_rows("select cdcode,name,count(*) as num from lotfile inner join (select name,`code` from citycode union select name,`code` from divisioncode) cd on cdcode = `code` group by cdcode order by cdcode");
 	$cds = array();
 	foreach($cdraw as $cdraw){
 		$cds[$cdraw['cdcode']] = $cdraw;
@@ -56,9 +57,10 @@ $(document).ready(function(){
 <table  border="3" cellpadding="3">
 <tr><th>自治体コード</th><th>自治体名</th><th>登録件数</th><th>入力件数</th></tr>
 <?php
-$cdraw = mysql_get_multi_rows("select cdcode,name,count(*) as num from lotfile inner join (select name,`code` from citycode union select name,`code` from divisioncode) cd on cdcode = `code` group by cdcode order by cdcode");
+$cdraw = mysql_get_multi_rows("select local_code as cdcode, name, count(*) as num from baseinfo inner join (select name,`code` from citycode union select name,`code` from divisioncode) cd on local_code = `code` group by cdcode order by cdcode ");
 $cds = array();
 foreach($cdraw as $cdraw){
+	$cdraw['finish'] = 0;
 	$cds[$cdraw['cdcode']] = $cdraw;
 }
 $finishes = mysql_get_multi_rows("select cdcode,count(*) as c from lotfile where finish = 1 group by cdcode");
