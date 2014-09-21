@@ -22,11 +22,12 @@ function metadata_items_first($items, $caller){
 	$_rippou_flag = output_radio('rippou_flag', $items['rippou_flag'], '該当しない', '該当する', $caller, $items['rippou_flag']);
 	$_doctor_flag = output_radio('doctor_flag', $items['doctor_flag'], '該当しない', '該当する', $caller, $items['doctor_flag']);
 	$_satuei_ken = output_text_input('satuei_ken',(isset($items['satuei_ken'])?$items['satuei_ken']:$items['satuei_basho_address']),$caller);
+	$_keyword = output_keywords_tab($items['keyword'],$caller);
 
 	$text_fields = array('standard_id', 'series_title',  'betu_title',  'betu_series', 'betu_series_title','naiyo_saimoku_title',
 			'naiyo_saimoku_chosha', 'buhenmei',  'makiji_bango',
 		'contributor','iban', 'iban_chosha','publisher',
-		'keyword', 'chuuki', 'youyaku', 'mokuji', 'is_bubun', 'oya_uri', 'shigen_mei', 'has_bubun', 'ko_uri',
+		'chuuki', 'youyaku', 'mokuji', 'is_bubun', 'oya_uri', 'shigen_mei', 'has_bubun', 'ko_uri',
 		'taisho_basho_uri', 'taisho_basho_ken', 'taisho_basho_shi', 'taisho_basho_banchi', 'taisho_basho_ido', 'taisho_basho_keido',
 		'satusei_ido','satuei_keido','satuei_shi','satuei_banchi','kanko_hindo', 'kanko_kanji',
 		'doctor','doctor_bango', // 'doctor_nen', 'doctor_tuki', 'doctor_bi',
@@ -93,7 +94,7 @@ function metadata_items_first($items, $caller){
 	<tr><th class='$class_hissu1'>3.タイトルのヨミ<br>$title_button</th><td>$title_yomi</td></tr>
 	<tr><th class='hissu'>4.作成者・著者名</th><td>$creator</td></tr>
 	<tr><th class='hissu'>5.作成者・著者名のヨミ$creator_button</th><td>$creator_yomi</td></tr>
-	<tr><th class='opthissu opthissu_音声・映像 opthissu_写真 opthissu_絵画・絵はがき'>6.主題（キーワード）</th><td>$keyword</td></tr>
+	<tr><th class='opthissu opthissu_音声・映像 opthissu_写真 opthissu_絵画・絵はがき'>6.主題（キーワード）</th><td>$_keyword</td></tr>
 	<tr><th class='hissu'>7.アクセス制御</th><td>$open_level</td></tr>
 	<tr><th class='hissu'>8.シリーズ（継続資料）</th><td>$_series_flag</td></tr>
 	<tr class='series_flag_option'><th class='$class_hissu1'>9.シリーズタイトル</th><td>$series_title</td></tr>

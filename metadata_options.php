@@ -177,4 +177,103 @@ function output_open_level_selection($open_level, $caller){
 	return selection('open_level', $levels, $open_level, $caller, 2).(is_numeric($open_level)?'':'基本情報整理表未入力');
 }
 
+function output_keywords_tab($keywords, $caller){
+	$tabs = array('資料種別' => array('新聞','地図','楽譜'),
+					'現象' => array('津波', '地震', '火災', '液状化', '浸水'),
+					'被災' => array('がれき', '建物', '道路', '鉄道', '船', '車', '飛行機', 'まちなみ', '地盤', '海岸', 
+									'防潮堤', '水門', '橋', '漁業施設', '石碑', '墓地', '風評被害'), 
+					'組織' => array('府省庁', '都道府県', '市区町村', '自衛隊', '警察', '海上保安庁', '海外救援隊',
+									'消防', '赤十字', '社会福祉協議会', '医療', 'NPO', '第3者委員会'), 
+					'原子力' => array('放射能'), 
+					'避難・救助' => array('避難', '救助', '捜索', '行方不明', 'ご遺体'), 
+					'災害対策' => array('災害情報', '被災情報', '広報', '津波避難ビル'), 
+					'震災復興' => array('がれき除去', '工事', 'ボランティア活動', '再建', 'かさ上げ', '区画整理', '防災集団移転'),
+					'救援・支援' => array( '避難所', '避難者', '物資', '心の支援', '起業', '思い出の品'),
+					'くらし' => array( '仮設住宅', '風呂', '給水', '悪臭', '食事', 'トイレ', '住宅再建', '移転'), 
+					'お金' => array( '融資', '補助金', '義援金'),
+					'保健福祉' => array( '医療', '高齢者', '障がい者', '介護', '乳幼児', '健康管理'), 
+					'工業' => array( '電気', '燃料', '工場'), 
+					'商業' => array( '店舗', '復興商店街'), 
+					'農業・林業' => array( '水田', '畑', '農業施設', '畜産', '森林'),
+					'水産業' => array( '漁船', '養殖', '漁具', '漁業施設'), 
+					'上下水道' => array( '水道', '下水道', '処理施設'), 
+					'通信' => array( '防災無線', '通信設備', '電話', 'インターネット', '放送'),
+					'教育' => array( '保育園', '幼稚園', '小学校', '中学校', '高等学校', '大学', '各種学校', '教育委員会', '社会教育'),
+					'文化財' => array( '寺', '神社', '仏像', '美術品', '文化財'), 
+					'観光' => array( 'ホテル', '旅館', '民宿', 'ツアー'));
+
+	if($caller == _INPUT_){
+		$readonly = 'readonly';
+	}else{
+		$readonly = '';
+	}
+	//タブ
+	$lis = '';
+	foreach($tabs as $tab => $chks){
+		$tab = htmlspecialchars($tab);
+		$lis .= "<li class='TabbedPanelsTab' tabindex='$tabidx'>$tab</li>";
+	}
+	$tabGroup = "<ul class='TabbedPanelsTabGroup'>$lis</ul>";
+	//タブの中身
+	$contents = '';
+	foreach($tabs as $tab => $chks){
+		$tab = htmlspecialchars($tab);
+		$inputs = '';
+		foreach($chks as $chk){
+			$chk = htmlspecialchars($chk,ENT_QUOTES);
+			$inputs .= "<label style='word-break:keep-all;'><input type='checkbox' class='keyword' value='$chk' $readonly>$chk</label> ";
+		}
+		$contents .= "<div class='TabbedPanelsContent'>$inputs</div>";
+	}
+	$contentsGroup = "<div class='TabbedPanelsContentGroup'>$contents</div>";
+
+	$keywords = htmlspecialchars($keywords,ENT_QUOTES);
+	$str .= <<<__JS__
+<div id='KeywordTabbedPanel' class='TabbedPanels'> $tabGroup $contentsGroup</div>
+
+<script type="text/javascript">
+<!--
+var KeywordTabbedPanel = new Spry.Widget.TabbedPanels("KeywordTabbedPanel");
+$(document).ready(function(){
+	//hiddenフィールドからチェックボックス・自由入力欄へ
+	var keywords = $('#md_keyword').val().split(';');
+	var keywordOthers = [];
+	for(var i=0; i<keywords.length; i++){
+		if($('input[class=keyword][value='+keywords[i]+']').length){
+			$('input[class=keyword][value='+keywords[i]+']').attr('checked','checked');
+		}else{
+			keywordOthers.push(keywords[i]);
+		}
+	}
+	$('input[class=keyword_other]').val(keywordOthers.join(';'));
+	$('input.keyword').click(keywordClick);
+	$('input[class=keyword_other]').change(keywordClick);
+	keywordClick();
+});
+//選択済みキーワードを表示
+function keywordClick(){
+	var str = 'なし';
+	var keywords = [];
+	$('input[class=keyword]').filter(':checked').each(function(){
+		keywords.push($(this).val());
+	});
+	if(keywords.length > 0){
+		str = keywords.join(';');
+	}
+	$('#keyword_display').html(str);
+	var keywordOthers = $('input[class=keyword_other]').val();
+	if(keywordOthers)keywords.push(keywordOthers);
+	$('#md_keyword').val(keywords.join(';'));
+}
+
+//-->
+</script>
+	選択済みキーワード：<span id='keyword_display'>なし</span><br>
+    <font size="2">自由入力キーワード</font><font color="#000000" size="2">（複数入力可)</font><br>
+      &nbsp;<input type="text" class='keyword_other' size="30"  $readonly>&nbsp;<br>
+      <input type="hidden" name="keyword" id="md_keyword" value="$keywords">
+
+__JS__;
+	return $str;
+}
 ?>

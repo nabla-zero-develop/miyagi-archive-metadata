@@ -15,6 +15,9 @@ function output_header(){
 		<script src="js/jquery.mousewheel.min.js"></script>
 		<script src="js/jquery.iviewer/jquery.iviewer.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="js/jquery.iviewer/jquery.iviewer.css" />
+		<link rel="stylesheet" type="text/css" href="js/SpryTabbedPanels/SpryTabbedPanels.css" />
+		<script src="js/SpryTabbedPanels/SpryTabbedPanels.js"></script>
+
 EOS;
 }
 
