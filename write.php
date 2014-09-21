@@ -63,7 +63,7 @@ if($resume){
 }
 
 if($row2){
-	header("Location: metadata.php?lotid=$lotid&uniqid={$row2['uniqid']}&resume={$resume}&skipped=${$skipped}");
+	header("Location: metadata.php?lotid=$lotid&uniqid={$row2['uniqid']}&resume={$resume}&skipped={$skipped}");
 }else{
 	//ロット中の全てのデータの書き込みが終わっているか
 	$unfinish_num = mysql_get_value("select count(*) from lotfile where finish <> 1 and lotid = $lotid");
