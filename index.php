@@ -79,7 +79,7 @@ foreach($lots as $lot){
 		}
 		$shinchoku = "$counts[1]/$total";
 		if(isset($counts['1'])){
-			if(!isset($counts['0'])){
+			if(isset($counts['0']) && $counts['0']>0){
 				$button .= "<input type='button' value='再開' lotid={$lot['lotid']}>";
 			}
 			$button .= "<input type='button' value='修正' lotid={$lot['lotid']}>";
