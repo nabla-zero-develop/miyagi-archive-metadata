@@ -20,6 +20,8 @@
 	<li><a href='progress_city.php'>自治体別</a>
 	<li><a href='progress_lot.php'>ロット別</a>
 	</ul>
+	<h2>ダウンロード</h2>
+	<li><a href='download.php'>入力済みデータダウンロード</a>
   </body>
 </html>
 
