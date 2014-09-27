@@ -258,7 +258,7 @@ $(document).ready(function(){
 			s = s.split("\\n").join("").split("\\r").join("");
 			$(this).val(s);
 		}
-		if($(this).attr('name').match(/_yomi$/)){
+		if($(this).attr('name') && $(this).attr('name').match(/_yomi$/)){
 			if(s.match(/[ぁ-ん]/)){
 				s = s.replace(/[ぁ-ん]/g, function(ss) {
 		   			return String.fromCharCode(ss.charCodeAt(0) + 0x60);
