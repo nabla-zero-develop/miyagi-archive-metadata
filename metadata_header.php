@@ -276,16 +276,27 @@ function showOptional(){
 	$('.optional_'+type).css('display','');
 	$('.opthissu').removeClass('hissu');
 	$('.opthissu_'+type).addClass('hissu');
+	$('.optional').each(function(){
+		if($(this).css('display') == 'none'){
+			$(this).find('input.optctrl[value=0]').each(function(){
+				showOptCtrl($(this).attr('name'),true);
+			});
+		}else{
+			$(this).find('input.optctrl[value=0]').each(function(){
+				showOptCtrl($(this).attr('name'));
+			});
+		}
+	});
 }
 
 //class optctrl
 $(document).ready(function(){
 	$('input.optctrl').change(function(){showOptCtrl($(this).attr('name'))});
-	$('input.optctrl').each(function(){showOptCtrl($(this).attr('name'))});
+	$('input.optctrl[value=0]').each(function(){showOptCtrl($(this).attr('name'))});
 });
 
-function showOptCtrl(name){
-	if($('input[name='+name+']:checked').val()==1){
+function showOptCtrl(name,hide){
+	if($('input[name='+name+']:checked').val()==1 && !hide){
 		$('.'+name+'_option').css('display','');
 	}else{
 		$('.'+name+'_option').css('display','none');
