@@ -15,7 +15,7 @@ if(isset($_REQUEST['download'])){
 	$sql = <<<__SQL__
 	select baseinfo.uniqid,name as cdname,lotid,finish from baseinfo
 	 left join lotfile on baseinfo.uniqid = lotfile.uniqid
-	left join (select name,`code` from citycode union select name,`code` from divisioncode) cd on floor(baseinfo.uniqid/1000000) = `code`
+	left join (select name,`code` from citycode union select name,`code` from divisioncode) cd on baseinfo.local_code = `code`
 __SQL__;
 	if($search_text){
 		$sql = $sql." where baseinfo.uniqid like '".mysql_real_escape_string($search_text)."'";
@@ -97,7 +97,7 @@ if($num > $limit){
 $sql = <<<__SQL__
 select baseinfo.uniqid,name as cdname,lotid,finish from baseinfo
  left join lotfile on baseinfo.uniqid = lotfile.uniqid
-left join (select name,`code` from citycode union select name,`code` from divisioncode) cd on floor(baseinfo.uniqid/1000000) = `code`
+left join (select name,`code` from citycode union select name,`code` from divisioncode) cd on baseinfo.local_code = `code`
 __SQL__;
 if($search_text){
 	$sql = $sql." where baseinfo.uniqid like '".mysql_real_escape_string($search_text)."'";
