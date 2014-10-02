@@ -65,7 +65,7 @@ CREATE TABLE `lotfile` (
   `lotid` int(11),
   `ord` int(11) NOT NULL,
   `filepath` text,
-  `finish` tinyint(4) DEFAULT '0',
+  `finish` tinyint(4) DEFAULT '0' COMMENT '状態 -1:入力スキップ 0:未入力 1:入力済',
   `cdcode` int(11),
   `finish_date` datetime,
   PRIMARY KEY (`uniqid`),
@@ -97,7 +97,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`userid`)
 );
 
-DROP TABLE IF EXISTS `baseinfo`
+DROP TABLE IF EXISTS `baseinfo`;
 CREATE TABLE baseinfo(
 uniqid bigint,
 file_id int NOT NULL,
@@ -132,7 +132,7 @@ original_shiryo_keitai text COMMENT '媒体コード',
 PRIMARY KEY (uniqid)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-DROP TABLE IF EXISTS `baseinfo_file`
+DROP TABLE IF EXISTS `baseinfo_file`;
 CREATE TABLE baseinfo_file(
 id int auto_increment,
 filename text,
