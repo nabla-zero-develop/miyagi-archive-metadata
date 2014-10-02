@@ -110,6 +110,10 @@ shoshi_flag int COMMENT '書誌データ',
 chizu_kubun text COMMENT '地図か地図帳か',
 seigen tinyint COMMENT '情報の質 0:該当しない,1:悲惨（閲覧注意）',
 skip_reason text COMMENT '入力スキップ理由（作業時用）',
+sekou_taisho text COMMENT '施行対象',
+sekou_nen int COMMENT '施行日時',
+sekou_tuki int COMMENT '施行日時',
+sekou_bi int COMMENT '施行日時',
 PRIMARY KEY(`uniqid`)
 )ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
@@ -229,5 +233,9 @@ shoshi_flag int COMMENT '書誌データ',
 chizu_kubun text COMMENT '地図か地図帳か',
 seigen tinyint COMMENT '情報の質 0:該当しない,1:悲惨（閲覧注意）',
 skip_reason text COMMENT '入力スキップ理由（作業時用）',
+sekou_taisho text COMMENT '施行対象',
+sekou_nen int COMMENT '施行日時',
+sekou_tuki int COMMENT '施行日時',
+sekou_bi int COMMENT '施行日時',
 PRIMARY KEY(`log_id`)
 )ENGINE=InnoDB  DEFAULT CHARSET=utf8;

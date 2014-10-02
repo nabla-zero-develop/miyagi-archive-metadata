@@ -35,7 +35,7 @@ function metadata_items_first($items, $caller){
 		'keisai_go1', 'keisai_go2', 'keisai_shimei', 'keisai_kan', 'keisai_page', 'license_info','license_uri','license_holder','license_chuki','shiryo_keitai',
 		'teller',  'haifu_taisho', 'haifu_basho', // 'haifu_nen', 'haifu_tuki', 'haifu_bi',
 		'keiji_basho',
-		'series_title_yomi','betu_title_yomi', 'betu_series_yomi', 'betu_series_title_yomi','naiyo_saimoku_title_yomi','buhenmei_yomi','makiji_bango_yomi', 'contributor_yomi', 'doctor_daigaku_yomi','teller_yomi','haifu_basho_yomi', 'keiji_basho_yomi');
+		'series_title_yomi','betu_title_yomi', 'betu_series_yomi', 'betu_series_title_yomi','naiyo_saimoku_title_yomi','buhenmei_yomi','makiji_bango_yomi', 'contributor_yomi', 'doctor_daigaku_yomi','teller_yomi','haifu_basho_yomi', 'keiji_basho_yomi', 'sekou_taisho');
 		// 'keiji_nen', 'keiji_tuki', 'keiji_bi');
 	foreach($text_fields as $f){
 		$$f = output_text_input($f, $items[$f], $caller);
@@ -68,6 +68,9 @@ function metadata_items_first($items, $caller){
 	$keiji_nen = $items['keiji_nen'];
 	$keiji_tuki = $items['keiji_tuki'];
 	$keiji_bi = $items['keiji_bi'];
+	$sekou_nen = $items['sekou_nen'];
+	$sekou_tuki = $items['sekou_tuki'];
+	$sekou_bi = $items['sekou_bi'];
 	$shiryo_keitai = output_shiryo_keitai_selection($items['shiryo_keitai'], $caller);
 	$language = output_language_selection($items['language'], $caller);
 	$kanko_status = output_kanko_status_selection($items['kanko_status'], $caller);
@@ -216,6 +219,12 @@ function metadata_items_first($items, $caller){
 	</td></tr>
 	<tr class='optional optional_図書 optional_新聞・雑誌 ptional_記事'><th>94.書誌データ</th><td>$shoshi_flag</td></tr>
 	<tr class='optional optional_地図・地図帳'><th>95.地図か地図帳か</th><td>$chizu_kubun</td></tr>
+	<tr class="rippou_flag_option"><th>97.施行対象</th><td>$sekou_taisho</td></tr>
+	<tr class="rippou_flag_option"><th>98.施行日</th><td>
+		<input type='text' class='imeDisable' name='sekou_nen' size='4' value='$sekou_nen'>年
+		<input type='text' class='imeDisable' name='sekou_tuki' size='2' value='$sekou_tuki'>月　
+		<input type='text' class='imeDisable' name='sekou_bi' size='2' value='$sekou_bi'>日
+	</td></tr>
 	<tr><th>96.情報の質</th><td>$seigen</td></tr>
 EOS;
 }

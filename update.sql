@@ -1,3 +1,12 @@
+alter table metadata add column sekou_taisho text COMMENT '施行対象';
+alter table metadata add column sekou_nen int COMMENT '施行日時';
+alter table metadata add column sekou_tuki int COMMENT '施行日時';
+alter table metadata add column sekou_bi int COMMENT '施行日時';
+alter table metadata_log add column sekou_taisho text COMMENT '施行対象';
+alter table metadata_log add column sekou_nen int COMMENT '施行日時';
+alter table metadata_log add column sekou_tuki int COMMENT '施行日時';
+alter table metadata_log add column sekou_bi int COMMENT '施行日時';
+
 alter table metadata change column subject keyword text COMMENT 'サブジェクト（キーワード）';
 alter table metadata change column media_code original_shiryo_keitai text COMMENT 'オリジナル資料の形態';
 
