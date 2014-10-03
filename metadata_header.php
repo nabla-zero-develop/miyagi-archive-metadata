@@ -267,6 +267,7 @@ $(document).ready(function(){
 			}
 		}
 	});
+	$('#ord').change(ordChange);
 });
 
 function showOptional(){
@@ -432,6 +433,13 @@ function ndl_check(){
 			}
 		} );
 	};
+}
+function ordChange(){
+	var ord = $(this).val();
+	resume = $('input[name=resume]').val();
+	skip = $('input[name=skip]').val();
+	lotid = $('input[name=lotid]').val();
+	location.href = 'metadata.php?resume='+resume+'&skip='+skip+'&lotid='+lotid+'&ord='+ord
 }
 </script>
 EOS;

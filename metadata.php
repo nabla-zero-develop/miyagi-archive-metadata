@@ -22,7 +22,9 @@ if(isset($_GET['lotid'])){
 	$resume = isset($_GET['resume'])?$_GET['resume'] : 0;
 	$skipped = isset($_GET['skipped'])?$_GET['skipped'] : 0;
 	$uniqid = isset($_GET['uniqid'])?$_GET['uniqid'] : 0;
+	$ord = isset($_GET['ord'])?$_GET['ord'] : 0;//対象となるord番目の資料
 	if(!is_numeric($uniqid)) die('uniqidが不正です');
+	if(!is_numeric($ord)) die('ordが不正です');
 
 	//編集対象を確定
 	if($uniqid){
@@ -31,22 +33,24 @@ if(isset($_GET['lotid'])){
 		if(!$row) die("No data for uniqid $uniqid.");
 	}else{
 		if($resume){
-			$res = mysql_query("select * from lotfile where finish = 0 and lotid=$lotid order by ord");
+			$lotfiles = mysql_get_multi_rows("select * from lotfile where finish = 0 and lotid=$lotid order by ord");
 		}elseif($skipped){
-			$res = mysql_query("select * from lotfile where finish = -1 and lotid=$lotid order by ord");
+			$lotfiles = mysql_get_multi_rows("select * from lotfile where finish = -1 and lotid=$lotid order by ord");
 		}else{
-			$res = mysql_query("select * from lotfile where lotid=$lotid order by ord");
+			$lotfiles = mysql_get_multi_rows("select * from lotfile where lotid=$lotid order by ord");
 		}
-		$row = mysql_fetch_assoc($res);
-		if(!$row) die("No data");
-		$uniqid = $row['uniqid'];
-		$get = '';
-		foreach($_GET as $name => $value){
-			if(is_array($g)) die(basename(__FILE__).':'.__LINE__);
-			$get .= urlencode($name).'='.urlencode($value).'&';
+		if(isset($lotfiles[$ord])){
+			$uniqid = $lotfiles[$ord]['uniqid'];
+			$get = '';
+			foreach($_GET as $name => $value){
+				if(is_array($g)) die(basename(__FILE__).':'.__LINE__);
+				$get .= urlencode($name).'='.urlencode($value).'&';
+			}
+			$get .= 'uniqid='.$uniqid;
+			header('Location: metadata.php?'.$get);
+		}else{
+			die('ordが不正です');
 		}
-		$get .= 'uniqid='.$uniqid;
-		header('Location: metadata.php?'.$get);
 	}
 	//ロット内のデータ数
 	$res = mysql_query("select uniqid from lotfile where lotid=$lotid order by ord");
@@ -340,7 +344,19 @@ echo output_map_script();
 	<div id='formDiv'>
 		<p>
 		<h4>ロットNo.<?php printf("%03d", $lotid); ?></h4>
-		<?php echo "$actualord/$num_in_lot"; ?><br>
+		<?php
+			if($resume || $skipped){
+				echo "$actualord/$num_in_lot";
+			}else{
+				$ordopts = '';
+				for($i=0;$i<$num_in_lot;$i++){
+					$selected = $i == $ord? 'selected=selected': '';
+					$ii = $i+1;
+					$ordopts .= "<option value='$i' $selected>$ii</option>";
+				}
+				echo "<select id='ord'>$ordopts</select>/$num_in_lot";
+			}
+		?><br>
 		<!-- form name="input_form" method ="post" action="./metadata_confirm.php" onSubmit="return check()" -->
 		<!-- form name="input_form" -->
 		<form name="input_form" method ="post" action="write.php" onSubmit="return check()">

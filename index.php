@@ -28,7 +28,7 @@ td.skipped{
 $(document).ready(function(){
 	$('input[value=開始]').click(function(){
 		var lotid = $(this).attr('lotid');
-		location.href = "metadata.php?lotid="+lotid;
+		location.href = "metadata.php?resume=1&lotid="+lotid;
 });
 	$('input[value=修正]').click(function(){
 		var lotid = $(this).attr('lotid');
