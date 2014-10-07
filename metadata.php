@@ -63,6 +63,9 @@ if(isset($_GET['lotid'])){
 
 	$filedir = $file_basepath.mb_convert_encoding($row['filepath'],'SJIS','UTF-8');
 	$files = glob($filedir.'/*');
+	if(!$files && file_exists($filedir) && !is_dir($filedir)){
+		$files = array($filedir);
+	}
 
 	$res = mysql_query("select * from content where uniqid=$uniqid");
 	$data = mysql_fetch_assoc($res);
@@ -173,6 +176,7 @@ foreach(array($common_items, $ken_items,  $shi_items) as $is){
 }
 
 // 種別
+/*
 if(!isset($md_type) && $is_input){
 	$md_type = '';
 	if ($shubetu=="v"){$md_type="映像"; } //映像
@@ -182,6 +186,8 @@ if(!isset($md_type) && $is_input){
 	if ($shubetu=="s"){$md_type="音声"; } //音声
 }
 $items['md_type'] = $md_type;
+*/
+$items['md_type'] = '';
 
 //権利処理（県版と市町村版で値制約が異なる。県版は「済」「未」、市町村版は9で済）
 //なので、県版の「済」を9に書き換える
