@@ -275,7 +275,7 @@ function keywordClick(){
 
 //-->
 </script>
-	選択済みキーワード：<span id='keyword_display'>なし</span><br>
+	選択済みキーワード：<span id='keyword_display' style="background-color:#fff;">なし</span><br>
     <font size="2">自由入力キーワード</font><font color="#000000" size="2">（複数入力可)</font><br>
       &nbsp;<span><input type="text" class='keyword_other' size="40"  $readonly></span>&nbsp;<br>
       <input type="hidden" name="keyword" id="md_keyword" value="$keywords">

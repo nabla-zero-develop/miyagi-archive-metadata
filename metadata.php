@@ -60,6 +60,7 @@ if(isset($_GET['lotid'])){
 		if($row2['uniqid'] == $uniqid)break;
 		$actualord++;
 	}
+	$ord = $actualord-1;
 
 	$filedir = $file_basepath.mb_convert_encoding($row['filepath'],'SJIS','UTF-8');
 	$files = glob($filedir.'/*');
