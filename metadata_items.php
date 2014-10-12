@@ -102,105 +102,24 @@ function metadata_items_first($items, $caller){
 	<tr><th class='hissu'>8.シリーズ（継続資料）</th><td>$_series_flag</td></tr>
 	<tr class='series_flag_option'><th class='$class_hissu1'>9.シリーズタイトル</th><td>$series_title</td></tr>
 	<tr class='series_flag_option'><th class='$class_hissu1'>10.シリーズタイトルのヨミ<br>$series_title_button</th><td>$series_title_yomi</td></tr>
-	<tr><td colspan='2'>
-			<input type="submit" name='next' value="登録して次へ" onClick="setSkipCheck(0);">
-			<input type="submit" name='quit' value="中断" onClick="setSkipCheck(1);">
-	</td></tr>
-	<tr><td></td></tr>
-	<tr><th>11.別タイトルの有無</th><td>$_betu_title_flag</td></tr>
-	<tr><th>12.寄与者（寄贈者）の有無</th><td>$_kiyo_flag</td></tr>
-	<tr class='optional optional_図書 optional_雑誌・新聞'><th>13.異版<font size='-1'>（第x版、改訂版等）</font></th><td>$_iban_flag</td></tr>
-	<tr><th>14.ライセンス(CC等)の有無</th><td>$_license_flag</td></tr>
-	<tr><th>15.引用資料<br><font size='-1'>親となる資料からの引用</font></th><td>$_inyou_flag</td></tr>
-	<tr><th>16.政府刊行物・刊行元<br><font size='-1'>x省等が発行元</font></th><td>$_gov_issue</td></tr>
-	<tr><th>17.官公庁刊行物<br><font size='-1'>該当する場合刊行元（機関名）<br>x省等の下部機関が発行元</font></th><td>$_gov_issue_2</td></tr>
-	<tr><th>18.地方公共団体刊行物<br><font size='-1'>該当する場合刊行元（団体名）</font></th><td>$_gov_issue_chihou</td></tr>
+	<tr class='series_flag_option'><th>65.刊行状態</th><td>$kanko_status</td></tr>
     <tr><th>19.宮城県内地方公共団体刊行物<br><font size='-1'>宮城県内の自治体が発行元</font></th><td>$_gov_issue_miyagi</td></tr>
-	<tr><th>20.視聴覚者向け資料</th><td>$_for_handicapped</td></tr>
-	<tr><th>21.オリジナル資料の形態</th><td>$_original_shiryo_keitai</td></tr>
     <tr><th>22.立法資料</th><td>$_rippou_flag</td></tr>
-    <tr class='optional optional_図書'><th>23.博士論文</th><td>$_doctor_flag</td></tr>
-	<tr><td></td></tr>
-	<tr class='betu_title_flag_option'><th>25.別タイトル</th><td>$betu_title</td></tr>
-	<tr class='betu_title_flag_option'><th>26.別タイトルのヨミ<br>$betu_title_button</th><td>$betu_title_yomi</td></tr>
-	<tr class='betu_title_flag_option'><th>27.別シリーズタイトル</th><td>$betu_series_title</td></tr>
-	<tr class='betu_title_flag_option'><th>28.別シリーズタイトルのヨミ<br>$betu_series_title_button</th><td>$betu_series_title_yomi</td></tr>
-	<tr class='$class_option2'><th>29.内容細目タイトル</th><td>$naiyo_saimoku_title</td></tr>
-	<tr class='$class_option2'><th>30.内容細目タイトルのヨミ<br>$naiyo_saimoku_title_button</th><td>$naiyo_saimoku_title_yomi</td></tr>
-	<tr class='$class_option2'><th>31.内容細目著者</th><td>$naiyo_saimoku_chosha</td></tr>
-	<tr class='$class_option2'><th>32.部編名</th><td>$buhenmei</td></tr>
-	<tr class='$class_option2'><th>33.部編名のヨミ<br>$buhenmei_button</th><td>$buhenmei_yomi</td></tr>
-	<tr class='$class_option2'><th>34.巻次・部編番号</th><td>$makiji_bango</td></tr>
-	<tr class='$class_option2'><th>35.巻次・部編番号のヨミ<br>$makiji_bango_button</th><td>$makiji_bango_yomi</td></tr>
-	<tr class='kiyo_flag_option'><th>36.寄与者（寄贈者）</th><td>$contributor</td></tr>
-	<tr class='kiyo_flag_option'><th>37.寄与者（寄贈者）のヨミ<br>$contributor_button</th><td>$contributor_yomi</td></tr>
-	<tr class='iban_flag_option'><th>38.異版名(第x版）</th><td>$iban</td></tr>
-	<tr class='iban_flag_option'><th>39.異版の著者名</th><td>$iban_chosha</td></tr>
-	<tr><th>40.出版社・公開者</th><td>$publisher</td></tr>
-	<tr><th>41.注記等</th><td>$chuuki</td></tr>
-	<tr><th>42.要約</th><td>$youyaku</td></tr>
-	<tr class='$class_option3'><th>43.目次</th><td>$mokuji</td></tr>
+	<tr class="rippou_flag_option"><th>97.施行対象</th><td>$sekou_taisho</td></tr>
+	<tr class="rippou_flag_option"><th>98.施行日</th><td>
+		<input type='text' class='imeDisable' name='sekou_nen' size='4' value='$sekou_nen'>年
+		<input type='text' class='imeDisable' name='sekou_tuki' size='2' value='$sekou_tuki'>月　
+		<input type='text' class='imeDisable' name='sekou_bi' size='2' value='$sekou_bi'>日
+	</td></tr>
 	<tr><th>44.作成・撮影日</th><td>（西暦）
 		<input type='text' class='imeDisable' name='sakusei_nen' size='4' value='$sakusei_nen'>年
 		<input type='text' class='imeDisable' name='sakusei_tuki' size='2' value='$sakusei_tuki'>月
 		<input type='text' class='imeDisable' name='sakusei_bi' size='2' value='$sakusei_bi'>日</td></tr>
-	<tr class='optional optional_オンライン資料'><th>45.オンライン資料採取日</th><td>（西暦）
-		<input type='text' class='imeDisable' name='online_nen' value='$online_nen' size='4'>年
-		<input type='text' class='imeDisable' name='online_tuki' value='$online_tuki' size='2'>月
-		<input type='text' class='imeDisable' name='online_bi' value='$online_bi' size='2'>日</td></tr>
-	<tr><th>46.公開日</th><td>（西暦）
-		<input type='text' class='imeDisable' name='koukai_nen' size='4' value='$koukai_nen'>年
-		<input type='text' class='imeDisable' name='koukai_tuki' size='2' value='$koukai_tuki'>月
-        <input type='text' class='imeDisable' name='koukai_bi' size='2' value='$koukai_bi'>日</td></tr>
-	<tr><th>47.言語</th><td>$language</td></tr>
-	<!--引用資料-->
-	<tr class='inyou_flag_option'><th>48.～の一部分である</th><td>$is_bubun</td></tr>
-	<tr class='inyou_flag_option'><th>49.親URIへの参照</th><td>$oya_uri</td></tr>
-	<tr class='inyou_flag_option'><th>50.参照する情報資源の名称</th><td>$shigen_mei</td></tr>
-	<tr class='inyou_flag_option'><th>51.～を一部分として持つ</th><td>$has_bubun</td></tr>
-	<tr class='inyou_flag_option'><th>52.子URIへの参照</th><td>$ko_uri</td></tr>
-    <!--情報資源が対象とする場所-->
-	<tr><th>53.情報資源が対象とする場所(URI)<br><input type='button' value='地図から取得' onClick="getAddress('taisho_');return false;"></th><td>$taisho_basho_uri</td></tr>
-	<tr><th>54.情報資源が対象とする場所（県名）</th><td>$taisho_basho_ken</td></tr>
-	<tr><th>55.情報資源が対象とする場所（市町村）</th><td>$taisho_basho_shi</td></tr>
-	<tr><th>56.情報資源が対象とする場所（街路番地）</th><td>$taisho_basho_banchi</td></tr>
-	<tr><th>57.情報資源が対象とする場所（緯度）</th><td>$taisho_basho_ido</td></tr>
-	<tr><th>58.情報資源が対象とする場所（経度）</th><td>$taisho_basho_keido</td></tr>
-	<tr class='$class_option4'><th>59.撮影場所（緯度）<br><input type='button' value='地図から取得' onClick="getAddress('satuei_');return false;"></th><td>$satusei_ido</td></tr>
-	<tr class='$class_option4'><th>60.撮影場所（経度）</th><td>$satuei_keido</td></tr>
 	<tr class='$class_option4'><th>61.撮影場所（県名）
 		<!--とりあえず、撮影場所の住所を県のところに表示させておく。基本情報整理表には、複数が入力されている場合あり-->
 		</th><td>$_satuei_ken</td></tr>
 	<tr class='$class_option4'><th>62.撮影場所（市町村）</th><td>$satuei_shi</td></tr>
 	<tr class='$class_option4'><th>63.撮影場所（街路番地）</th><td>$satuei_banchi</td></tr>
-	<!--刊行頻度・状態・巻次（雑誌の場合のみ）-->
-	<tr class='optional optional_雑誌・新聞'><th>64.刊行頻度</th><td>$kanko_hindo</td></tr>
-	<tr class='series_flag_option'><th>65.刊行状態</th><td>$kanko_status</td></tr>
-	<tr class='optional optional_雑誌・新聞'><th>66.刊行巻次</th><td>$kanko_kanji</td></tr>
-	<!--博士論文-->
-	<tr class="doctor_flag_option"><th>67.学位</th><td>$doctor</td></tr>
-	<tr class="doctor_flag_option"><th>68.報告番号</th><td>$doctor_bango</td></tr>
-	<tr class="doctor_flag_option"><th>69.授与年月日</th><td>（西暦）
-		<input type='text' class='imeDisable' name='doctor_nen' value='$doctor_nen' size='4'>年
-		<input type='text' class='imeDisable' name='doctor_tuki' value='$doctor_tuki' size='2'>月　
-		<input type='text' class='imeDisable' name='doctor_bi' value='$doctor_bi' size='2'>日</td></tr>
-	<tr class="doctor_flag_option"><th>70.授与大学</th><td>$doctor_daigaku</td></tr>
-	<tr class="doctor_flag_option"><th>71.授与大学のヨミ<br>$doctor_daigaku_button</th><td>$doctor_daigaku_yomi</td></tr>
-	<!-- <tr class="doctor_flag_option"><th></th><td></tr> -->
-	<!--通巻番号等-->
-	<tr class='optional optional_記事 optional_会議録・含資料'><th>72.掲載通号</th><td>$keisai_go1</td></tr>
-	<tr class='optional optional_記事 optional_会議録・含資料'><th>73.掲載号</th><td>$keisai_go2</td></tr>
-	<tr class='optional optional_記事 optional_会議録・含資料'><th>74.掲載誌名</th><td>$keisai_shimei</td></tr>
-	<tr class='optional optional_記事 optional_会議録・含資料'><th>75.掲載巻（論文の場合）</th><td>$keisai_kan</td></tr>
-	<tr class='optional optional_記事 optional_会議録・含資料'><th>76.掲載ページ</th><td>$keisai_page</td></tr>
-	<tr class='license_flag_option'><th>77.ライセンス情報</th><td>$license_info</td></tr>
-	<tr class='license_flag_option'><th>78.URIへの参照</th><td>$license_uri</td></tr>
-	<tr class='license_flag_option'><th>79.ライセンス保有者名</th><td>$license_holder</td></tr>
-	<tr class='license_flag_option'><th>80.権利・利用条件に関する注記</th><td>$license_chuki</td></tr>
-	<tr class='optional optional_図書 optional_記事 optional_新聞・雑誌 optional_文書・楽譜 optional_地図・地図帳 optional_ポスター optional_チラシ optional_会議録・含資料 optional_絵画・絵はがき'><th>81.資料形態（大活字等)</th><td>$shiryo_keitai </td></tr>
-	<tr class='optional optional_博物資料'><th>82.博物資料の区分</th><td>$hakubutu_kubun</td></tr>
-	<tr class='optional optional_図書 optional_記事 optional_新聞・雑誌 optional_文書・楽譜 optional_地図・地図帳 optional_ポスター optional_チラシ optional_会議録・含資料 optional_絵画・絵はがき'><th>83.書写資料</th><td>$shosha_flag</td></tr>
-	<tr class='optional optional_記事 optional_雑誌・新聞'><th>84.オンラインジャーナル（学術系）</th><td>$online_flag</td></tr>
 	<tr class='optional optional_語り'><th>85.話者</th><td>$teller</td></tr>
 	<tr class='optional optional_語り'><th>86.話者のヨミ<br>$teller_button</th><td>$teller_yomi</td></tr>
 	<tr class='optional optional_チラシ optional_会議録・含資料'><th>87.配布場所</th><td>$haifu_basho</td></tr>
@@ -212,6 +131,75 @@ function metadata_items_first($items, $caller){
 	<tr class='optional optional_チラシ optional_会議録・含資料'><th>90.配布対象（被災者等）</th><td>$haifu_taisho</td></tr>
 	<tr class='optional optional_ポスター optional_博物資料'><th>91.掲示・設置場所</th><td>$keiji_basho</td></tr>
 	<tr class='optional optional_ポスター optional_博物資料'><th>92.掲示・設置場所のヨミ<br>$keiji_basho_button</th><td>$keiji_basho_yomi</td></tr>
+	<tr><th>96.情報の質</th><td>$seigen</td></tr>
+
+	<tr><td colspan='2'>
+			<input type="submit" name='next' value="登録して次へ" onClick="setSkipCheck(0);">
+			<input type="submit" name='quit' value="中断" onClick="setSkipCheck(1);">
+	</td></tr>
+	<tr><td></td></tr>
+
+	<tr><th>11.別タイトルの有無</th><td>$_betu_title_flag</td></tr>
+	<tr class='betu_title_flag_option'><th>25.別タイトル</th><td>$betu_title</td></tr>
+	<tr class='betu_title_flag_option'><th>26.別タイトルのヨミ<br>$betu_title_button</th><td>$betu_title_yomi</td></tr>
+	<tr class='betu_title_flag_option'><th>27.別シリーズタイトル</th><td>$betu_series_title</td></tr>
+	<tr class='betu_title_flag_option'><th>28.別シリーズタイトルのヨミ<br>$betu_series_title_button</th><td>$betu_series_title_yomi</td></tr>
+	<tr><th>12.寄与者（寄贈者）の有無</th><td>$_kiyo_flag</td></tr>
+	<tr class='kiyo_flag_option'><th>36.寄与者（寄贈者）</th><td>$contributor</td></tr>
+	<tr class='kiyo_flag_option'><th>37.寄与者（寄贈者）のヨミ<br>$contributor_button</th><td>$contributor_yomi</td></tr>
+	<tr class='optional optional_図書 optional_雑誌・新聞'><th>13.異版<font size='-1'>（第x版、改訂版等）</font></th><td>$_iban_flag</td></tr>
+	<tr class='iban_flag_option'><th>38.異版名(第x版）</th><td>$iban</td></tr>
+	<tr class='iban_flag_option'><th>39.異版の著者名</th><td>$iban_chosha</td></tr>
+	<tr><th>14.ライセンス(CC等)の有無</th><td>$_license_flag</td></tr>
+	<tr class='license_flag_option'><th>77.ライセンス情報</th><td>$license_info</td></tr>
+	<tr class='license_flag_option'><th>78.URIへの参照</th><td>$license_uri</td></tr>
+	<tr class='license_flag_option'><th>79.ライセンス保有者名</th><td>$license_holder</td></tr>
+	<tr class='license_flag_option'><th>80.権利・利用条件に関する注記</th><td>$license_chuki</td></tr>
+	<tr><th>15.引用資料<br><font size='-1'>親となる資料からの引用</font></th><td>$_inyou_flag</td></tr>
+	<!--引用資料-->
+	<tr class='inyou_flag_option'><th>48.～の一部分である</th><td>$is_bubun</td></tr>
+	<tr class='inyou_flag_option'><th>49.親URIへの参照</th><td>$oya_uri</td></tr>
+	<tr class='inyou_flag_option'><th>50.参照する情報資源の名称</th><td>$shigen_mei</td></tr>
+	<tr class='inyou_flag_option'><th>51.～を一部分として持つ</th><td>$has_bubun</td></tr>
+	<tr class='inyou_flag_option'><th>52.子URIへの参照</th><td>$ko_uri</td></tr>
+	<tr><th>16.政府刊行物・刊行元<br><font size='-1'>x省等が発行元</font></th><td>$_gov_issue</td></tr>
+	<tr><th>17.官公庁刊行物<br><font size='-1'>該当する場合刊行元（機関名）<br>x省等の下部機関が発行元</font></th><td>$_gov_issue_2</td></tr>
+	<tr><th>18.地方公共団体刊行物<br><font size='-1'>該当する場合刊行元（団体名）</font></th><td>$_gov_issue_chihou</td></tr>
+	<tr><th>20.視聴覚者向け資料</th><td>$_for_handicapped</td></tr>
+	<tr><th>21.オリジナル資料の形態</th><td>$_original_shiryo_keitai</td></tr>
+    <tr class='optional optional_図書'><th>23.博士論文</th><td>$_doctor_flag</td></tr>
+	<!--博士論文-->
+	<tr class="doctor_flag_option"><th>67.学位</th><td>$doctor</td></tr>
+	<tr class="doctor_flag_option"><th>68.報告番号</th><td>$doctor_bango</td></tr>
+	<tr class="doctor_flag_option"><th>69.授与年月日</th><td>（西暦）
+		<input type='text' class='imeDisable' name='doctor_nen' value='$doctor_nen' size='4'>年
+		<input type='text' class='imeDisable' name='doctor_tuki' value='$doctor_tuki' size='2'>月　
+		<input type='text' class='imeDisable' name='doctor_bi' value='$doctor_bi' size='2'>日</td></tr>
+	<tr class="doctor_flag_option"><th>70.授与大学</th><td>$doctor_daigaku</td></tr>
+	<tr class="doctor_flag_option"><th>71.授与大学のヨミ<br>$doctor_daigaku_button</th><td>$doctor_daigaku_yomi</td></tr>
+	<tr><th>40.出版社・公開者</th><td>$publisher</td></tr>
+	<tr class='optional optional_オンライン資料'><th>45.オンライン資料採取日</th><td>（西暦）
+		<input type='text' class='imeDisable' name='online_nen' value='$online_nen' size='4'>年
+		<input type='text' class='imeDisable' name='online_tuki' value='$online_tuki' size='2'>月
+		<input type='text' class='imeDisable' name='online_bi' value='$online_bi' size='2'>日</td></tr>
+	<tr><th>46.公開日</th><td>（西暦）
+		<input type='text' class='imeDisable' name='koukai_nen' size='4' value='$koukai_nen'>年
+		<input type='text' class='imeDisable' name='koukai_tuki' size='2' value='$koukai_tuki'>月
+        <input type='text' class='imeDisable' name='koukai_bi' size='2' value='$koukai_bi'>日</td></tr>
+	<tr><th>47.言語</th><td>$language</td></tr>
+	<!--刊行頻度・状態・巻次（雑誌の場合のみ）-->
+	<tr class='optional optional_雑誌・新聞'><th>64.刊行頻度</th><td>$kanko_hindo</td></tr>
+	<tr class='optional optional_雑誌・新聞'><th>66.刊行巻次</th><td>$kanko_kanji</td></tr>
+	<!--通巻番号等-->
+	<tr class='optional optional_記事 optional_会議録・含資料'><th>72.掲載通号</th><td>$keisai_go1</td></tr>
+	<tr class='optional optional_記事 optional_会議録・含資料'><th>73.掲載号</th><td>$keisai_go2</td></tr>
+	<tr class='optional optional_記事 optional_会議録・含資料'><th>74.掲載誌名</th><td>$keisai_shimei</td></tr>
+	<tr class='optional optional_記事 optional_会議録・含資料'><th>75.掲載巻（論文の場合）</th><td>$keisai_kan</td></tr>
+	<tr class='optional optional_記事 optional_会議録・含資料'><th>76.掲載ページ</th><td>$keisai_page</td></tr>
+	<tr class='optional optional_図書 optional_記事 optional_新聞・雑誌 optional_文書・楽譜 optional_地図・地図帳 optional_ポスター optional_チラシ optional_会議録・含資料 optional_絵画・絵はがき'><th>81.資料形態（大活字等)</th><td>$shiryo_keitai </td></tr>
+	<tr class='optional optional_博物資料'><th>82.博物資料の区分</th><td>$hakubutu_kubun</td></tr>
+	<tr class='optional optional_図書 optional_記事 optional_新聞・雑誌 optional_文書・楽譜 optional_地図・地図帳 optional_ポスター optional_チラシ optional_会議録・含資料 optional_絵画・絵はがき'><th>83.書写資料</th><td>$shosha_flag</td></tr>
+	<tr class='optional optional_記事 optional_雑誌・新聞'><th>84.オンラインジャーナル（学術系）</th><td>$online_flag</td></tr>
 	<tr class='optional optional_ポスター optional_博物資料'><th>93.掲示・配付日時</th><td>（西暦）
 		<input type='text' class='imeDisable' name='keiji_nen' size='4' value='$keiji_nen'>年
 		<input type='text' class='imeDisable' name='keiji_tuki' size='2' value='$keiji_tuki'>月　
@@ -219,13 +207,34 @@ function metadata_items_first($items, $caller){
 	</td></tr>
 	<tr class='optional optional_図書 optional_新聞・雑誌 ptional_記事'><th>94.書誌データ</th><td>$shoshi_flag</td></tr>
 	<tr class='optional optional_地図・地図帳'><th>95.地図か地図帳か</th><td>$chizu_kubun</td></tr>
-	<tr class="rippou_flag_option"><th>97.施行対象</th><td>$sekou_taisho</td></tr>
-	<tr class="rippou_flag_option"><th>98.施行日</th><td>
-		<input type='text' class='imeDisable' name='sekou_nen' size='4' value='$sekou_nen'>年
-		<input type='text' class='imeDisable' name='sekou_tuki' size='2' value='$sekou_tuki'>月　
-		<input type='text' class='imeDisable' name='sekou_bi' size='2' value='$sekou_bi'>日
+
+	<tr><td colspan='2'>
+			<input type="submit" name='next' value="登録して次へ" onClick="setSkipCheck(0);">
+			<input type="submit" name='quit' value="中断" onClick="setSkipCheck(1);">
 	</td></tr>
-	<tr><th>96.情報の質</th><td>$seigen</td></tr>
+	<tr><td></td></tr>
+
+	<tr class='$class_option2'><th>29.内容細目タイトル</th><td>$naiyo_saimoku_title</td></tr>
+	<tr class='$class_option2'><th>30.内容細目タイトルのヨミ<br>$naiyo_saimoku_title_button</th><td>$naiyo_saimoku_title_yomi</td></tr>
+	<tr class='$class_option2'><th>31.内容細目著者</th><td>$naiyo_saimoku_chosha</td></tr>
+	<tr class='$class_option2'><th>32.部編名</th><td>$buhenmei</td></tr>
+	<tr class='$class_option2'><th>33.部編名のヨミ<br>$buhenmei_button</th><td>$buhenmei_yomi</td></tr>
+	<tr class='$class_option2'><th>34.巻次・部編番号</th><td>$makiji_bango</td></tr>
+	<tr class='$class_option2'><th>35.巻次・部編番号のヨミ<br>$makiji_bango_button</th><td>$makiji_bango_yomi</td></tr>
+	<tr><th>41.注記等</th><td>$chuuki</td></tr>
+	<tr><th>42.要約</th><td>$youyaku</td></tr>
+	<tr class='$class_option3'><th>43.目次</th><td>$mokuji</td></tr>
+    <!--情報資源が対象とする場所-->
+	<tr><th>53.情報資源が対象とする場所(URI)<br><input type='button' value='地図から取得' onClick="getAddress('taisho_');return false;"></th><td>$taisho_basho_uri</td></tr>
+	<tr><th>54.情報資源が対象とする場所（県名）</th><td>$taisho_basho_ken</td></tr>
+	<tr><th>55.情報資源が対象とする場所（市町村）</th><td>$taisho_basho_shi</td></tr>
+	<tr><th>56.情報資源が対象とする場所（街路番地）</th><td>$taisho_basho_banchi</td></tr>
+	<tr><th>57.情報資源が対象とする場所（緯度）</th><td>$taisho_basho_ido</td></tr>
+	<tr><th>58.情報資源が対象とする場所（経度）</th><td>$taisho_basho_keido</td></tr>
+	<tr class='$class_option4'><th>59.撮影場所（緯度）<br><input type='button' value='地図から取得' onClick="getAddress('satuei_');return false;"></th><td>$satusei_ido</td></tr>
+	<tr class='$class_option4'><th>60.撮影場所（経度）</th><td>$satuei_keido</td></tr>
+
+
 EOS;
 }
 
