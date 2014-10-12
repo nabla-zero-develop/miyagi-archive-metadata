@@ -376,10 +376,14 @@ $(document).keydown(function(ev){
 function yomi(field, yomi_field, init_value) {
 	s = $("input[name='" + field + "']").val();
 	if(s == undefined){s = $("textarea[name='" + field + "']").val();}
+	\$yomi = $("input[name='" + yomi_field + "']");
+	if(\$yomi.length == 0){
+		\$yomi = $("textarea[name='" + yomi_field + "']");
+	}
 	s = $.trim(s);
 	if(s.length == 0){s = init_value};
 	if(s == "@" || s == "＠" ){
-			$("input[name='" + yomi_field + "']").val(s);
+			\$yomi.val(s);
 	}else if(s != ""){
 		$.ajax({
 			url: './mecab_proxy.php',
@@ -387,11 +391,7 @@ function yomi(field, yomi_field, init_value) {
 			data: {"s": s },
 			success: function(data) {
 				//alert(data);
-				if($("input[name='" + yomi_field + "']").length > 0){
-					$("input[name='" + yomi_field + "']").val(data);
-				}else{
-					$("textarea[name='" + yomi_field + "']").val(data);
-				}
+				\$yomi.val(data);
 				return data;
 			},
 			error: function(data) {
@@ -410,9 +410,9 @@ function ndl_check(){
 			data: {"s": s },
 			success: function(data) {
 				fields = data.split("\t");
-				$("input[name='title']").val(fields[1]);
-				$("input[name='title_yomi']").val(fields[17]);
-				$("input[name='creator']").val(fields[7]);
+				$("textarea[name='title']").val(fields[1]);
+				$("textarea[name='title_yomi']").val(fields[17]);
+				$("textarea[name='creator']").val(fields[7]);
 				$("input[name='publisher']").val(fields[25]);
 				//s = fields[21] + "";
 				//alert(s.length() );
@@ -426,7 +426,8 @@ function ndl_check(){
 				//	$("input[name='koukai_tsuki'").val(dt.getMonth());
 				//	$("input[name='koukai_bi'").val(dt.getDay());
 				//}
-				$("input[name='creator_yomi'").val(yomi('creator', 'creator_yomi', ''));
+				//$("textarea[name='creator_yomi]'").val(yomi('creator', 'creator_yomi', ''));
+				yomi('creator', 'creator_yomi', '');
 			},
 			error: function(data) {
 				//alert("error:"+data);
