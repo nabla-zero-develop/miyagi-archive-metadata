@@ -110,7 +110,7 @@ function output_gov_issue_selection($gov_issue, $caller){
 }
 
 function output_gov_issue_miyagi_selection($gov_issue_miyagi, $caller){
-	$gov_types_miyagi = array(array('', '該当しない'),array('4100', '仙台市'),array('4202', '石巻市'),array('4203', '塩竈市'),
+	$gov_types_miyagi = array(array('', '該当しない'),array('4000', '宮城県'),array('4100', '仙台市'),array('4202', '石巻市'),array('4203', '塩竈市'),
                 array('4204', '古川市'),array('4205', '気仙沼市'),array('4206', '白石市'),array('4207', '名取市'),
                 array('4208', '角田市'),array('4209', '多賀城市'),array('4210', '泉市'),array('4211', '岩沼市'),
                 array('4212', '登米市'),array('4213', '栗原市'),array('4214', '東松島市'),array('4215', '大崎市'),array('4301', '蔵王町'),
