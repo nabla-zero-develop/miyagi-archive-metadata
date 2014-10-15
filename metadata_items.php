@@ -103,8 +103,9 @@ function metadata_items_first($items, $caller){
 	<tr class='series_flag_option'><th class='$class_hissu1'>9.シリーズタイトル</th><td>$series_title</td></tr>
 	<tr class='series_flag_option'><th class='$class_hissu1'>10.シリーズタイトルのヨミ<br>$series_title_button</th><td>$series_title_yomi</td></tr>
 	<tr class='series_flag_option'><th>65.刊行状態</th><td>$kanko_status</td></tr>
-    <tr><th>19.宮城県内地方公共団体刊行物<br><font size='-1'>宮城県内の自治体が発行元</font></th><td>$_gov_issue_miyagi</td></tr>
-    <tr><th>22.立法資料</th><td>$_rippou_flag</td></tr>
+	<tr><th>19.宮城県内地方公共団体刊行物<br><font size='-1'>宮城県内の自治体が発行元</font></th><td>$_gov_issue_miyagi</td></tr>
+	<tr><th>18.地方公共団体刊行物<br><font size='-1'>該当する場合刊行元（団体名）</font></th><td>$_gov_issue_chihou</td></tr>
+	<tr><th>22.立法資料</th><td>$_rippou_flag</td></tr>
 	<tr class="rippou_flag_option"><th>97.施行対象</th><td>$sekou_taisho</td></tr>
 	<tr class="rippou_flag_option"><th>98.施行日</th><td>
 		<input type='text' class='imeDisable' name='sekou_nen' size='4' value='$sekou_nen'>年
@@ -164,7 +165,6 @@ function metadata_items_first($items, $caller){
 	<tr class='inyou_flag_option'><th>52.子URIへの参照</th><td>$ko_uri</td></tr>
 	<tr><th>16.政府刊行物・刊行元<br><font size='-1'>x省等が発行元</font></th><td>$_gov_issue</td></tr>
 	<tr><th>17.官公庁刊行物<br><font size='-1'>該当する場合刊行元（機関名）<br>x省等の下部機関が発行元</font></th><td>$_gov_issue_2</td></tr>
-	<tr><th>18.地方公共団体刊行物<br><font size='-1'>該当する場合刊行元（団体名）</font></th><td>$_gov_issue_chihou</td></tr>
 	<tr><th>20.視聴覚者向け資料</th><td>$_for_handicapped</td></tr>
 	<tr><th>21.オリジナル資料の形態</th><td>$_original_shiryo_keitai</td></tr>
     <tr class='optional optional_図書'><th>23.博士論文</th><td>$_doctor_flag</td></tr>
