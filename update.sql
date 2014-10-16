@@ -1,3 +1,13 @@
+alter table metadata add column naiyo_saimoku_chosha_yomi text COMMENT '内容細目著者のヨミ' after naiyo_saimoku_chosha;
+alter table metadata change column naiyo_saimoku_chosha naiyo_saimoku_chosha text COMMENT '内容細目著者';
+alter table metadata change column naiyo_saimoku_title naiyo_saimoku_title text COMMENT '内容細目タイトル';
+alter table metadata change column naiyo_saimoku_title_yomi naiyo_saimoku_title_yomi text COMMENT '内容細目タイトルのヨミ';
+alter table metadata_log add column naiyo_saimoku_chosha_yomi text COMMENT '内容細目著者のヨミ' after naiyo_saimoku_chosha;
+alter table metadata_log change column naiyo_saimoku_chosha naiyo_saimoku_chosha text COMMENT '内容細目著者';
+alter table metadata_log change column naiyo_saimoku_title naiyo_saimoku_title text COMMENT '内容細目タイトル';
+alter table metadata_log change column naiyo_saimoku_title_yomi naiyo_saimoku_title_yomi text COMMENT '内容細目タイトルのヨミ';
+
+
 alter table metadata add column sekou_taisho text COMMENT '施行対象';
 alter table metadata add column sekou_nen int COMMENT '施行日時';
 alter table metadata add column sekou_tuki int COMMENT '施行日時';

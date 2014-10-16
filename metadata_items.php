@@ -25,7 +25,7 @@ function metadata_items_first($items, $caller){
 	$_keyword = output_keywords_tab($items['keyword'],$caller);
 
 	$text_fields = array('standard_id', 'series_title',  'betu_title',  'betu_series', 'betu_series_title','naiyo_saimoku_title',
-			'naiyo_saimoku_chosha', 'buhenmei',  'makiji_bango',
+			'naiyo_saimoku_chosha', 'naiyo_saimoku_chosha_yomi', 'buhenmei',  'makiji_bango',
 		'contributor','iban', 'iban_chosha','publisher',
 		'chuuki', 'youyaku', 'mokuji', 'is_bubun', 'oya_uri', 'shigen_mei', 'has_bubun', 'ko_uri',
 		'taisho_basho_uri', 'taisho_basho_ken', 'taisho_basho_shi', 'taisho_basho_banchi', 'taisho_basho_ido', 'taisho_basho_keido',
@@ -44,7 +44,7 @@ function metadata_items_first($items, $caller){
 	foreach($text_area_fields as $f){
 		$$f = output_text_area($f, $items[$f], $caller);
 	}
-	$yomi_fields = array('title', 'creator', 'series_title','betu_title', 'betu_series', 'betu_series_title','naiyo_saimoku_title','buhenmei','makiji_bango', 'contributor', 'doctor_daigaku','teller','haifu_basho', 'keiji_basho');
+	$yomi_fields = array('title', 'creator', 'series_title','betu_title', 'betu_series', 'betu_series_title','naiyo_saimoku_chosha','naiyo_saimoku_title','buhenmei','makiji_bango', 'contributor', 'doctor_daigaku','teller','haifu_basho', 'keiji_basho');
 	if($caller == _INPUT_){
 		foreach($yomi_fields as $f){
 			${$f.'_button'} = output_yomi_button($f, $f."_yomi", $items[$f]);
@@ -217,6 +217,7 @@ function metadata_items_first($items, $caller){
 	<tr class='$class_option2'><th>29.内容細目タイトル</th><td>$naiyo_saimoku_title</td></tr>
 	<tr class='$class_option2'><th>30.内容細目タイトルのヨミ<br>$naiyo_saimoku_title_button</th><td>$naiyo_saimoku_title_yomi</td></tr>
 	<tr class='$class_option2'><th>31.内容細目著者</th><td>$naiyo_saimoku_chosha</td></tr>
+	<tr class='$class_option2'><th>99.内容細目著者のヨミ<br>$naiyo_saimoku_chosha_button</th><td>$naiyo_saimoku_chosha_yomi</td></tr>
 	<tr class='$class_option2'><th>32.部編名</th><td>$buhenmei</td></tr>
 	<tr class='$class_option2'><th>33.部編名のヨミ<br>$buhenmei_button</th><td>$buhenmei_yomi</td></tr>
 	<tr class='$class_option2'><th>34.巻次・部編番号</th><td>$makiji_bango</td></tr>
