@@ -430,13 +430,34 @@ function write_table($data, $ken_or_shi, $lot, $filename){
 			$data2['creator_yomi'] =$data[$r][$c];
 			//L列：作成日(年)
 			$c = 11;
-			$data2['sakusei_nen'] =$data[$r][$c];
+			$data2['sakusei_nen'] = mb_convert_kana($data[$r][$c],'a');
+			if(preg_match('/\[([0-9]+)\]/',$data2['sakusei_nen'],$match)){
+				$data2['sakusei_nen'] = $match[1];
+			}
+			$data2['sakusei_nen'] = intval($data2['sakusei_nen']);
 			//M列：作成日(月)
 			$c = 12;
-			$data2['sakusei_tuki'] =$data[$r][$c];
-			//N列：作成日(日)
-			$c = 13;
-			$data2['sakusei_bi'] =$data[$r][$c];
+			$data2['sakusei_tuki'] = mb_convert_kana($data[$r][$c],'a');
+					if(preg_match('/\[([0-9]+)\]/',$data2['sakusei_tuki'],$match)){
+				$data2['sakusei_tuki'] = $match[1];
+			}
+			$data2['sakusei_tuki'] = intval($data2['sakusei_tuki']);
+			if($data2['sakusei_tuki']>12){
+				//月のところへ2/13等と記入してあることがある。その場合、Excelによってシリアル化されて格納されている。
+				$tmpstr = PHPExcel_Style_NumberFormat::toFormattedString($data2['sakusei_tuki'], PHPExcel_Style_NumberFormat::FORMAT_DATE_YYYYMMDD2);
+				echo $data2['sakusei_tuki'],$tmpstr,'|';
+				$data2['sakusei_tuki'] = date('n',strtotime($tmpstr));
+				$data2['sakusei_bi'] = date('j',strtotime($tmpstr));
+
+			}else{
+				//N列：作成日(日)
+				$c = 13;
+				$data2['sakusei_bi'] = mb_convert_kana($data[$r][$c],'a');
+						if(preg_match('/\[([0-9]+)\]/',$data2['sakusei_bi'],$match)){
+					$data2['sakusei_bi'] = $match[1];
+				}
+				$data2['sakusei_bi'] = intval($data2['sakusei_bi']);
+			}
 			//O列：撮影場所（〒番号)
 			$c = 14;
 			$data2['satuei_basho_zip'] =$data[$r][$c];
