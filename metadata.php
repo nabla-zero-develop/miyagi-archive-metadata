@@ -285,7 +285,18 @@ $items['creator_yomi'] = $creator_yomi;
 $items['publisher'] = $publisher;
 
 //寄与者が入力されていれば、寄与者（寄贈者）の有無は1に
-$item['kiyo_flag'] = preg_match('/^[xｘXＸ×@＠]*$/',$items['contributor'])?0:1;
+$items['kiyo_flag'] = preg_match('/^[xｘXＸ×@＠]*$/',$items['contributor'])?0:1;
+
+//キーワードの区切り文字を変換
+$items['keyword'] = str_replace(array(',','、'),array(';',';'),$item['keyword']);
+
+//改行を空白に変換
+foreach($items as &$v){
+	if(strpos("\r",$v) || strpos("\n",$v)){
+		$v = str_replace("\r\n",' ',$v);
+		str_replace(array("\r","\n"),array(' ',' '),$v);
+	}
+}
 
 // 整理表では提供されない情報
 $new_items = array('series_flag', 'betu_title_flag', 'iban_flag', 'license_flag', 'inyou_flag',
@@ -300,6 +311,19 @@ foreach($new_items as $i){
 		$$i = '';
 	}
 }
+
+if(!preg_match('/^[xｘXＸ×@＠]*$/',$items['satuei_basho_zip'])){
+	$zip = str_replace('-','',mb_convert_kana($items['satuei_basho_zip'],'a'));
+	$address = mysql_get_value(sprintf("select address from zip2 where 7keta = '%s'",mysql_real_escape_string($zip)));
+	if($address){
+		$items['satuei_ken'] = mb_substr($address,0,3);
+		$items['satuei_shi'] = mb_substr($address,3);
+	}else{
+		$items['satuei_ken'] = $zip;
+	}
+	unset($zip);unset($address);
+}
+$items['satuei_banchi'] = $items['satuei_basho_address'];
 
 //DBにメタデータ格納済みなら取得
 $items_ = mysql_get_single_row("select * from metadata where uniqid = $uniqid");

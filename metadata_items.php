@@ -21,7 +21,6 @@ function metadata_items_first($items, $caller){
 	$_original_shiryo_keitai = output_original_shiryo_keitai_selection((($items['media_code'] == "32") && ($caller == _INPUT_)) ? "32" : $items['original_shiryo_keitai'], $caller);
 	$_rippou_flag = output_radio('rippou_flag', $items['rippou_flag'], '該当しない', '該当する', $caller, $items['rippou_flag']);
 	$_doctor_flag = output_radio('doctor_flag', $items['doctor_flag'], '該当しない', '該当する', $caller, $items['doctor_flag']);
-	$_satuei_ken = output_text_input('satuei_ken',(isset($items['satuei_ken'])?$items['satuei_ken']:$items['satuei_basho_address']),$caller);
 	$_keyword = output_keywords_tab($items['keyword'],$caller);
 
 	$text_fields = array('standard_id', 'series_title',  'betu_title',  'betu_series', 'betu_series_title','naiyo_saimoku_title',
@@ -29,7 +28,7 @@ function metadata_items_first($items, $caller){
 		'contributor','iban', 'iban_chosha','publisher',
 		'chuuki', 'youyaku', 'mokuji', 'is_bubun', 'oya_uri', 'shigen_mei', 'has_bubun', 'ko_uri',
 		'taisho_basho_uri', 'taisho_basho_ken', 'taisho_basho_shi', 'taisho_basho_banchi', 'taisho_basho_ido', 'taisho_basho_keido',
-		'satusei_ido','satuei_keido','satuei_shi','satuei_banchi','kanko_hindo', 'kanko_kanji',
+		'satusei_ido','satuei_keido','satuei_ken','satuei_shi','satuei_banchi','kanko_hindo', 'kanko_kanji',
 		'doctor','doctor_bango', // 'doctor_nen', 'doctor_tuki', 'doctor_bi',
 		'doctor_daigaku',
 		'keisai_go1', 'keisai_go2', 'keisai_shimei', 'keisai_kan', 'keisai_page', 'license_info','license_uri','license_holder','license_chuki','shiryo_keitai',
@@ -116,9 +115,7 @@ function metadata_items_first($items, $caller){
 		<input type='text' class='imeDisable' name='sakusei_nen' size='4' value='$sakusei_nen'>年
 		<input type='text' class='imeDisable' name='sakusei_tuki' size='2' value='$sakusei_tuki'>月
 		<input type='text' class='imeDisable' name='sakusei_bi' size='2' value='$sakusei_bi'>日</td></tr>
-	<tr class='$class_option4'><th>61.撮影場所（県名）
-		<!--とりあえず、撮影場所の住所を県のところに表示させておく。基本情報整理表には、複数が入力されている場合あり-->
-		</th><td>$_satuei_ken</td></tr>
+	<tr class='$class_option4'><th>61.撮影場所（県名）</th><td>$satuei_ken</td></tr>
 	<tr class='$class_option4'><th>62.撮影場所（市町村）</th><td>$satuei_shi</td></tr>
 	<tr class='$class_option4'><th>63.撮影場所（街路番地）</th><td>$satuei_banchi</td></tr>
 	<tr class='optional optional_語り'><th>85.話者</th><td>$teller</td></tr>
