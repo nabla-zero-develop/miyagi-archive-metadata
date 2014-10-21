@@ -74,6 +74,9 @@ EOS;
 }
 
 function output_yomi_button($field, $yomi_field, $init_value){
+	$init_value = htmlspecialchars($init_value,ENT_QUOTES);
+	$init_value = str_replace("\r\n",'\n',$init_value);
+	$init_value = str_replace(array("\n","\n"),array('\n','\n'),$init_value);
 	return <<< EOS
 	<button id="text-button-{$field}" onClick="yomi('{$field}', '{$yomi_field}', '{$init_value}'); return false;">候補</button>
 EOS;
@@ -120,7 +123,7 @@ function output_gov_issue_miyagi_selection($gov_issue_miyagi, $caller){
                 array('4403', '泉町'),array('4404', '七ヶ浜町'),array('4405', '宮城町'),array('4406', '利府町'),
                 array('4421', '大和町'),array('4422', '大郷町'),array('4423', '富谷町'),array('4424', '大衡村'),
                 array('4441', '中新田町'),array('4442', '小野田町'),array('4443', '宮崎町'),array('4444', '色麻町'),
-                array('4444', '色麻村'),array('4445', '加美町'),array('4461', '松山町'),array('4462', '三本木町'),
+                array('4445', '加美町'),array('4461', '松山町'),array('4462', '三本木町'),
                 array('4463', '鹿島台町'),array('4481', '岩出山町'),array('4482', '鳴子町'),array('4501', '涌谷町'),
                 array('4502', '田尻町'),array('4503', '小牛田町'),array('4504', '南郷町'),array('4505', '美里町'),
                 array('4521', '築館町'),array('4522', '若柳町'),array('4523', '栗駒町'),array('4524', '高清水町'),

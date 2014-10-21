@@ -33,7 +33,7 @@ function output_css($show_image_flag){
 <style>
 #formDiv{
 	width: 750px;
-	height: 100%;
+	height: 950px;
 	overflow: scroll;
 	float: right;
 	font-size: 20px;
@@ -410,24 +410,28 @@ function ndl_check(){
 			data: {"s": s },
 			success: function(data) {
 				fields = data.split("\t");
-				$("textarea[name='title']").val(fields[1]);
-				$("textarea[name='title_yomi']").val(fields[17]);
-				$("textarea[name='creator']").val(fields[7]);
-				$("input[name='publisher']").val(fields[25]);
-				//s = fields[21] + "";
-				//alert(s.length() );
-				//if(s.length() == 7){
-				//	dt = Date.parse(fields[21]+"-01");
-				//	$("input[name='koukai_nen'").val(dt.getYear());
-				//	$("input[name='koukai_tsuki'").val(dt.getMonth());
-				//} else {
-				//	dt = Date.parse(fields[21]);
-				//	$("input[name='koukai_nen'").val(dt.getYear());
-				//	$("input[name='koukai_tsuki'").val(dt.getMonth());
-				//	$("input[name='koukai_bi'").val(dt.getDay());
-				//}
-				//$("textarea[name='creator_yomi]'").val(yomi('creator', 'creator_yomi', ''));
-				yomi('creator', 'creator_yomi', '');
+				if(fields.length>1){
+					$("textarea[name='title']").val(fields[1]);
+					$("textarea[name='title_yomi']").val(fields[17]);
+					$("textarea[name='creator']").val(fields[7]);
+					$("input[name='publisher']").val(fields[25]);
+					//s = fields[21] + "";
+					//alert(s.length() );
+					//if(s.length() == 7){
+					//	dt = Date.parse(fields[21]+"-01");
+					//	$("input[name='koukai_nen'").val(dt.getYear());
+					//	$("input[name='koukai_tsuki'").val(dt.getMonth());
+					//} else {
+					//	dt = Date.parse(fields[21]);
+					//	$("input[name='koukai_nen'").val(dt.getYear());
+					//	$("input[name='koukai_tsuki'").val(dt.getMonth());
+					//	$("input[name='koukai_bi'").val(dt.getDay());
+					//}
+					//$("textarea[name='creator_yomi]'").val(yomi('creator', 'creator_yomi', ''));
+					yomi('creator', 'creator_yomi', '');
+				}else{
+					alert('データが取得できませんでした');
+				}
 			},
 			error: function(data) {
 				//alert("error:"+data);
