@@ -331,6 +331,8 @@ if($items_){
 	foreach($items_ as $k => $v){
 		$items[$k] = $v;
 	}
+	unset($items['kiyo_flag']);
+	$items['kiyo_flag'] = $items_['kiyo_flag']?"1":"0";
 }
 
 // 引数での上書き
