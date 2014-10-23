@@ -292,7 +292,7 @@ $items['keyword'] = str_replace(array(',','、'),array(';',';'),$item['keyword']
 
 //改行を空白に変換
 foreach($items as &$v){
-	if(strpos("\r",$v) || strpos("\n",$v)){
+	if(strpos($v,"\r") || strpos($v,"\n")){
 		$v = str_replace("\r\n",' ',$v);
 		str_replace(array("\r","\n"),array(' ',' '),$v);
 	}

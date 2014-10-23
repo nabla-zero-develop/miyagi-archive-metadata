@@ -446,6 +446,33 @@ function ordChange(){
 	lotid = $('input[name=lotid]').val();
 	location.href = 'metadata.php?resume='+resume+'&skip='+skip+'&lotid='+lotid+'&ord='+ord
 }
+
+//selectで複数選択
+$(function(){
+	$('select.add').change(function(){
+		var \$input = $(this).next();
+		var \$display = \$input.next();
+		var add_value = $(this).val();
+		if(add_value.length == 0){
+			return;
+		}
+		var value = \$input.val();
+		if(value.length>0){
+			\$input.val(value+';'+add_value);
+			\$display.text(\$display.text()+';'+$(this).children('option[value='+add_value+']').text());
+		}else{
+			\$input.val(add_value);
+			\$display.text($(this).children('option[value='+add_value+']').text());
+		}
+	});
+	$('button.add_del').click(function(){
+		$(this).prev().text($(this).prev().attr('def_val'))
+			.prev().val($(this).prev().prev().attr('def_val'))
+			.prev().val('');
+		return false;
+	});
+});
+
 </script>
 EOS;
 }

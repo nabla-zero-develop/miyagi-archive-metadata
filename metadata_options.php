@@ -40,6 +40,28 @@ function selection($name, $is, $default_selection, $caller, $type=1){
 	return $s;
 }
 
+function multi_selection($name, $is, $default_selection, $caller, $type=1, $def_val){
+	if($type==1)$def_val = array(htmlspecialchars($def_val,ENT_QUOTES),htmlspecialchars($def_val,ENT_QUOTES));
+	$selection_add = selection('', $is, '', $caller, $type);
+	$selection_add = str_replace("name = ''","class='add' def_val='$def_val[0]'",$selection_add);
+	$default_selection_display_a = array();
+	foreach(explode(';',$default_selection) as $a){
+		foreach($is as $b){
+			if($type == 1){
+				if($b == $a)$default_selection_display_a[] = $b;
+			}else{
+				if($b[0] == $a)$default_selection_display_a[] = $b[1];
+			}
+		}
+	}
+	$default_selection_display = implode(';',$default_selection_display_a);
+	if(!$default_selection_display)$default_selection_display = $def_val[1];
+	return <<<EOS
+$selection_add <input type='hidden' name='$name' value='$default_selection'><span id='${name}_display' style="background-color:#fff;" def_val='$def_val[1]'>$default_selection_display</span><button class='add_del' onClick='return false;'>削除</button>
+EOS;
+
+}
+
 function output_text_input($var_name, $value, $caller){
 	$value = htmlspecialchars($value);
 	if($caller == _INPUT_){
@@ -94,7 +116,7 @@ function output_md_type_selection($md_type, $caller){
 }
 
 function output_gov_issue_selection($gov_issue, $caller){
-	$gov_types = array(array("","該当しない"),array('AA0',"衆議院"),array('AB0',"参議院"),array('AC0',"国立国会図書館"),
+	$gov_types = array(array("",""),array('AA0',"衆議院"),array('AB0',"参議院"),array('AC0',"国立国会図書館"),
 	        array('AD0',"裁判官弾劾裁判所"),array('AE0',"裁判官訴追委員会"),array('BA0',"会計検査院"),array('CA0',"内閣"),array('CB0',"安全保障会議"),
                 array('CC0',"人事院"),array('DA0',"内閣府"),array('DB0',"宮内庁"),array('DC0',"国家公安委員会"),array('DD0',"警察庁"),
                 array('DE0',"防衛省"),array('DF0',"防衛施設庁"),array('DG0',"金融庁"),array('EA0',"総務省"),array('EB0',"公正取引委員会"),
@@ -109,7 +131,8 @@ function output_gov_issue_selection($gov_issue, $caller){
                 array('RA0',"環境省"),array('SA0',"最高裁判所"),array('SB0',"高等裁判所"),array('SC0',"地方裁判所"),array('SD0',"家庭裁判所"),
                 array('TA0',"公団"),array('TB0',"事業団"),array('TC0',"公庫"),array('TD0',"基金"),array('TE0',"銀行"),
                 array('TF0',"その他"),array('WA0',"国立大学等"),array('WB0',"国立大学共同利用機関"));
-	return selection('gov_issue', $gov_types, $gov_issue, $caller, 2);
+	return multi_selection('gov_issue', $gov_types, $gov_issue, $caller, 2,array('','該当しない'));
+
 }
 
 function output_gov_issue_miyagi_selection($gov_issue_miyagi, $caller){
@@ -134,7 +157,7 @@ function output_gov_issue_miyagi_selection($gov_issue_miyagi, $caller){
                 array('4563', '雄勝町'),array('4564', '河南町'),array('4565', '桃生町'),array('4566', '鳴瀬町'),
                 array('4567', '北上町'),array('4581', '女川町'),array('4582', '牡鹿町'),array('4601', '志津川町'),
                 array('4602', '津山町'),array('4603', '本吉町'),array('4604', '唐桑町'),array('4605', '歌津町'),array('4606', '南三陸町'));
-	return selection('gov_issue_miyagi', $gov_types_miyagi, $gov_issue_miyagi, $caller, 2);
+	return multi_selection('gov_issue_miyagi', $gov_types_miyagi, $gov_issue_miyagi, $caller, 2,array('','該当しない'));
 }
 
 function output_for_handicapped_selection($for_handicapped, $caller){
@@ -151,11 +174,11 @@ function output_shiryo_keitai_selection($shiryo_keitai, $caller){
 }
 
 function output_language_selection($language, $caller){
-	$languages = array(array('JPN','日本語'),array('ENG','英語'),array('CHI','中国語'),
+	$languages = array(array('',''),array('JPN','日本語'),array('ENG','英語'),array('CHI','中国語'),
 		array('KOR','韓国語'),array('GER','ドイツ語'),array('FRE','フランス語'),
 		array('SPA','スペイン語'),array('ITA','イタリア語'),array('RUS','ロシア語'),
 		array('POR','ポルトガル語'), array('TGL','タガログ語'));
-	return selection('language', $languages, $language, $caller, 2);
+	return multi_selection('language', $languages, $language, $caller, 2, array('','選択なし'));
 }
 
 function output_original_shiryo_keitai_selection($original_shiryo_keitai, $caller){
