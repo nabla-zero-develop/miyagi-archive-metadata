@@ -1,3 +1,6 @@
+alter table metadata change column satusei_ido satuei_ido text COMMENT '撮影場所（緯度）';
+alter table metadata_log change column satusei_ido satuei_ido text COMMENT '撮影場所（緯度）';
+
 alter table metadata add column naiyo_saimoku_chosha_yomi text COMMENT '内容細目著者のヨミ' after naiyo_saimoku_chosha;
 alter table metadata change column naiyo_saimoku_chosha naiyo_saimoku_chosha text COMMENT '内容細目著者';
 alter table metadata change column naiyo_saimoku_title naiyo_saimoku_title text COMMENT '内容細目タイトル';

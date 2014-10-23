@@ -488,11 +488,11 @@ function output_map_script(){
 			autoOpen: false,
 			buttons: {    // ボタンを設定
 				"保存": function(event) {
-					$('input[name='+addressPrefix+'basho_ken]').val($('#addressKen').text());
-					$('input[name='+addressPrefix+'basho_shi]').val($('#addressShi').text());
-					$('input[name='+addressPrefix+'basho_banchi]').val($('#addressBanchi').text());
-					$('input[name='+addressPrefix+'basho_ido]').val($('#addressIdo').text());
-					$('input[name='+addressPrefix+'basho_keido]').val($('#addressKeido').text());
+					$('input[name='+addressPrefix+'ken]').val($('#addressKen').text());
+					$('input[name='+addressPrefix+'shi]').val($('#addressShi').text());
+					$('input[name='+addressPrefix+'banchi]').val($('#addressBanchi').text());
+					$('input[name='+addressPrefix+'ido]').val($('#addressIdo').text());
+					$('input[name='+addressPrefix+'keido]').val($('#addressKeido').text());
 					$(this).dialog("close");
         		},
         		"キャンセル": function() { $(this).dialog("close"); }

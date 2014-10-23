@@ -28,7 +28,7 @@ function metadata_items_first($items, $caller){
 		'contributor','iban', 'iban_chosha','publisher',
 		'chuuki', 'youyaku', 'mokuji', 'is_bubun', 'oya_uri', 'shigen_mei', 'has_bubun', 'ko_uri',
 		'taisho_basho_uri', 'taisho_basho_ken', 'taisho_basho_shi', 'taisho_basho_banchi', 'taisho_basho_ido', 'taisho_basho_keido',
-		'satusei_ido','satuei_keido','satuei_ken','satuei_shi','satuei_banchi','kanko_hindo', 'kanko_kanji',
+		'satuei_ido','satuei_keido','satuei_ken','satuei_shi','satuei_banchi','kanko_hindo', 'kanko_kanji',
 		'doctor','doctor_bango', // 'doctor_nen', 'doctor_tuki', 'doctor_bi',
 		'doctor_daigaku',
 		'keisai_go1', 'keisai_go2', 'keisai_shimei', 'keisai_kan', 'keisai_page', 'license_info','license_uri','license_holder','license_chuki','shiryo_keitai',
@@ -223,13 +223,13 @@ function metadata_items_first($items, $caller){
 	<tr><th>42.要約</th><td>$youyaku</td></tr>
 	<tr class='$class_option3'><th>43.目次</th><td>$mokuji</td></tr>
     <!--情報資源が対象とする場所-->
-	<tr><th>53.情報資源が対象とする場所(URI)<br><input type='button' value='地図から取得' onClick="getAddress('taisho_');return false;"></th><td>$taisho_basho_uri</td></tr>
+	<tr><th>53.情報資源が対象とする場所(URI)<br><input type='button' value='地図から取得' onClick="getAddress('taisho_basho_');return false;"></th><td>$taisho_basho_uri</td></tr>
 	<tr><th>54.情報資源が対象とする場所（県名）</th><td>$taisho_basho_ken</td></tr>
 	<tr><th>55.情報資源が対象とする場所（市町村）</th><td>$taisho_basho_shi</td></tr>
 	<tr><th>56.情報資源が対象とする場所（街路番地）</th><td>$taisho_basho_banchi</td></tr>
 	<tr><th>57.情報資源が対象とする場所（緯度）</th><td>$taisho_basho_ido</td></tr>
 	<tr><th>58.情報資源が対象とする場所（経度）</th><td>$taisho_basho_keido</td></tr>
-	<tr class='$class_option4'><th>59.撮影場所（緯度）<br><input type='button' value='地図から取得' onClick="getAddress('satuei_');return false;"></th><td>$satusei_ido</td></tr>
+	<tr class='$class_option4'><th>59.撮影場所（緯度）<br><input type='button' value='地図から取得' onClick="getAddress('satuei_');return false;"></th><td>$satuei_ido</td></tr>
 	<tr class='$class_option4'><th>60.撮影場所（経度）</th><td>$satuei_keido</td></tr>
 
 
