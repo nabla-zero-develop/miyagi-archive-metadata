@@ -411,10 +411,17 @@ function ndl_check(){
 			success: function(data) {
 				fields = data.split("\t");
 				if(fields.length>1){
-					$("textarea[name='title']").val(fields[1]);
-					$("textarea[name='title_yomi']").val(fields[17]);
-					$("textarea[name='creator']").val(fields[7]);
-					$("input[name='publisher']").val(fields[25]);
+					if(fields[1].length>1)
+						$("textarea[name='title']").val(fields[1]);
+					if(fields[17].length>1)
+						$("textarea[name='title_yomi']").val(fields[17]);
+					if(fields[7].length>1){
+						$("textarea[name='creator']").val(fields[7]);
+						yomi('creator', 'creator_yomi', '');
+						alert(''+fields[7]+fields[7].length);
+					}
+					if(fields[25].length>1)
+						$("input[name='publisher']").val(fields[25]);
 					//s = fields[21] + "";
 					//alert(s.length() );
 					//if(s.length() == 7){
@@ -428,7 +435,6 @@ function ndl_check(){
 					//	$("input[name='koukai_bi'").val(dt.getDay());
 					//}
 					//$("textarea[name='creator_yomi]'").val(yomi('creator', 'creator_yomi', ''));
-					yomi('creator', 'creator_yomi', '');
 				}else{
 					alert('データが取得できませんでした');
 				}
