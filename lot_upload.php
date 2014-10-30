@@ -99,13 +99,15 @@ if(isset($_REQUEST['update_insert'])){
 			}
 
 			//指定されたロットがなければ作成
-			$sql = "select * from lot where lotid = $lotid";
-			$res = mysql_query($sql);
-			if(!$res)die(mysql_error());
-			if(mysql_num_rows($res) == 0){
-				$sql = "insert into lot (lotid,regist_date) values ($lotid,now())";
+			if($lotid){
+				$sql = "select * from lot where lotid = $lotid";
 				$res = mysql_query($sql);
 				if(!$res)die(mysql_error());
+				if(mysql_num_rows($res) == 0){
+					$sql = "insert into lot (lotid,regist_date) values ($lotid,now())";
+					$res = mysql_query($sql);
+					if(!$res)die(mysql_error());
+				}
 			}
 
 			//新ロットの追加
